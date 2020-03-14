@@ -12,6 +12,7 @@ package classcraft;
 public class Etudiant {
     private String nAdmission, nom, role, pseudo, cheminImage;
     private int exp, niveau, pv;
+    Role job;
     
     public static final int MAX_EXP = 1;
     

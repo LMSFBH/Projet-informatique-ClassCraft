@@ -22,17 +22,18 @@ public class pouvoir {
         setUtiliser(false);
     }
     
-    public void setDebloque(int entreDebloque){
-        debloque=entreDebloque;
-    }
-    public void setUtiliser(boolean entreUtiliser){
-        utiliser=entreUtiliser;
+    public void setDebloque(int debloque){
+        this.debloque=debloque;
     }
     
+    public void setUtiliser(boolean entreUtiliser){
+        this.utiliser=utiliser;
+    }
     
     public int getDebloque(){
         return debloque;
     }
+    
     public boolean getUtiliser(){
         return utiliser;
     }

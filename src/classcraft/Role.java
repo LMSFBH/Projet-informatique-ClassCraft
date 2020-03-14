@@ -22,9 +22,6 @@ public class Role extends pouvoir  {
     public Role (String nomJob,int max){
         setJob(nomJob);
         setCurrentPv(max);
-        
-        
-        
     }
    public String getJob(){
        return job;
@@ -34,9 +31,9 @@ public class Role extends pouvoir  {
    }
    
    public void setJob(String NouveauJob){
-       job=NouveauJob;
+       this.job=job;
    }
-   public void setCurrentPv(int Nouveau){
-       currentPv=Nouveau;
+   public void setCurrentPv(int currentPv){
+       this.currentPv=currentPv;
    }
 }
