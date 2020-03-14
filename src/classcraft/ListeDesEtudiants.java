@@ -116,19 +116,17 @@ public class ListeDesEtudiants{
     
     public void organisezClassement(){
         etudiants.sort((Etudiant etudiant1, Etudiant etudiant2) -> {
-            int niveauDiff = new Integer(etudiant1.getNiveau()).compareTo(etudiant2.getNiveau());
-            int expDiff = new Integer(etudiant1.getExp()).compareTo(etudiant2.getExp());
+            int niveauDiff = Integer.compare(etudiant1.getNiveau(), etudiant2.getNiveau());
+            int expDiff = Integer.compare(etudiant1.getExp(), etudiant2.getExp());
             
             if(niveauDiff > 0)
-                return 1;
-            else if(niveauDiff < 0)
                 return -1;
-            else{
-                if(expDiff > 0)
-                    return 1;
-                if(expDiff < 0)
+            else if(niveauDiff < 0)
+                return 1;
+            else if(expDiff > 0)
                     return -1;
-            }
+            else if(expDiff < 0)
+                return 1;
             
             return 0;
         });
@@ -299,7 +297,7 @@ public class ListeDesEtudiants{
             }
         }
         
-        //organisezAlphabet(); //On assume que l'ordre n'est pas alphabetique
+        organisezAlphabet(); //On assume que l'ordre n'est pas alphabetique
         closeWorkBook(fileName, wb, false);
     }
     
