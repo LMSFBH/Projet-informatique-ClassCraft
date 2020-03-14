@@ -1,0 +1,8 @@
+build
+dist
+poi-4.1.2/docs
+test
+*.class
+~*.*
+~*
+authors.txt
