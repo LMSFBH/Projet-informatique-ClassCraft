@@ -10,10 +10,9 @@ package classcraft;
  * V.1.0
  */
 public class Role extends Pouvoir  {
-    String job;
-    int currentPv;
-    public pouvoir pouvoirs = new Pouvoir();
-    
+    private String job;
+    private int currentPv;
+    public Pouvoir pouvoirs = new Pouvoir();
     
     public Role(){
     
@@ -23,18 +22,19 @@ public class Role extends Pouvoir  {
         setJob(nomJob);
         setCurrentPv(max);
     }
-   public String getJob(){
-       return job;
+    
+    public String getJob(){
+        return job;
     }
-   public int getCurrentPv(){
-       return currentPv;
-   }
+    public int getCurrentPv(){
+        return currentPv;
+    }
    
-   public void setJob(String NouveauJob){
-       this.job=job;
-   }
+    public void setJob(String NouveauJob){
+        this.job=job;
+    }
    
-   public void setCurrentPv(int currentPv){
-       this.currentPv=currentPv;
-   }
+    public void setCurrentPv(int currentPv){
+        this.currentPv=currentPv;
+    }
 }

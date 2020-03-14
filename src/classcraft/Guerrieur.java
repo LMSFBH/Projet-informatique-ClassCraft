@@ -10,7 +10,7 @@ package classcraft;
  * v1.0
  */
 public class Guerrieur extends Role {
-    final int MAXPV=5;
+    final int MAX_PV_GUERRIEUR=5;
     
     public Guerrieur(){
         super("Guerrieur",5);

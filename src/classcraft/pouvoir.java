@@ -9,15 +9,15 @@ package classcraft;
  *
  * V:1.0
  */
-public class pouvoir {
+public class Pouvoir {
     public int debloque;
     boolean utiliser;
     
-    public pouvoir(){
+    public Pouvoir(){
         
     }
     
-    public pouvoir(int niveau){
+    public Pouvoir(int niveau){
         setDebloque(niveau);
         setUtiliser(false);
     }
