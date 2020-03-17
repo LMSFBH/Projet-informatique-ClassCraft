@@ -9,11 +9,16 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTextField;
@@ -22,7 +27,7 @@ import javax.swing.JTextField;
  *
  * @author usager
  */
-class MainFrame extends JFrame  { 
+class MainFrame extends JFrame implements ActionListener { 
     
     ListeDesEtudiants liste;
     JPanel panneau = new JPanel();
@@ -175,7 +180,36 @@ class MainFrame extends JFrame  {
             
         }
         
-        add(panneau);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent ev) {
+                String[] options = {"Oui", "Non"};
+                if(JOptionPane.showOptionDialog(null, "Etes-vous sure de vouloir fermer l'application?", "FERMETURE", JOptionPane.YES_NO_OPTION,
+                                                 JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 0){
+                    try{
+                        //L'ecriture des images prends beaucoups de temps
+                        //if(liste.isModif())
+                            liste.writeToutEtudiantsEtImages(JOptionPane.showInputDialog("Veuillez selectionnez l'emplacement du fichier excel de sauvegarde. \n(L'operation peut prendre plus de temps a cause des images)"), true);
+                        //else
+                        //    liste.writeToutEtudiantsEtImages(JOptionPane.showInputDialog("Veuillez selectionnez l'emplacement du fichier excel de sauvegarde."), false);
+                    } catch(FileNotFoundException fnfe){
+                        JOptionPane.showMessageDialog(null, fnfe.getMessage());
+                    } catch(IOException ioe){
+                        JOptionPane.showMessageDialog(null, ioe.getMessage());
+                    } catch(Exception e){
+                        JOptionPane.showMessageDialog(null, e.getMessage());
+                    }
+                    
+                    System.exit(0);
+                }
+            }  
+        });
         
+        add(panneau);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

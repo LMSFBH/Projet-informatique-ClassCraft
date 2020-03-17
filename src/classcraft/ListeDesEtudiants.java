@@ -26,8 +26,9 @@ public class ListeDesEtudiants{
     public static final int MAX_CELLS = 14;
     public static final int NBR_POUVOIRS = 6;
     public static final int IMG_POS = 15;
-    
     public static final String DEFAULT_IMAGE = "default.png"; 
+    
+    private boolean modifier = false;
     private ArrayList<Etudiant> etudiants = new ArrayList<>();
     
     //Initialise la liste d'etudiant avec un fichier de chemin fichierAvatar
@@ -92,11 +93,16 @@ public class ListeDesEtudiants{
         etudiants.set(index, unEtudiant);
     }
     
+    public boolean isModif(){
+        return modifier;
+    }
+    
     //Ajoute un etudiant et reorganise la liste
     public void addEtudiant(Etudiant unEtudiant) throws Exception{
         if(!etudiants.add(unEtudiant))
             throw new Exception("L'etudiant "+unEtudiant.getName()+" de numero de DA "+unEtudiant.getNAdmission()+" n'a pas pu etre ajouter.");
         
+        modifier = true;
         organisezAlphabet();
     }
     
@@ -105,6 +111,7 @@ public class ListeDesEtudiants{
         if(!etudiants.remove(unEtudiant))
             throw new Exception("L'etudiant "+unEtudiant.getName()+" de numero de DA "+unEtudiant.getNAdmission()+" n'a pas pu etre supprimer.");
         
+        modifier = true;
         organisezAlphabet();
     }
     
@@ -114,7 +121,7 @@ public class ListeDesEtudiants{
         etudiants.sort((Etudiant etudiant1, Etudiant etudiant2) -> etudiant1.getName().compareToIgnoreCase(etudiant2.getName()));
     }
     
-    public void organisezClassement(){
+    public void organisezClassementDecroissant(){
         etudiants.sort((Etudiant etudiant1, Etudiant etudiant2) -> {
             int niveauDiff = Integer.compare(etudiant1.getNiveau(), etudiant2.getNiveau());
             int expDiff = Integer.compare(etudiant1.getExp(), etudiant2.getExp());
@@ -127,6 +134,24 @@ public class ListeDesEtudiants{
                     return -1;
             else if(expDiff < 0)
                 return 1;
+            
+            return 0;
+        });
+    }
+    
+    public void organisezClassementCroissant(){
+        etudiants.sort((Etudiant etudiant1, Etudiant etudiant2) -> {
+            int niveauDiff = Integer.compare(etudiant1.getNiveau(), etudiant2.getNiveau());
+            int expDiff = Integer.compare(etudiant1.getExp(), etudiant2.getExp());
+            
+            if(niveauDiff > 0)
+                return 1;
+            else if(niveauDiff < 0)
+                return -1;
+            else if(expDiff > 0)
+                    return 1;
+            else if(expDiff < 0)
+                return -1;
             
             return 0;
         });
@@ -213,7 +238,7 @@ public class ListeDesEtudiants{
                     ImageIO.write(bImage, "png", os);
                     pictureIdx = wb.addPicture(os.toByteArray(), Workbook.PICTURE_TYPE_PNG);
                 } catch (IOException ioe){
-                    throw new IOException("Erreur d'acces a l'image "+img+".");
+                    throw new IOException("Erreur d'acces a l'image "+((img == null) ? DEFAULT_IMAGE : img)+".");
                 }
 
                 CreationHelper helper = wb.getCreationHelper();

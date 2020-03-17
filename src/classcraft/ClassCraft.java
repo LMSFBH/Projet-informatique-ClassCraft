@@ -20,7 +20,7 @@ public class ClassCraft{
      */
     public static void main(String[] args) throws  FileNotFoundException, IOException, Exception{
         MainFrame frame = new MainFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.setVisible(true);
     }
 }
