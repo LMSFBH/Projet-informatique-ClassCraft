@@ -189,10 +189,11 @@ class MainFrame extends JFrame implements ActionListener {
                     try{
                         //L'ecriture des images prends beaucoups de temps
                         //if(liste.isModif())
-                            liste.writeToutEtudiantsEtImages(JOptionPane.showInputDialog("Veuillez selectionnez l'emplacement du fichier excel de sauvegarde. \n(L'operation peut prendre plus de temps a cause des images)"), true);
+                            String fichierImg = JOptionPane.showInputDialog("Veuillez selectionnez l'emplacement du fichier excel de sauvegarde. \n(L'operation peut prendre plus de temps a cause des images)");
+                            liste.writeToutEtudiantsEtImages(fichierImg, true);
                         //else
                         //    liste.writeToutEtudiantsEtImages(JOptionPane.showInputDialog("Veuillez selectionnez l'emplacement du fichier excel de sauvegarde."), false);
-                    } catch(FileNotFoundException fnfe){
+                    }catch(FileNotFoundException fnfe){
                         JOptionPane.showMessageDialog(null, fnfe.getMessage());
                     } catch(IOException ioe){
                         JOptionPane.showMessageDialog(null, ioe.getMessage());

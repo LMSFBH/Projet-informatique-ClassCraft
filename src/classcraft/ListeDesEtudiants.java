@@ -32,11 +32,11 @@ public class ListeDesEtudiants{
     private ArrayList<Etudiant> etudiants = new ArrayList<>();
     
     //Initialise la liste d'etudiant avec un fichier de chemin fichierAvatar
-    public ListeDesEtudiants(String fichierAvatars) throws FileNotFoundException, IOException, Exception{
+    public ListeDesEtudiants(String fichierAvatars) throws IllegalArgumentException, FileNotFoundException, IOException, Exception{
         setToutEtudiants(fichierAvatars);
     }
     
-    public ListeDesEtudiants(File fichierAvatars) throws FileNotFoundException, IOException, Exception{
+    public ListeDesEtudiants(File fichierAvatars) throws IllegalArgumentException, FileNotFoundException, IOException, Exception{
         this(fichierAvatars.getCanonicalPath());
     }
 
@@ -50,6 +50,9 @@ public class ListeDesEtudiants{
     
     //Adapte de https://stackoverflow.com/a/52875928
     public static void convertCsvToXlsx(String xlsLocation, String csvLocation) throws FileNotFoundException, IOException, Exception {
+        if((csvLocation == null) || (csvLocation.isEmpty()))
+            throw new IllegalArgumentException("Un fichier d'entree est vide.");
+        
         SXSSFWorkbook workbook = new SXSSFWorkbook();
         SXSSFSheet sheet = workbook.createSheet();
         AtomicReference<Integer> row = new AtomicReference<>(0);
@@ -121,35 +124,17 @@ public class ListeDesEtudiants{
         etudiants.sort((Etudiant etudiant1, Etudiant etudiant2) -> etudiant1.getName().compareToIgnoreCase(etudiant2.getName()));
     }
     
-    public void organisezClassementDecroissant(){
+    public void organisezClassement(boolean isCroissant){
         etudiants.sort((Etudiant etudiant1, Etudiant etudiant2) -> {
-            int niveauDiff = Integer.compare(etudiant1.getNiveau(), etudiant2.getNiveau());
-            int expDiff = Integer.compare(etudiant1.getExp(), etudiant2.getExp());
-            
-            if(niveauDiff > 0)
-                return -1;
-            else if(niveauDiff < 0)
-                return 1;
-            else if(expDiff > 0)
-                    return -1;
-            else if(expDiff < 0)
-                return 1;
-            
-            return 0;
-        });
-    }
-    
-    public void organisezClassementCroissant(){
-        etudiants.sort((Etudiant etudiant1, Etudiant etudiant2) -> {
-            int niveauDiff = Integer.compare(etudiant1.getNiveau(), etudiant2.getNiveau());
-            int expDiff = Integer.compare(etudiant1.getExp(), etudiant2.getExp());
+            int niveauDiff = Integer.compare((isCroissant) ? etudiant1.getNiveau() : etudiant2.getNiveau(), (isCroissant) ? etudiant2.getNiveau() : etudiant1.getNiveau());
+            int expDiff = Integer.compare((isCroissant) ? etudiant1.getExp() : etudiant2.getExp(), (isCroissant) ? etudiant2.getExp() : etudiant1.getExp());
             
             if(niveauDiff > 0)
                 return 1;
             else if(niveauDiff < 0)
                 return -1;
             else if(expDiff > 0)
-                    return 1;
+                return 1;
             else if(expDiff < 0)
                 return -1;
             
@@ -159,6 +144,9 @@ public class ListeDesEtudiants{
     
     //Obtient une image du fichier fileName
     public XSSFPictureData getImage(Etudiant etudiant, String fileName) throws IllegalArgumentException, FileNotFoundException, IOException, Exception{
+        if((fileName == null) || (fileName.isEmpty()))
+            throw new IllegalArgumentException("Un fichier d'entree est vide.");
+        
         XSSFWorkbook wb = null;
         
         int index = etudiants.indexOf(etudiant);
@@ -184,7 +172,10 @@ public class ListeDesEtudiants{
     //Ecrit tout les etudiants et les images liee de cet objet dans un fichier excel de nom fileName
     //ecrit ou pas les images selon writeImage, a faire que si un etudiant a ete ajouter/retirer ou la premiere ecriture du fichier
     //Important: verifiez si un fichier rempli d'etudiant et d'image atteint la limite de POI (ca ne devrait pas)
-    public void writeToutEtudiantsEtImages(String fileName, boolean writeImage) throws FileNotFoundException, IOException, EOFException, Exception{
+    public void writeToutEtudiantsEtImages(String fileName, boolean writeImage) throws IllegalArgumentException, FileNotFoundException, IOException, EOFException, Exception{
+        if((fileName == null) || (fileName.isEmpty()))
+            throw new IllegalArgumentException("Un fichier d'entree est vide.");
+        
         XSSFWorkbook wb = new XSSFWorkbook();
         Sheet sheet = wb.createSheet();
         
@@ -261,7 +252,10 @@ public class ListeDesEtudiants{
     }
     
     //Appeler lors de l'initialisation de cet objet, ne devrait pas etre appeler autrement
-    public void setToutEtudiants(String fileName) throws FileNotFoundException, IOException, Exception{
+    public void setToutEtudiants(String fileName) throws IllegalArgumentException, FileNotFoundException, IOException, Exception{
+        if((fileName == null) || (fileName.isEmpty()))
+            throw new IllegalArgumentException("Un fichier d'entree est vide.");
+        
         XSSFWorkbook wb = null;
         try{
             wb = new XSSFWorkbook(new FileInputStream(fileName));
@@ -331,7 +325,9 @@ public class ListeDesEtudiants{
     }
     
     //Ne devrait pas etre appeler par quoi que ce soit
-    public void closeWorkBook(String fileName, XSSFWorkbook wb, boolean isWrite) throws FileNotFoundException, IOException, EOFException, Exception{
+    public void closeWorkBook(String fileName, XSSFWorkbook wb, boolean isWrite) throws IllegalArgumentException, FileNotFoundException, IOException, EOFException, Exception{
+        if((fileName == null) || (fileName.isEmpty()))
+            throw new IllegalArgumentException("Un fichier d'entree est vide.");
         
         if(isWrite){
             try{

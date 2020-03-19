@@ -18,9 +18,9 @@ public class Role extends Pouvoir  {
     
     }
     
-    public Role (String nomJob,int max){
+    public Role (String nomJob,int maxPv){
         setJob(nomJob);
-        setCurrentPv(max);
+        setCurrentPv(maxPv);
     }
     
     public String getJob(){
