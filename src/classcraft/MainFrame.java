@@ -29,7 +29,7 @@ import javax.swing.JTextField;
  */
 class MainFrame extends JFrame implements ActionListener { 
     
-    final ListeDesEtudiants liste;
+    ListeDesEtudiants liste;
     JPanel panneau = new JPanel();
     JLabel pv = new JLabel("Points de Vie");
     int nombreEtudiants;
@@ -227,22 +227,20 @@ class MainFrame extends JFrame implements ActionListener {
         switch (cmd.substring(0, 6)) {
             case "inc pv":
                 currEtudiant.setPv(currEtudiant.getPv()+1);
-                liste.setEtudiant(index, currEtudiant);
                 break;
             case "dec pv":
                 currEtudiant.setPv(currEtudiant.getPv()-1);
-                liste.setEtudiant(index, currEtudiant);
                 break;
             case "inc ex":
                 currEtudiant.setExp(currEtudiant.getExp()+1);
-                liste.setEtudiant(index, currEtudiant);
                 break;
             case "dec ex":
                 currEtudiant.setExp(currEtudiant.getPv()-1);
-                liste.setEtudiant(index, currEtudiant);
                 break;
             default:
                 break;
         }
+	
+	liste.setEtudiant(index, currEtudiant);
     }
 }
