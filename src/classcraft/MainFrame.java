@@ -29,7 +29,7 @@ import javax.swing.JTextField;
  */
 class MainFrame extends JFrame implements ActionListener { 
     
-    ListeDesEtudiants liste;
+    final ListeDesEtudiants liste;
     JPanel panneau = new JPanel();
     JLabel pv = new JLabel("Points de Vie");
     int nombreEtudiants;
@@ -97,13 +97,16 @@ class MainFrame extends JFrame implements ActionListener {
             Bplus[i] = new JButton("+");
             Bplus[i].setMargin(new Insets(0,0,0,0));
             Bplus[i].setPreferredSize(new Dimension(20,20));
+            Bplus[i].setActionCommand("inc pv "+i);
+            Bplus[i].addActionListener(this);
 	}
 	JButton [] Bmoins = new JButton[nombreEtudiants];
 	for (int i=0; i<nombreEtudiants;i++){
             Bmoins[i] = new JButton("-");
             Bmoins[i].setMargin(new Insets(0,0,0,0));
             Bmoins[i].setPreferredSize(new Dimension(20,20));
-
+            Bmoins[i].setActionCommand("dec pv "+i);
+            Bmoins[i].addActionListener(this);
 	}
 	// Moi: vies c'est le tableau des points de vie des étudiants. j'aivais déja utiliser pv
 	int [] Vies = new int[nombreEtudiants];
@@ -188,11 +191,12 @@ class MainFrame extends JFrame implements ActionListener {
                                                  JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 0){
                     try{
                         //L'ecriture des images prends beaucoups de temps
-                        //if(liste.isModif())
-                            String fichierImg = JOptionPane.showInputDialog("Veuillez selectionnez l'emplacement du fichier excel de sauvegarde. \n(L'operation peut prendre plus de temps a cause des images)");
+                        String fichierImg = JOptionPane.showInputDialog("Veuillez selectionnez l'emplacement du fichier excel de sauvegarde. \n(L'operation pourrait prendre plus de temps si les images sont a ecrire)");
+                        //if(liste.isModif()){
                             liste.writeToutEtudiantsEtImages(fichierImg, true);
                         //else
                         //    liste.writeToutEtudiantsEtImages(JOptionPane.showInputDialog("Veuillez selectionnez l'emplacement du fichier excel de sauvegarde."), false);
+                            
                     }catch(FileNotFoundException fnfe){
                         JOptionPane.showMessageDialog(null, fnfe.getMessage());
                     } catch(IOException ioe){
@@ -211,6 +215,34 @@ class MainFrame extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        String cmd = e.getActionCommand();
+        int index = 0;
+        try{
+            index = Integer.parseInt(cmd.substring(7));
+        } catch(NumberFormatException nfe){
+            index = Integer.parseInt(cmd.substring(8));
+        }
+        Etudiant currEtudiant = liste.getEtudiant(index);
+        
+        switch (cmd.substring(0, 6)) {
+            case "inc pv":
+                currEtudiant.setPv(currEtudiant.getPv()+1);
+                liste.setEtudiant(index, currEtudiant);
+                break;
+            case "dec pv":
+                currEtudiant.setPv(currEtudiant.getPv()-1);
+                liste.setEtudiant(index, currEtudiant);
+                break;
+            case "inc ex":
+                currEtudiant.setExp(currEtudiant.getExp()+1);
+                liste.setEtudiant(index, currEtudiant);
+                break;
+            case "dec ex":
+                currEtudiant.setExp(currEtudiant.getPv()-1);
+                liste.setEtudiant(index, currEtudiant);
+                break;
+            default:
+                break;
+        }
     }
 }

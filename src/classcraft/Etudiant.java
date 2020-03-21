@@ -28,7 +28,7 @@ public class Etudiant {
         setPseudo(pseudo);
         setExp(exp);
         setNiveau(niveau);
-        setpv(pv);
+        setPv(pv);
         setCheminImage(cheminImage);
     }
     
@@ -100,7 +100,7 @@ public class Etudiant {
     }
     
     //On fait ca
-    public void setpv(int pv){
+    public void setPv(int pv){
         if(pv < 0)
             throw new IllegalArgumentException("Les pv ne peuvent pas etre negatif.");
         
@@ -109,7 +109,7 @@ public class Etudiant {
     
     //Ou ca
     //Plus debatable dans ce cas, vu que je ne sais pas si un heal donne tout les pvs
-    public void decpv(boolean isInit){
+    public void decPv(boolean isInit){
         //if(isInit || ((pv-1) == 0))
         //    pv = Role.PV_ROLE_BASE;
         //else
