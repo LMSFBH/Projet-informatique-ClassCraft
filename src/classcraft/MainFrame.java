@@ -31,13 +31,11 @@ class MainFrame extends JFrame implements ActionListener {
     
     ListeDesEtudiants liste;
     JPanel panneau = new JPanel();
-    JLabel pv = new JLabel("Points de Vie");
     int nombreEtudiants;
     
     public MainFrame() throws  FileNotFoundException, IOException, Exception{
         liste = new ListeDesEtudiants("Classeur1.xlsx");
         nombreEtudiants = liste.getEtudiantsSize();
-        
         
         setSize(nombreEtudiants*35, nombreEtudiants*30);
         
@@ -65,10 +63,8 @@ class MainFrame extends JFrame implements ActionListener {
             panneau.add(nomEtudiants[i], constraints);
         }
         
-        
         constraints.gridx++;
         constraints.gridy=0;
-        
         JLabel classe = new JLabel("classe");
         panneau.add(classe, constraints);
         
@@ -100,6 +96,7 @@ class MainFrame extends JFrame implements ActionListener {
             Bplus[i].setActionCommand("inc pv "+i);
             Bplus[i].addActionListener(this);
 	}
+        
 	JButton [] Bmoins = new JButton[nombreEtudiants];
 	for (int i=0; i<nombreEtudiants;i++){
             Bmoins[i] = new JButton("-");
@@ -108,6 +105,7 @@ class MainFrame extends JFrame implements ActionListener {
             Bmoins[i].setActionCommand("dec pv "+i);
             Bmoins[i].addActionListener(this);
 	}
+        
 	// Moi: vies c'est le tableau des points de vie des étudiants. j'aivais déja utiliser pv
 	int [] Vies = new int[nombreEtudiants];
 	for (int i=0; i<Vies.length;i++){
@@ -118,6 +116,7 @@ class MainFrame extends JFrame implements ActionListener {
 
 	constraints.gridx=4;// Moi: j'ai mis 4 parce qu'il y a classe, liste et avatar avant pv et les bouttons
 	constraints.gridy=0;
+        JLabel pv = new JLabel("Points de Vie");
 	panneau.add(pv,constraints);
 	
 	for(int i=0; i<nombreEtudiants;i++){
@@ -174,6 +173,8 @@ class MainFrame extends JFrame implements ActionListener {
                 ListePouvoirs[i][j] = new JButton(""+lv);
                 ListePouvoirs[i][j].setMargin(new Insets(0,0,0,0));
                 ListePouvoirs[i][j].setPreferredSize(new Dimension(35,20));
+                ListePouvoirs[i][j].setActionCommand("pouvoir "+i+" "+j);
+                ListePouvoirs[i][j].addActionListener(this);
                 panneau.add(ListePouvoirs[i][j],constraints);
                 constraints.gridx++;
             }
@@ -216,13 +217,15 @@ class MainFrame extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String cmd = e.getActionCommand();
-        int index = 0;
+        int indexEtudiant;
         try{
-            index = Integer.parseInt(cmd.substring(7));
+            indexEtudiant = Integer.parseInt(cmd.substring(7)); //Soit c'est inc/dec pv, donc l'index est en position 7
         } catch(NumberFormatException nfe){
-            index = Integer.parseInt(cmd.substring(8));
+            indexEtudiant = Integer.parseInt(cmd.substring(8,9)); //Soit c'est pouvoir, donc l'index est 8-9
         }
-        Etudiant currEtudiant = liste.getEtudiant(index);
+        int indexPouvoir = 0;
+        
+        Etudiant currEtudiant = liste.getEtudiant(indexEtudiant);
         
         switch (cmd.substring(0, 6)) {
             case "inc pv":
@@ -237,10 +240,13 @@ class MainFrame extends JFrame implements ActionListener {
             case "dec ex":
                 currEtudiant.setExp(currEtudiant.getPv()-1);
                 break;
+            case "pouvoi":
+                indexPouvoir = Integer.parseInt(cmd.substring(10,11));
             default:
                 break;
         }
 	
-	liste.setEtudiant(index, currEtudiant);
+	liste.setEtudiant(indexEtudiant, currEtudiant);
+        repaint();
     }
 }
