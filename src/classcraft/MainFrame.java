@@ -22,6 +22,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTextField;
+import javax.swing.JFileChooser;
 
 /**
  *
@@ -32,9 +33,13 @@ class MainFrame extends JFrame implements ActionListener {
     ListeDesEtudiants liste;
     JPanel panneau = new JPanel();
     int nombreEtudiants;
+    JFileChooser choix;
     
     public MainFrame() throws  FileNotFoundException, IOException, Exception{
-        liste = new ListeDesEtudiants("Classeur1.xlsx");
+        choix = new JFileChooser();
+        choix.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        int resultat = choix.showOpenDialog(this);
+        liste = new ListeDesEtudiants(choix.getSelectedFile().getName());
         nombreEtudiants = liste.getEtudiantsSize();
         
         setSize(nombreEtudiants*35, nombreEtudiants*30);
@@ -95,13 +100,12 @@ class MainFrame extends JFrame implements ActionListener {
             Bplus[i].setPreferredSize(new Dimension(20,20));
             Bplus[i].setActionCommand("inc pv "+i);
             Bplus[i].addActionListener(this);
-            
             Bmoins[i] = new JButton("-");
             Bmoins[i].setMargin(new Insets(0,0,0,0));
             Bmoins[i].setPreferredSize(new Dimension(20,20));
             Bmoins[i].setActionCommand("dec pv "+i);
             Bmoins[i].addActionListener(this);
-	}
+        }
         
 	constraints.gridx=4;// Moi: j'ai mis 4 parce qu'il y a classe, liste et avatar avant pv et les bouttons
 	constraints.gridy=0;
