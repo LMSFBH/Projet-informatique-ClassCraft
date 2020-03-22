@@ -75,7 +75,6 @@ class MainFrame extends JFrame implements ActionListener {
             panneau.add(role[i],constraints);
         }
         
-        
         constraints.gridx++;
         constraints.gridy=0;
         JLabel pseudo = new JLabel("Pseudo");
@@ -89,16 +88,14 @@ class MainFrame extends JFrame implements ActionListener {
         }
         
 	JButton [] Bplus = new JButton[nombreEtudiants];
+	JButton [] Bmoins = new JButton[nombreEtudiants];
 	for (int i=0; i<nombreEtudiants;i++){
             Bplus[i] = new JButton("+");
             Bplus[i].setMargin(new Insets(0,0,0,0));
             Bplus[i].setPreferredSize(new Dimension(20,20));
             Bplus[i].setActionCommand("inc pv "+i);
             Bplus[i].addActionListener(this);
-	}
-        
-	JButton [] Bmoins = new JButton[nombreEtudiants];
-	for (int i=0; i<nombreEtudiants;i++){
+            
             Bmoins[i] = new JButton("-");
             Bmoins[i].setMargin(new Insets(0,0,0,0));
             Bmoins[i].setPreferredSize(new Dimension(20,20));
@@ -106,14 +103,6 @@ class MainFrame extends JFrame implements ActionListener {
             Bmoins[i].addActionListener(this);
 	}
         
-	// Moi: vies c'est le tableau des points de vie des étudiants. j'aivais déja utiliser pv
-	int [] Vies = new int[nombreEtudiants];
-	for (int i=0; i<Vies.length;i++){
-		// ici on va devoir appeler le tableau des etudiants pour chaque vies
-		Vies[i] = liste.getEtudiant(i).getPv();
-	}
-        
-
 	constraints.gridx=4;// Moi: j'ai mis 4 parce qu'il y a classe, liste et avatar avant pv et les bouttons
 	constraints.gridy=0;
         JLabel pv = new JLabel("Points de Vie");
@@ -121,7 +110,7 @@ class MainFrame extends JFrame implements ActionListener {
 	
 	for(int i=0; i<nombreEtudiants;i++){
             constraints.gridy++;
-            panneau.add(new JLabel(""+Vies[i]),constraints);
+            panneau.add(new JLabel(""+liste.getEtudiant(i).getPv()),constraints);
             constraints.anchor=GridBagConstraints.EAST;
             panneau.add(Bplus[i],constraints);
             constraints.anchor=GridBagConstraints.WEST;
@@ -135,24 +124,46 @@ class MainFrame extends JFrame implements ActionListener {
         panneau.add(exp,constraints);
         
         int ExpMax=2;
-        int Exp=0;
         JProgressBar[] progressBar = new JProgressBar[nombreEtudiants];
         for(int i=0; i<nombreEtudiants; i++){
             progressBar[i] = new JProgressBar();
             progressBar[i].setMaximum(ExpMax);
             progressBar[i].setValue(0);
             progressBar[i].setStringPainted(true);
-        }
-        
-        
-        
-        for(int i=0; i<nombreEtudiants; i++){
+            
             constraints.gridy++;
             progressBar[i].setString("LV"+liste.getEtudiant(i).getNiveau()+"                            ");
-            progressBar[i].setValue(liste.getEtudiant(i).getExp());
-            panneau.add(progressBar[i],constraints);	
+            progressBar[i].setValue(liste.getEtudiant(i).getExp());	
         }
-                
+        
+        JButton[] BplusExp = new JButton[nombreEtudiants];
+	JButton[] BmoinsExp = new JButton[nombreEtudiants];
+	for (int i=0; i<nombreEtudiants;i++){
+            BplusExp[i] = new JButton("+");
+            BplusExp[i].setMargin(new Insets(0,0,0,0));
+            BplusExp[i].setPreferredSize(new Dimension(20,20));
+            BplusExp[i].setActionCommand("inc pv "+i);
+            BplusExp[i].addActionListener(this);
+            
+            BmoinsExp[i] = new JButton("-");
+            BmoinsExp[i].setMargin(new Insets(0,0,0,0));
+            BmoinsExp[i].setPreferredSize(new Dimension(20,20));
+            BmoinsExp[i].setActionCommand("dec pv "+i);
+            BmoinsExp[i].addActionListener(this);
+	}
+        
+        constraints.gridx=5;
+        constraints.gridy=0;
+        for(int i=0; i<nombreEtudiants;i++){
+            constraints.gridy++;
+            panneau.add(progressBar[i],constraints);
+            constraints.anchor=GridBagConstraints.EAST;
+            panneau.add(BplusExp[i],constraints);
+            constraints.anchor=GridBagConstraints.WEST;
+            panneau.add(BmoinsExp[i],constraints);
+            constraints.anchor=GridBagConstraints.CENTER;
+	}
+        
         constraints.gridx=6;
         constraints.gridy=0;
         constraints.gridwidth=6;
