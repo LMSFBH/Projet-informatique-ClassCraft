@@ -9,20 +9,10 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JTextField;
-import javax.swing.JFileChooser;
+import javax.swing.*;
 
 /**
  *
@@ -39,7 +29,7 @@ class MainFrame extends JFrame implements ActionListener {
         choix = new JFileChooser();
         choix.setFileSelectionMode(JFileChooser.FILES_ONLY);
         int resultat = choix.showOpenDialog(this);
-        liste = new ListeDesEtudiants(choix.getSelectedFile().getName());
+        liste = new ListeDesEtudiants(choix.getSelectedFile());
         nombreEtudiants = liste.getEtudiantsSize();
         
         setSize(nombreEtudiants*35, nombreEtudiants*30);
@@ -65,6 +55,7 @@ class MainFrame extends JFrame implements ActionListener {
         for(int i=0; i<nombreEtudiants; i++){
             constraints.gridy++;
             nomEtudiants[i] = new JLabel(liste.getEtudiant(i).getName());
+            nomEtudiants[i].addMouseListener(new Mouse());
             panneau.add(nomEtudiants[i], constraints);
         }
         
@@ -136,7 +127,7 @@ class MainFrame extends JFrame implements ActionListener {
             progressBar[i].setStringPainted(true);
             
             constraints.gridy++;
-            progressBar[i].setString("LV"+liste.getEtudiant(i).getNiveau()+"                            ");
+            progressBar[i].setString("LV"+(liste.getEtudiant(i).getNiveau()+((liste.getEtudiant(i).getExp() == 1) ? 0.5 : 0))+"                            ");
             progressBar[i].setValue(liste.getEtudiant(i).getExp());	
         }
         
@@ -176,14 +167,12 @@ class MainFrame extends JFrame implements ActionListener {
         JLabel pouvoir = new JLabel("Pouvoirs");
         panneau.add(pouvoir,constraints);
         
-         // liste de pouvoirs pour un eleve
-        int POUVOIRS_MAX = 6;
         constraints.gridwidth=1;
         int lv = 0; // niveau ou on gagne un pouvoir
         constraints.gridy++;
-        JButton ListePouvoirs[][] = new JButton[nombreEtudiants][POUVOIRS_MAX];
+        JButton ListePouvoirs[][] = new JButton[nombreEtudiants][ListeDesEtudiants.NBR_POUVOIRS];
         for (int i=0; i<ListePouvoirs.length;i++){ 
-            for (int j=0; j<POUVOIRS_MAX;j++){ 
+            for (int j=0; j<ListeDesEtudiants.NBR_POUVOIRS;j++){ 
                 lv+=5;
                 ListePouvoirs[i][j] = new JButton(""+lv);
                 ListePouvoirs[i][j].setMargin(new Insets(0,0,0,0));
@@ -193,10 +182,10 @@ class MainFrame extends JFrame implements ActionListener {
                 panneau.add(ListePouvoirs[i][j],constraints);
                 constraints.gridx++;
             }
-            constraints.gridy++;
-            constraints.gridx-=POUVOIRS_MAX;
-            lv=0;
             
+            constraints.gridy++;
+            constraints.gridx-=ListeDesEtudiants.NBR_POUVOIRS;
+            lv=0;
         }
         
         addWindowListener(new WindowAdapter() {
@@ -205,25 +194,42 @@ class MainFrame extends JFrame implements ActionListener {
                 String[] options = {"Oui", "Non"};
                 if(JOptionPane.showOptionDialog(null, "Etes-vous sure de vouloir fermer l'application?", "FERMETURE", JOptionPane.YES_NO_OPTION,
                                                  JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 0){
-                    try{
+                    String fichierImg = "";
+
+                    while((fichierImg == null) || (fichierImg.isEmpty())){
+                        try{
                         //L'ecriture des images prends beaucoups de temps
-                        String fichierImg = JOptionPane.showInputDialog("Veuillez selectionnez l'emplacement du fichier excel de sauvegarde. \n(L'operation pourrait prendre plus de temps si les images sont a ecrire)");
-                        //if(liste.isModif()){
+
+                            fichierImg = JOptionPane.showInputDialog("Veuillez selectionnez l'emplacement du fichier excel de sauvegarde. \n(L'operation pourrait prendre plus de temps si les images sont a ecrire)");
+                            if((fichierImg == null) || (fichierImg.isEmpty())){
+                                if(fichierImg == null)
+                                    if(JOptionPane.showOptionDialog(null, "Vous avez changez d'idee?", "FERMETURE", JOptionPane.YES_NO_OPTION,
+                                                                    JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 0)
+                                        System.exit(0);
+                                
+                                JOptionPane.showMessageDialog(null, "Veuillez entrez un non de fichier non-vide.");
+                                continue;
+                            }
+
+                            if(!fichierImg.endsWith(".xlsx"))
+                                fichierImg += ".xlsx";   
+
+                            //if(liste.isModif()){
                             liste.writeToutEtudiantsEtImages(fichierImg, true);
-                        //else
-                        //    liste.writeToutEtudiantsEtImages(JOptionPane.showInputDialog("Veuillez selectionnez l'emplacement du fichier excel de sauvegarde."), false);
-                            
-                    }catch(FileNotFoundException fnfe){
-                        JOptionPane.showMessageDialog(null, fnfe.getMessage());
-                    } catch(IOException ioe){
-                        JOptionPane.showMessageDialog(null, ioe.getMessage());
-                    } catch(Exception e){
-                        JOptionPane.showMessageDialog(null, e.getMessage());
+                            //else
+                            //    liste.writeToutEtudiantsEtImages(JOptionPane.showInputDialog("Veuillez selectionnez l'emplacement du fichier excel de sauvegarde."), false);
+                        }catch(FileNotFoundException fnfe){
+                            JOptionPane.showMessageDialog(null, fnfe.getMessage());
+                        } catch(IOException ioe){
+                            JOptionPane.showMessageDialog(null, ioe.getMessage());
+                        } catch(Exception e){
+                            JOptionPane.showMessageDialog(null, e.getMessage());
+                        }
                     }
                     
                     System.exit(0);
                 }
-            }  
+            }
         });
         
         add(panneau);
@@ -272,5 +278,16 @@ class MainFrame extends JFrame implements ActionListener {
 	
 	liste.setEtudiant(indexEtudiant, currEtudiant);
         repaint();
+    }
+    
+    private class Mouse extends MouseAdapter{
+        
+        @Override
+        public void mouseClicked(MouseEvent e){
+            FrameEtudiant frameClique = new FrameEtudiant(new Etudiant("56675","ertr")); // Comment recuperer l'etudiant???
+            frameClique.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            frameClique.setVisible(true);
+        }
+        
     }
 }
