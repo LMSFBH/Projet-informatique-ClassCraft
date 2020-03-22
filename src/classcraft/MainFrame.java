@@ -227,23 +227,32 @@ class MainFrame extends JFrame implements ActionListener {
         
         Etudiant currEtudiant = liste.getEtudiant(indexEtudiant);
         
-        switch (cmd.substring(0, 6)) {
-            case "inc pv":
-                currEtudiant.setPv(currEtudiant.getPv()+1);
-                break;
-            case "dec pv":
-                currEtudiant.setPv(currEtudiant.getPv()-1);
-                break;
-            case "inc ex":
-                currEtudiant.setExp(currEtudiant.getExp()+1);
-                break;
-            case "dec ex":
-                currEtudiant.setExp(currEtudiant.getPv()-1);
-                break;
-            case "pouvoi":
-                indexPouvoir = Integer.parseInt(cmd.substring(10,11));
-            default:
-                break;
+        try{
+            switch (cmd.substring(0, 6)) {
+                case "inc pv":
+                    //Faire des verifications quant au max des PVs
+                    currEtudiant.setPv(currEtudiant.getPv()+1);
+                    break;
+                case "dec pv":
+                    currEtudiant.setPv(currEtudiant.getPv()-1);
+                    break;
+                case "inc ex":
+                    if(currEtudiant.getExp()+1 == 2){
+                        currEtudiant.setExp(0);
+                        currEtudiant.setNiveau(currEtudiant.getNiveau()+1);
+                    }
+                    else currEtudiant.setExp(currEtudiant.getExp()+1);
+                    break;
+                case "dec ex":
+                    currEtudiant.setExp(currEtudiant.getPv()-1);
+                    break;
+                case "pouvoi":
+                    indexPouvoir = Integer.parseInt(cmd.substring(10,11));
+                default:
+                    break;
+            }
+        } catch(IllegalArgumentException iae){
+            JOptionPane.showMessageDialog(null, iae.getMessage());
         }
 	
 	liste.setEtudiant(indexEtudiant, currEtudiant);
