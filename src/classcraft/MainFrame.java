@@ -142,13 +142,13 @@ class MainFrame extends JFrame implements ActionListener {
             BplusExp[i] = new JButton("+");
             BplusExp[i].setMargin(new Insets(0,0,0,0));
             BplusExp[i].setPreferredSize(new Dimension(20,20));
-            BplusExp[i].setActionCommand("inc pv "+i);
+            BplusExp[i].setActionCommand("inc ex "+i);
             BplusExp[i].addActionListener(this);
             
             BmoinsExp[i] = new JButton("-");
             BmoinsExp[i].setMargin(new Insets(0,0,0,0));
             BmoinsExp[i].setPreferredSize(new Dimension(20,20));
-            BmoinsExp[i].setActionCommand("dec pv "+i);
+            BmoinsExp[i].setActionCommand("dec ex "+i);
             BmoinsExp[i].addActionListener(this);
 	}
         
