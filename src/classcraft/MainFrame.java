@@ -28,7 +28,24 @@ class MainFrame extends JFrame implements ActionListener {
     public MainFrame() throws  FileNotFoundException, IOException, Exception{
         choix = new JFileChooser();
         choix.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        int resultat = choix.showOpenDialog(this);
+        int resultat = 1;
+        
+        while(resultat != JFileChooser.APPROVE_OPTION){
+            resultat = choix.showOpenDialog(this);
+            
+            if(resultat == JFileChooser.CANCEL_OPTION)
+                JOptionPane.showMessageDialog(null, "Veuillez choisir un fichier");
+            if(resultat == JFileChooser.ERROR_OPTION)
+                JOptionPane.showMessageDialog(null, "Une erreur est survenu lors du choix de fichier.");
+            
+            if(resultat != JFileChooser.APPROVE_OPTION){
+                String[] options = {"Oui", "Non"};
+                if(JOptionPane.showOptionDialog(null, "Voulez-vous recommencez?", "FERMETURE", JOptionPane.YES_NO_OPTION,
+                                                 JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 1)
+                    System.exit(0);
+            }
+        }
+        
         liste = new ListeDesEtudiants(choix.getSelectedFile());
         nombreEtudiants = liste.getEtudiantsSize();
         
@@ -205,7 +222,7 @@ class MainFrame extends JFrame implements ActionListener {
                                 if(fichierImg == null)
                                     if(JOptionPane.showOptionDialog(null, "Vous avez changez d'idee?", "FERMETURE", JOptionPane.YES_NO_OPTION,
                                                                     JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 0)
-                                        System.exit(0);
+                                        return;
                                 
                                 JOptionPane.showMessageDialog(null, "Veuillez entrez un non de fichier non-vide.");
                                 continue;
