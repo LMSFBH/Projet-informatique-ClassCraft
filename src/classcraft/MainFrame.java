@@ -28,7 +28,7 @@ class MainFrame extends JFrame implements ActionListener {
     public MainFrame() throws  FileNotFoundException, IOException, Exception{
         choix = new JFileChooser();
         choix.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        int resultat = 1;
+        int resultat = JFileChooser.CANCEL_OPTION;
         
         while(resultat != JFileChooser.APPROVE_OPTION){
             resultat = choix.showOpenDialog(this);
@@ -44,9 +44,22 @@ class MainFrame extends JFrame implements ActionListener {
                                                  JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 1)
                     System.exit(0);
             }
+            else{
+                try{
+                    liste = new ListeDesEtudiants(choix.getSelectedFile());
+                } catch(FileNotFoundException fnfe){
+                    JOptionPane.showMessageDialog(null, fnfe.getMessage());
+                } catch(IOException ioe){
+                    JOptionPane.showMessageDialog(null, ioe.getMessage());
+                } catch(Exception e){
+                    JOptionPane.showMessageDialog(null, e.getMessage());
+                }
+                
+                resultat = JFileChooser.CANCEL_OPTION;
+            }
+            
         }
         
-        liste = new ListeDesEtudiants(choix.getSelectedFile());
         nombreEtudiants = liste.getEtudiantsSize();
         
         setSize(nombreEtudiants*35, nombreEtudiants*30);
@@ -108,6 +121,7 @@ class MainFrame extends JFrame implements ActionListener {
             Bplus[i].setPreferredSize(new Dimension(20,20));
             Bplus[i].setActionCommand("inc pv "+i);
             Bplus[i].addActionListener(this);
+            
             Bmoins[i] = new JButton("-");
             Bmoins[i].setMargin(new Insets(0,0,0,0));
             Bmoins[i].setPreferredSize(new Dimension(20,20));
