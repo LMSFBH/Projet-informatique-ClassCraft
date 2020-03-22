@@ -49,13 +49,14 @@ class MainFrame extends JFrame implements ActionListener {
                     liste = new ListeDesEtudiants(choix.getSelectedFile());
                 } catch(FileNotFoundException fnfe){
                     JOptionPane.showMessageDialog(null, fnfe.getMessage());
+                    resultat = JFileChooser.CANCEL_OPTION;
                 } catch(IOException ioe){
                     JOptionPane.showMessageDialog(null, ioe.getMessage());
+                    resultat = JFileChooser.CANCEL_OPTION;
                 } catch(Exception e){
                     JOptionPane.showMessageDialog(null, e.getMessage());
+                    resultat = JFileChooser.CANCEL_OPTION;
                 }
-                
-                resultat = JFileChooser.CANCEL_OPTION;
             }
             
         }

@@ -16,7 +16,9 @@ public class FrameEtudiant extends JFrame {
         panneau = new JPanel();
         GridLayout layout = new GridLayout();
         
+        JLabel nAdmisssion = new JLabel(unEtudiant.getNAdmission());
         JLabel nomEtPrenom = new JLabel(unEtudiant.getName());
+        JLabel role = new JLabel(unEtudiant.getRole());
         JLabel pseudo = new JLabel(unEtudiant.getPseudo());
         JLabel niveau = new JLabel(""+(unEtudiant.getNiveau()+((unEtudiant.getExp() == 1) ? 0.5 : 0)));
     }

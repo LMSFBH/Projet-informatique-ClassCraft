@@ -135,15 +135,11 @@ public class ListeDesEtudiants{
         });
     }
     
-    public ArrayList<XSSFPictureData> getAllImages(Etudiant etudiant, String fileName) throws IllegalArgumentException, FileNotFoundException, IOException, Exception{
+    public static ArrayList<XSSFPictureData> getAllImages(String fileName) throws IllegalArgumentException, FileNotFoundException, IOException, Exception{
         if((fileName == null) || (fileName.isEmpty()))
             throw new IllegalArgumentException("Un fichier d'entree est vide.");
         
         XSSFWorkbook wb = null;
-        
-        int index = etudiants.indexOf(etudiant);
-        if(index == -1)
-            throw new IllegalArgumentException("L'etudiant "+etudiant.getName()+" de numero de DA "+etudiant.getNAdmission()+" n'est pas dans le fichier "+fileName);
         
         try{
             wb = new XSSFWorkbook(new FileInputStream(fileName));
@@ -163,8 +159,12 @@ public class ListeDesEtudiants{
     
     //Obtient une image du fichier fileName
     public XSSFPictureData getImage(Etudiant etudiant, String fileName) throws IllegalArgumentException, FileNotFoundException, IOException, Exception{
-        ArrayList<XSSFPictureData> ret = getAllImages(etudiant, fileName);
-        return ret.get(ret.indexOf(etudiant));
+        ArrayList<XSSFPictureData> ret = getAllImages(fileName);
+        
+        if(etudiants.indexOf(etudiant) == -1)
+            throw new Exception("L'etudiant "+etudiant.getName()+" de numero de DA "+etudiant.getNAdmission()+" n'est pas dans la liste.");
+        
+        return ret.get(etudiants.indexOf(etudiant));
     }
     
     //Ecrit tout les etudiants et les images liee de cet objet dans un fichier excel de nom fileName
@@ -322,7 +322,7 @@ public class ListeDesEtudiants{
     }
     
     //Ne devrait pas etre appeler par quoi que ce soit
-    public void closeWorkBook(String fileName, XSSFWorkbook wb, boolean isWrite) throws IllegalArgumentException, FileNotFoundException, IOException, EOFException, Exception{
+    public static void closeWorkBook(String fileName, XSSFWorkbook wb, boolean isWrite) throws IllegalArgumentException, FileNotFoundException, IOException, EOFException, Exception{
         if((fileName == null) || (fileName.isEmpty()))
             throw new IllegalArgumentException("Un fichier d'entree est vide.");
         
