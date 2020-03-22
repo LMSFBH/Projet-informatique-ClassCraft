@@ -28,7 +28,6 @@ public class ListeDesEtudiants{
     public static final int IMG_POS = 15;
     public static final String DEFAULT_IMAGE = "default.png"; 
     
-    private boolean modifier = false;
     private ArrayList<Etudiant> etudiants = new ArrayList<>();
     
     //Initialise la liste d'etudiant avec un fichier de chemin fichierAvatar
@@ -96,16 +95,11 @@ public class ListeDesEtudiants{
         etudiants.set(index, unEtudiant);
     }
     
-    public boolean isModif(){
-        return modifier;
-    }
-    
     //Ajoute un etudiant et reorganise la liste
     public void addEtudiant(Etudiant unEtudiant) throws Exception{
         if(!etudiants.add(unEtudiant))
             throw new Exception("L'etudiant "+unEtudiant.getName()+" de numero de DA "+unEtudiant.getNAdmission()+" n'a pas pu etre ajouter.");
         
-        modifier = true;
         organisezAlphabet();
     }
     
@@ -114,7 +108,6 @@ public class ListeDesEtudiants{
         if(!etudiants.remove(unEtudiant))
             throw new Exception("L'etudiant "+unEtudiant.getName()+" de numero de DA "+unEtudiant.getNAdmission()+" n'a pas pu etre supprimer.");
         
-        modifier = true;
         organisezAlphabet();
     }
     
@@ -142,8 +135,7 @@ public class ListeDesEtudiants{
         });
     }
     
-    //Obtient une image du fichier fileName
-    public XSSFPictureData getImage(Etudiant etudiant, String fileName) throws IllegalArgumentException, FileNotFoundException, IOException, Exception{
+    public ArrayList<XSSFPictureData> getAllImages(Etudiant etudiant, String fileName) throws IllegalArgumentException, FileNotFoundException, IOException, Exception{
         if((fileName == null) || (fileName.isEmpty()))
             throw new IllegalArgumentException("Un fichier d'entree est vide.");
         
@@ -166,12 +158,17 @@ public class ListeDesEtudiants{
         ArrayList<XSSFPictureData> ret = (ArrayList<XSSFPictureData>) wb.getAllPictures();
         closeWorkBook(fileName, wb, false);
         
-        return ret.get(index);
+        return ret;
+    }
+    
+    //Obtient une image du fichier fileName
+    public XSSFPictureData getImage(Etudiant etudiant, String fileName) throws IllegalArgumentException, FileNotFoundException, IOException, Exception{
+        ArrayList<XSSFPictureData> ret = getAllImages(etudiant, fileName);
+        return ret.get(ret.indexOf(etudiant));
     }
     
     //Ecrit tout les etudiants et les images liee de cet objet dans un fichier excel de nom fileName
     //ecrit ou pas les images selon writeImage, a faire que si un etudiant a ete ajouter/retirer ou la premiere ecriture du fichier
-    //Important: verifiez si un fichier rempli d'etudiant et d'image atteint la limite de POI (ca ne devrait pas)
     public void writeToutEtudiantsEtImages(String fileName, boolean writeImage) throws IllegalArgumentException, FileNotFoundException, IOException, EOFException, Exception{
         if((fileName == null) || (fileName.isEmpty()))
             throw new IllegalArgumentException("Un fichier d'entree est vide.");
@@ -189,7 +186,7 @@ public class ListeDesEtudiants{
             
             // Ecriture etudiant
             cellule = ligne.createCell(0);
-            cellule.setCellValue(currEtudiant.getNAdmission());
+            cellule.setCellValue(Integer.parseInt(currEtudiant.getNAdmission()));
             cellule = ligne.createCell(1);
             cellule.setCellValue(currEtudiant.getName());
             cellule = ligne.createCell(2);
