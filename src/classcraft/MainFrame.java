@@ -84,9 +84,18 @@ class MainFrame extends JFrame implements ActionListener {
         
         JLabel[] nomEtudiants = new JLabel[nombreEtudiants];
         for(int i=0; i<nombreEtudiants; i++){
+            Etudiant currEtudiant = liste.getEtudiant(i);
+            
             constraints.gridy++;
-            nomEtudiants[i] = new JLabel(liste.getEtudiant(i).getName());
-            nomEtudiants[i].addMouseListener(new Mouse());
+            nomEtudiants[i] = new JLabel(currEtudiant.getName());
+            nomEtudiants[i].addMouseListener(new MouseAdapter(){
+                @Override
+                public void mouseClicked(MouseEvent e){
+                    FrameEtudiant frameClique = new FrameEtudiant(currEtudiant); // Comment recuperer l'etudiant???
+                    frameClique.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    frameClique.setVisible(true);
+                }
+            });
             panneau.add(nomEtudiants[i], constraints);
         }
         
@@ -310,16 +319,5 @@ class MainFrame extends JFrame implements ActionListener {
 	
 	liste.setEtudiant(indexEtudiant, currEtudiant);
         repaint();
-    }
-    
-    private class Mouse extends MouseAdapter{
-        
-        @Override
-        public void mouseClicked(MouseEvent e){
-            FrameEtudiant frameClique = new FrameEtudiant(new Etudiant("56675","ertr")); // Comment recuperer l'etudiant???
-            frameClique.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            frameClique.setVisible(true);
-        }
-        
     }
 }
