@@ -91,7 +91,7 @@ class MainFrame extends JFrame implements ActionListener {
             nomEtudiants[i].addMouseListener(new MouseAdapter(){
                 @Override
                 public void mouseClicked(MouseEvent e){
-                    FrameEtudiant frameClique = new FrameEtudiant(currEtudiant); // Comment recuperer l'etudiant???
+                    FrameEtudiant frameClique = new FrameEtudiant(currEtudiant);
                     frameClique.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                     frameClique.setVisible(true);
                 }
@@ -306,7 +306,7 @@ class MainFrame extends JFrame implements ActionListener {
                     else currEtudiant.setExp(currEtudiant.getExp()+1);
                     break;
                 case "dec ex":
-                    currEtudiant.setExp(currEtudiant.getPv()-1);
+                    currEtudiant.setExp(currEtudiant.getExp()-1);
                     break;
                 case "pouvoi":
                     indexPouvoir = Integer.parseInt(cmd.substring(10,11));
