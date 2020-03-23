@@ -6,3 +6,8 @@ test
 ~*.*
 ~*
 authors.txt
+
+*.png
+*.xlsx
+!Classeur1.xlsx
+!default.png

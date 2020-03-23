@@ -24,6 +24,7 @@ class MainFrame extends JFrame implements ActionListener {
     JPanel panneau = new JPanel();
     int nombreEtudiants;
     JFileChooser choix;
+    String fichierPrincipale;
     
     public MainFrame() throws  FileNotFoundException, IOException, Exception{
         choix = new JFileChooser();
@@ -33,8 +34,6 @@ class MainFrame extends JFrame implements ActionListener {
         while(resultat != JFileChooser.APPROVE_OPTION){
             resultat = choix.showOpenDialog(this);
             
-            if(resultat == JFileChooser.CANCEL_OPTION)
-                JOptionPane.showMessageDialog(null, "Veuillez choisir un fichier");
             if(resultat == JFileChooser.ERROR_OPTION)
                 JOptionPane.showMessageDialog(null, "Une erreur est survenu lors du choix de fichier.");
             
@@ -43,10 +42,13 @@ class MainFrame extends JFrame implements ActionListener {
                 if(JOptionPane.showOptionDialog(null, "Voulez-vous recommencez?", "FERMETURE", JOptionPane.YES_NO_OPTION,
                                                  JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 1)
                     System.exit(0);
+                else if(resultat == JFileChooser.CANCEL_OPTION)
+                    JOptionPane.showMessageDialog(null, "Veuillez choisir un fichier");
             }
             else{
                 try{
                     liste = new ListeDesEtudiants(choix.getSelectedFile());
+                    fichierPrincipale = choix.getSelectedFile().getCanonicalPath();
                 } catch(FileNotFoundException fnfe){
                     JOptionPane.showMessageDialog(null, fnfe.getMessage());
                     resultat = JFileChooser.CANCEL_OPTION;
@@ -91,7 +93,7 @@ class MainFrame extends JFrame implements ActionListener {
             nomEtudiants[i].addMouseListener(new MouseAdapter(){
                 @Override
                 public void mouseClicked(MouseEvent e){
-                    FrameEtudiant frameClique = new FrameEtudiant(currEtudiant);
+                    FrameEtudiant frameClique = new FrameEtudiant(currEtudiant, liste, fichierPrincipale);
                     frameClique.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                     frameClique.setVisible(true);
                 }
@@ -248,7 +250,7 @@ class MainFrame extends JFrame implements ActionListener {
                                                                     JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 0)
                                         return;
                                 
-                                JOptionPane.showMessageDialog(null, "Veuillez entrez un non de fichier non-vide.");
+                                JOptionPane.showMessageDialog(null, "Veuillez entrez un nom de fichier non-vide.");
                                 continue;
                             }
 

@@ -148,7 +148,7 @@ public class ListeDesEtudiants{
         } catch(IOException ioe){
             throw new IOException("Erreur d'I/O lors de la lecture de la liste d'etudiant "+fileName+" lors de la lecture d'image.");
         } catch(Exception e){
-            throw new Exception("Erreur d'exception lors de la lecture de la liste d'etudiant "+fileName+" lors de la lecture d'image.");
+            throw new Exception("Erreur lors de la lecture de la liste d'etudiant "+fileName+" lors de la lecture d'image.");
         }
         
         ArrayList<XSSFPictureData> ret = (ArrayList<XSSFPictureData>) wb.getAllPictures();
@@ -270,10 +270,13 @@ public class ListeDesEtudiants{
         Row ligne = null;
         String img;
         Etudiant unEtudiant;
+        String numAdmission;
+        DataFormatter formatter = new DataFormatter();
         for (int i=0;((ligne = sheet.getRow(i)) != null);i++){
             try{
                 switch (ligne.getLastCellNum()) {
                     case 2:
+                        numAdmission = formatter.formatCellValue(ligne.getCell(0));
                         unEtudiant = new Etudiant(String.valueOf(ligne.getCell(0).getNumericCellValue()), ligne.getCell(1).getStringCellValue());
                         
                         etudiants.add(unEtudiant);
@@ -284,7 +287,8 @@ public class ListeDesEtudiants{
                         else
                             img = ligne.getCell(4).getStringCellValue();
                         
-                        unEtudiant = new Etudiant(String.valueOf((int)ligne.getCell(0).getNumericCellValue()), ligne.getCell(1).getStringCellValue(), ligne.getCell(2).getStringCellValue(), ligne.getCell(3).getStringCellValue(), img,
+                        numAdmission = formatter.formatCellValue(ligne.getCell(0));
+                        unEtudiant = new Etudiant(/*String.valueOf((int)ligne.getCell(0).getNumericCellValue())*/numAdmission, ligne.getCell(1).getStringCellValue(), ligne.getCell(2).getStringCellValue(), ligne.getCell(3).getStringCellValue(), img,
                                                    (int)ligne.getCell(5).getNumericCellValue(), (int)ligne.getCell(6).getNumericCellValue(), (int)ligne.getCell(7).getNumericCellValue());
                         if(etudiants.contains(unEtudiant))
                             throw new Exception("2 etudiants ne peuvent pas etre pareil.");
@@ -297,7 +301,8 @@ public class ListeDesEtudiants{
                         else
                             img = ligne.getCell(4).getStringCellValue();
                         
-                        unEtudiant = new Etudiant(String.valueOf((int)ligne.getCell(0).getNumericCellValue()), ligne.getCell(1).getStringCellValue(), ligne.getCell(2).getStringCellValue(), ligne.getCell(3).getStringCellValue(), img,
+                        numAdmission = formatter.formatCellValue(ligne.getCell(0));
+                        unEtudiant = new Etudiant(numAdmission, ligne.getCell(1).getStringCellValue(), ligne.getCell(2).getStringCellValue(), ligne.getCell(3).getStringCellValue(), img,
                                                    (int)ligne.getCell(5).getNumericCellValue(), (int)ligne.getCell(6).getNumericCellValue(), (int)ligne.getCell(7).getNumericCellValue());
                         if(etudiants.contains(unEtudiant))
                             throw new Exception("2 etudiants ne peuvent pas etre pareil.");
