@@ -167,6 +167,10 @@ public class ListeDesEtudiants{
         return ret.get(etudiants.indexOf(etudiant));
     }
     
+    public void writeToutEtudiantsEtImages(File file, boolean writeImage) throws IllegalArgumentException, FileNotFoundException, IOException, EOFException, Exception{
+        writeToutEtudiantsEtImages(file.getCanonicalPath(), writeImage);
+    }
+    
     //Ecrit tout les etudiants et les images liee de cet objet dans un fichier excel de nom fileName
     //ecrit ou pas les images selon writeImage, a faire que si un etudiant a ete ajouter/retirer ou la premiere ecriture du fichier
     public void writeToutEtudiantsEtImages(String fileName, boolean writeImage) throws IllegalArgumentException, FileNotFoundException, IOException, EOFException, Exception{

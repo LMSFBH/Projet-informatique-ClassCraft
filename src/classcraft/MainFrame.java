@@ -25,43 +25,50 @@ class MainFrame extends JFrame implements ActionListener {
     int nombreEtudiants;
     JFileChooser choix;
     String fichierPrincipale;
+    boolean isModif = false;
     
     public MainFrame() throws  FileNotFoundException, IOException, Exception{
-        choix = new JFileChooser(".");
-        choix.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        int resultat = JFileChooser.CANCEL_OPTION;
-        
-        while(resultat != JFileChooser.APPROVE_OPTION){
-            resultat = choix.showOpenDialog(this);
-            
-            switch (resultat) {
-                case JFileChooser.ERROR_OPTION:
-                    JOptionPane.showMessageDialog(null, "Une erreur est survenu lors du choix de fichier.");
-                    
-                    String[] options = {"Oui", "Non"};
-                    if(JOptionPane.showOptionDialog(null, "Voulez-vous recommencez?", "FERMETURE", JOptionPane.YES_NO_OPTION,
-                            JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 1)
+        if(!isModif){
+            choix = new JFileChooser(".");
+            choix.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            choix.setDialogTitle("Sauvegarde");
+
+            int resultat = JFileChooser.CANCEL_OPTION;
+
+            while(resultat != JFileChooser.APPROVE_OPTION){
+                resultat = choix.showOpenDialog(this);
+
+                switch (resultat) {
+                    case JFileChooser.ERROR_OPTION:
+                        JOptionPane.showMessageDialog(null, "Une erreur est survenu lors du choix de fichier.");
+
+                        String[] options = {"Oui", "Non"};
+                        if(JOptionPane.showOptionDialog(null, "Voulez-vous recommencez?", "FERMETURE", JOptionPane.YES_NO_OPTION,
+                                JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 1)
+                            System.exit(0);
+                        break;
+                    case JFileChooser.CANCEL_OPTION:
                         System.exit(0);
-                    break;
-                case JFileChooser.CANCEL_OPTION:
-                    System.exit(0);
-                default:
-                    try{
-                        liste = new ListeDesEtudiants(choix.getSelectedFile());
-                        fichierPrincipale = choix.getSelectedFile().getCanonicalPath();
-                    } catch(FileNotFoundException fnfe){
-                        JOptionPane.showMessageDialog(null, fnfe.getMessage());
-                        resultat = JFileChooser.CANCEL_OPTION;
-                    } catch(IOException ioe){
-                        JOptionPane.showMessageDialog(null, ioe.getMessage());
-                        resultat = JFileChooser.CANCEL_OPTION;
-                    } catch(Exception e){
-                        JOptionPane.showMessageDialog(null, e.getMessage());
-                        resultat = JFileChooser.CANCEL_OPTION;
-                    }   break;
+                    default:
+                        try{
+                            liste = new ListeDesEtudiants(choix.getSelectedFile());
+                            fichierPrincipale = choix.getSelectedFile().getCanonicalPath();
+                        } catch(FileNotFoundException fnfe){
+                            JOptionPane.showMessageDialog(null, fnfe.getMessage());
+                            resultat = JFileChooser.CANCEL_OPTION;
+                        } catch(IOException ioe){
+                            JOptionPane.showMessageDialog(null, ioe.getMessage());
+                            resultat = JFileChooser.CANCEL_OPTION;
+                        } catch(Exception e){
+                            JOptionPane.showMessageDialog(null, e.getMessage());
+                            resultat = JFileChooser.CANCEL_OPTION;
+                        }
+                        break;
+                }
+
             }
-            
         }
+        else isModif = false;
         
         nombreEtudiants = liste.getEtudiantsSize();
         
@@ -122,6 +129,9 @@ class MainFrame extends JFrame implements ActionListener {
         for(int i=0; i<nombreEtudiants; i++){
             constraints.gridy++;
             pseudoEtudiant[i] = new JTextField(liste.getEtudiant(i).getPseudo());
+            //Trouvez un moyen de faire l'action (probablement simple, me disait seulement si on pourrait utiliser autre chose qu'un keylistener)
+            //pseudoEtudiant[i].setActionCommand("pseudo "+i+pseudoEtudiant[i].getText());
+            //pseudoEtudiant[i].addActionListener(this);
             panneau.add(pseudoEtudiant[i], constraints);
         }
         
@@ -237,15 +247,28 @@ class MainFrame extends JFrame implements ActionListener {
                 String[] options = {"Oui", "Non"};
                 if(JOptionPane.showOptionDialog(null, "Etes-vous sure de vouloir fermer l'application?", "FERMETURE", JOptionPane.YES_NO_OPTION,
                                                  JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 0){
-                    String fichierImg = "";
-
+                    String fichierImg;
                     int resultat = JFileChooser.CANCEL_OPTION;
+                    boolean utiliserFichierDemarrage;
+                    
                     while(resultat != JFileChooser.APPROVE_OPTION){
+                        utiliserFichierDemarrage = (JOptionPane.showOptionDialog(null, "Voulez-vous utilisez le meme fichier selectionnez au lancement du programme?", "FERMETURE", JOptionPane.YES_NO_OPTION,
+                                                                                    JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 0);
+                        
                         try{
-                        //L'ecriture des images prends beaucoups de temps
-                            JFileChooser choix = new JFileChooser(".");
-                            choix.addChoosableFileFilter(new FileNameExtensionFilter("Excel Workbook (.xlsx)", ".xlsx"));
-                            resultat = choix.showSaveDialog(null);
+                            JFileChooser choix = null;
+                            if(!utiliserFichierDemarrage){
+                                choix = new JFileChooser(".");
+                                
+                                /*FileNameExtensionFilter extensionFilter = new FileNameExtensionFilter("Excel Workbook (.xlsx)", ".xlsx");
+                                choix.addChoosableFileFilter(extensionFilter);
+                                choix.setAcceptAllFileFilterUsed(false);
+                                choix.setFileFilter(extensionFilter);*/
+                                choix.setDialogTitle("Sauvegarde");
+                                
+                                resultat = choix.showSaveDialog(null);
+                            } else
+                                resultat = JFileChooser.APPROVE_OPTION;
                             
                             switch(resultat){
                                 case JFileChooser.ERROR_OPTION:
@@ -258,15 +281,18 @@ class MainFrame extends JFrame implements ActionListener {
                                 case JFileChooser.CANCEL_OPTION:
                                     return;
                                 case JFileChooser.APPROVE_OPTION:
+                                    //L'ecriture des images prends beaucoups de temps, trouver un moyen de ne pas les ecrire chaques fois
                                     //if(liste.isModif()){
-                                    fichierImg = choix.getSelectedFile().getCanonicalPath();
+                                    fichierImg = utiliserFichierDemarrage ? fichierPrincipale : choix.getSelectedFile().getCanonicalPath();
                                     if(!fichierImg.endsWith(".xlsx"))
                                         fichierImg += ".xlsx";
                                     
                                     if((new File(fichierImg)).exists())
                                         if(JOptionPane.showOptionDialog(null, "Le fichier existe deja. Voulez-vous le re-ecrire? (le programme vous redemandera si vous selectionnez non)", "FERMETURE", JOptionPane.YES_NO_OPTION,
-                                                                    JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 1)
-                                            break;
+                                                                    JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) != 0){
+                                            resultat = JFileChooser.CANCEL_OPTION;
+                                            continue;
+                                        }
                                     
                                     liste.writeToutEtudiantsEtImages(fichierImg, true);
                                     System.exit(0);
@@ -295,11 +321,11 @@ class MainFrame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         String cmd = e.getActionCommand();
         int indexEtudiant;
-        try{
+        if(cmd.startsWith("inc pv") || cmd.startsWith("dec pv") || cmd.startsWith("inc ex") || cmd.startsWith("dec ex"))
             indexEtudiant = Integer.parseInt(cmd.substring(7)); //Soit c'est inc/dec pv, donc l'index est en position 7
-        } catch(NumberFormatException nfe){
+        else
             indexEtudiant = Integer.parseInt(cmd.substring(8,9)); //Soit c'est pouvoir, donc l'index est 8-9
-        }
+        
         int indexPouvoir = 0;
         
         Etudiant currEtudiant = liste.getEtudiant(indexEtudiant);
@@ -333,6 +359,9 @@ class MainFrame extends JFrame implements ActionListener {
         }
 	
 	liste.setEtudiant(indexEtudiant, currEtudiant);
+        isModif = true;
+        
+        revalidate();
         repaint();
     }
 }

@@ -5,8 +5,6 @@ package classcraft;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import org.apache.poi.xssf.usermodel.XSSFPictureData;
@@ -46,6 +44,7 @@ public class FrameEtudiant extends JFrame {
     
     @Override
     public void paint(Graphics g){
+        super.paintComponents(g);
         
         panneau = new JPanel();
         GridLayout layout = new GridLayout();
