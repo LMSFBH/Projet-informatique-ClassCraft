@@ -10,9 +10,9 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.*;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -27,38 +27,38 @@ class MainFrame extends JFrame implements ActionListener {
     String fichierPrincipale;
     
     public MainFrame() throws  FileNotFoundException, IOException, Exception{
-        choix = new JFileChooser();
+        choix = new JFileChooser(".");
         choix.setFileSelectionMode(JFileChooser.FILES_ONLY);
         int resultat = JFileChooser.CANCEL_OPTION;
         
         while(resultat != JFileChooser.APPROVE_OPTION){
             resultat = choix.showOpenDialog(this);
             
-            if(resultat == JFileChooser.ERROR_OPTION)
-                JOptionPane.showMessageDialog(null, "Une erreur est survenu lors du choix de fichier.");
-            
-            if(resultat != JFileChooser.APPROVE_OPTION){
-                String[] options = {"Oui", "Non"};
-                if(JOptionPane.showOptionDialog(null, "Voulez-vous recommencez?", "FERMETURE", JOptionPane.YES_NO_OPTION,
-                                                 JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 1)
+            switch (resultat) {
+                case JFileChooser.ERROR_OPTION:
+                    JOptionPane.showMessageDialog(null, "Une erreur est survenu lors du choix de fichier.");
+                    
+                    String[] options = {"Oui", "Non"};
+                    if(JOptionPane.showOptionDialog(null, "Voulez-vous recommencez?", "FERMETURE", JOptionPane.YES_NO_OPTION,
+                            JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 1)
+                        System.exit(0);
+                    break;
+                case JFileChooser.CANCEL_OPTION:
                     System.exit(0);
-                else if(resultat == JFileChooser.CANCEL_OPTION)
-                    JOptionPane.showMessageDialog(null, "Veuillez choisir un fichier");
-            }
-            else{
-                try{
-                    liste = new ListeDesEtudiants(choix.getSelectedFile());
-                    fichierPrincipale = choix.getSelectedFile().getCanonicalPath();
-                } catch(FileNotFoundException fnfe){
-                    JOptionPane.showMessageDialog(null, fnfe.getMessage());
-                    resultat = JFileChooser.CANCEL_OPTION;
-                } catch(IOException ioe){
-                    JOptionPane.showMessageDialog(null, ioe.getMessage());
-                    resultat = JFileChooser.CANCEL_OPTION;
-                } catch(Exception e){
-                    JOptionPane.showMessageDialog(null, e.getMessage());
-                    resultat = JFileChooser.CANCEL_OPTION;
-                }
+                default:
+                    try{
+                        liste = new ListeDesEtudiants(choix.getSelectedFile());
+                        fichierPrincipale = choix.getSelectedFile().getCanonicalPath();
+                    } catch(FileNotFoundException fnfe){
+                        JOptionPane.showMessageDialog(null, fnfe.getMessage());
+                        resultat = JFileChooser.CANCEL_OPTION;
+                    } catch(IOException ioe){
+                        JOptionPane.showMessageDialog(null, ioe.getMessage());
+                        resultat = JFileChooser.CANCEL_OPTION;
+                    } catch(Exception e){
+                        JOptionPane.showMessageDialog(null, e.getMessage());
+                        resultat = JFileChooser.CANCEL_OPTION;
+                    }   break;
             }
             
         }
@@ -239,28 +239,41 @@ class MainFrame extends JFrame implements ActionListener {
                                                  JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 0){
                     String fichierImg = "";
 
-                    while((fichierImg == null) || (fichierImg.isEmpty())){
+                    int resultat = JFileChooser.CANCEL_OPTION;
+                    while(resultat != JFileChooser.APPROVE_OPTION){
                         try{
                         //L'ecriture des images prends beaucoups de temps
+                            JFileChooser choix = new JFileChooser(".");
+                            choix.addChoosableFileFilter(new FileNameExtensionFilter("Excel Workbook (.xlsx)", ".xlsx"));
+                            resultat = choix.showSaveDialog(null);
+                            
+                            switch(resultat){
+                                case JFileChooser.ERROR_OPTION:
+                                    JOptionPane.showMessageDialog(null, "Une erreur est survenu lors du choix de fichier.");
 
-                            fichierImg = JOptionPane.showInputDialog("Veuillez selectionnez l'emplacement du fichier excel de sauvegarde. \n(L'operation pourrait prendre plus de temps si les images sont a ecrire)");
-                            if((fichierImg == null) || (fichierImg.isEmpty())){
-                                if(fichierImg == null)
-                                    if(JOptionPane.showOptionDialog(null, "Vous avez changez d'idee?", "FERMETURE", JOptionPane.YES_NO_OPTION,
-                                                                    JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 0)
-                                        return;
-                                
-                                JOptionPane.showMessageDialog(null, "Veuillez entrez un nom de fichier non-vide.");
-                                continue;
+                                    if(JOptionPane.showOptionDialog(null, "Voulez-vous recommencez?", "FERMETURE", JOptionPane.YES_NO_OPTION,
+                                            JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 1)
+                                        System.exit(0);
+                                    break;
+                                case JFileChooser.CANCEL_OPTION:
+                                    return;
+                                case JFileChooser.APPROVE_OPTION:
+                                    //if(liste.isModif()){
+                                    fichierImg = choix.getSelectedFile().getCanonicalPath();
+                                    if(!fichierImg.endsWith(".xlsx"))
+                                        fichierImg += ".xlsx";
+                                    
+                                    if((new File(fichierImg)).exists())
+                                        if(JOptionPane.showOptionDialog(null, "Le fichier existe deja. Voulez-vous le re-ecrire? (le programme vous redemandera si vous selectionnez non)", "FERMETURE", JOptionPane.YES_NO_OPTION,
+                                                                    JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 1)
+                                            break;
+                                    
+                                    liste.writeToutEtudiantsEtImages(fichierImg, true);
+                                    System.exit(0);
+                                    //else
+                                    //  liste.writeToutEtudiantsEtImages(JOptionPane.showInputDialog("Veuillez selectionnez l'emplacement du fichier excel de sauvegarde."), false);
                             }
 
-                            if(!fichierImg.endsWith(".xlsx"))
-                                fichierImg += ".xlsx";   
-
-                            //if(liste.isModif()){
-                            liste.writeToutEtudiantsEtImages(fichierImg, true);
-                            //else
-                            //    liste.writeToutEtudiantsEtImages(JOptionPane.showInputDialog("Veuillez selectionnez l'emplacement du fichier excel de sauvegarde."), false);
                         }catch(FileNotFoundException fnfe){
                             JOptionPane.showMessageDialog(null, fnfe.getMessage());
                         } catch(IOException ioe){
