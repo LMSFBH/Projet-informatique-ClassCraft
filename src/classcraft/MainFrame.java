@@ -42,9 +42,7 @@ class MainFrame extends JFrame implements ActionListener {
                     case JFileChooser.ERROR_OPTION:
                         JOptionPane.showMessageDialog(null, "Une erreur est survenu lors du choix de fichier.");
 
-                        String[] options = {"Oui", "Non"};
-                        if(JOptionPane.showOptionDialog(null, "Voulez-vous recommencez?", "FERMETURE", JOptionPane.YES_NO_OPTION,
-                                JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 1)
+                        if(!ouiOuNon("Voulez-vous recommencez?", "FERMETURE"))
                             System.exit(0);
                         break;
                     case JFileChooser.CANCEL_OPTION:
@@ -68,7 +66,7 @@ class MainFrame extends JFrame implements ActionListener {
 
             }
         }
-        else isModif = false;
+        else isModif = true;
         
         nombreEtudiants = liste.getEtudiantsSize();
         
@@ -141,13 +139,13 @@ class MainFrame extends JFrame implements ActionListener {
             Bplus[i] = new JButton("+");
             Bplus[i].setMargin(new Insets(0,0,0,0));
             Bplus[i].setPreferredSize(new Dimension(20,20));
-            Bplus[i].setActionCommand("inc pv "+i);
+            Bplus[i].setActionCommand("pv inc "+i);
             Bplus[i].addActionListener(this);
             
             Bmoins[i] = new JButton("-");
             Bmoins[i].setMargin(new Insets(0,0,0,0));
             Bmoins[i].setPreferredSize(new Dimension(20,20));
-            Bmoins[i].setActionCommand("dec pv "+i);
+            Bmoins[i].setActionCommand("pv dec "+i);
             Bmoins[i].addActionListener(this);
         }
         
@@ -190,13 +188,13 @@ class MainFrame extends JFrame implements ActionListener {
             BplusExp[i] = new JButton("+");
             BplusExp[i].setMargin(new Insets(0,0,0,0));
             BplusExp[i].setPreferredSize(new Dimension(20,20));
-            BplusExp[i].setActionCommand("inc ex "+i);
+            BplusExp[i].setActionCommand("exp inc "+i);
             BplusExp[i].addActionListener(this);
             
             BmoinsExp[i] = new JButton("-");
             BmoinsExp[i].setMargin(new Insets(0,0,0,0));
             BmoinsExp[i].setPreferredSize(new Dimension(20,20));
-            BmoinsExp[i].setActionCommand("dec ex "+i);
+            BmoinsExp[i].setActionCommand("exp dec "+i);
             BmoinsExp[i].addActionListener(this);
 	}
         
@@ -244,16 +242,13 @@ class MainFrame extends JFrame implements ActionListener {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent ev) {
-                String[] options = {"Oui", "Non"};
-                if(JOptionPane.showOptionDialog(null, "Etes-vous sure de vouloir fermer l'application?", "FERMETURE", JOptionPane.YES_NO_OPTION,
-                                                 JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 0){
+                if(ouiOuNon("Etes-vous sure de vouloir fermer l'application?", "FERMETURE")){
                     String fichierImg;
                     int resultat = JFileChooser.CANCEL_OPTION;
                     boolean utiliserFichierDemarrage;
                     
                     while(resultat != JFileChooser.APPROVE_OPTION){
-                        utiliserFichierDemarrage = (JOptionPane.showOptionDialog(null, "Voulez-vous utilisez le meme fichier selectionnez au lancement du programme?", "FERMETURE", JOptionPane.YES_NO_OPTION,
-                                                                                    JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 0);
+                        utiliserFichierDemarrage = ouiOuNon("Voulez-vous utilisez le meme fichier selectionnez au lancement du programme?", "FERMETURE");
                         
                         try{
                             JFileChooser choix = null;
@@ -274,8 +269,7 @@ class MainFrame extends JFrame implements ActionListener {
                                 case JFileChooser.ERROR_OPTION:
                                     JOptionPane.showMessageDialog(null, "Une erreur est survenu lors du choix de fichier.");
 
-                                    if(JOptionPane.showOptionDialog(null, "Voulez-vous recommencez?", "FERMETURE", JOptionPane.YES_NO_OPTION,
-                                            JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 1)
+                                    if(!ouiOuNon("Voulez-vous recommencez?", "FERMETURE"))
                                         System.exit(0);
                                     break;
                                 case JFileChooser.CANCEL_OPTION:
@@ -288,8 +282,7 @@ class MainFrame extends JFrame implements ActionListener {
                                         fichierImg += ".xlsx";
                                     
                                     if((new File(fichierImg)).exists())
-                                        if(JOptionPane.showOptionDialog(null, "Le fichier existe deja. Voulez-vous le re-ecrire? (le programme vous redemandera si vous selectionnez non)", "FERMETURE", JOptionPane.YES_NO_OPTION,
-                                                                    JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) != 0){
+                                        if(!ouiOuNon("Le fichier existe deja. Voulez-vous le re-ecrire? (le programme vous redemandera si vous selectionnez non)", "FERMETURE")){
                                             resultat = JFileChooser.CANCEL_OPTION;
                                             continue;
                                         }
@@ -316,41 +309,51 @@ class MainFrame extends JFrame implements ActionListener {
         
         add(panneau);
     }
-
+    
+    public static boolean ouiOuNon(String msg, String titre){
+        String[] options = {"Oui", "Non"};
+        return (JOptionPane.showOptionDialog(null, msg, titre, JOptionPane.YES_NO_OPTION,
+                JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 0);
+    }
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         String cmd = e.getActionCommand();
         int indexEtudiant;
-        if(cmd.startsWith("inc pv") || cmd.startsWith("dec pv") || cmd.startsWith("inc ex") || cmd.startsWith("dec ex"))
-            indexEtudiant = Integer.parseInt(cmd.substring(7)); //Soit c'est inc/dec pv, donc l'index est en position 7
-        else
-            indexEtudiant = Integer.parseInt(cmd.substring(8,9)); //Soit c'est pouvoir, donc l'index est 8-9
-        
+        String[] cmds = cmd.split(" ");
         int indexPouvoir = 0;
+        
+        if(cmd.startsWith("pv inc") || cmd.startsWith("pv dec") || cmd.startsWith("exp inc") || cmd.startsWith("exp dec"))
+            indexEtudiant = Integer.parseInt(cmds[2]); //Soit c'est pv/exp inc/dec, donc l'index est apres le 2e espace
+        else{
+            indexEtudiant = Integer.parseInt(cmds[1]); //Soit c'est pouvoir, donc l'index est apres le 1e espace
+            indexPouvoir = Integer.parseInt(cmds[2]);
+        }
         
         Etudiant currEtudiant = liste.getEtudiant(indexEtudiant);
         
         try{
-            switch (cmd.substring(0, 6)) {
-                case "inc pv":
+            switch (cmds[0]) {
+                case "pv":
                     //Faire des verifications quant au max des PVs
-                    currEtudiant.setPv(currEtudiant.getPv()+1);
+                    if(cmds[1].equals("inc"))
+                        currEtudiant.setPv(currEtudiant.getPv()+1);
+                    else currEtudiant.setPv(currEtudiant.getPv()-1);
                     break;
-                case "dec pv":
-                    currEtudiant.setPv(currEtudiant.getPv()-1);
-                    break;
-                case "inc ex":
-                    if(currEtudiant.getExp()+1 == 2){
-                        currEtudiant.setExp(0);
-                        currEtudiant.setNiveau(currEtudiant.getNiveau()+1);
+                case "exp":
+                    if(cmds[1].equals("inc")){
+                        if(currEtudiant.getExp()+1 == 2){
+                            currEtudiant.setExp(0);
+                            currEtudiant.setNiveau(currEtudiant.getNiveau()+1);
+                        }
+                        else currEtudiant.setExp(currEtudiant.getExp()+1);
                     }
-                    else currEtudiant.setExp(currEtudiant.getExp()+1);
+                    //Probleme: que fait on si le prof veut baisser le niveau de l'eleve (je me disais qu'on fairait une fenetre en edition de toute les infos d'un etudiant)
+                    else currEtudiant.setExp(currEtudiant.getExp()-1);
                     break;
-                case "dec ex":
-                    currEtudiant.setExp(currEtudiant.getExp()-1);
+                case "pouvoir":
+                    
                     break;
-                case "pouvoi":
-                    indexPouvoir = Integer.parseInt(cmd.substring(10,11));
                 default:
                     break;
             }
@@ -359,7 +362,7 @@ class MainFrame extends JFrame implements ActionListener {
         }
 	
 	liste.setEtudiant(indexEtudiant, currEtudiant);
-        isModif = true;
+        isModif = false;
         
         revalidate();
         repaint();
