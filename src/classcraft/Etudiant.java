@@ -16,9 +16,18 @@ public class Etudiant {
     
     public static final int MAX_EXP = 1;
     
-    public Etudiant(String nAdmission, String nom){
+    public Etudiant(String nAdmission, String nom, String role){
         setName(nom);
         setNAdmission(nom);
+        
+        //Devrait on demander le role ici?
+        setRole(role);
+        
+        setExp(0);
+        setNiveau(1);
+        //setPv(job.MAX_PV);
+        
+        setCheminImage(null);
     }
     
     public Etudiant(String nAdmission, String nom, String role, String pseudo, String cheminImage, int exp, int niveau, int pv){

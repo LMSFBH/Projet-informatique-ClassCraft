@@ -274,14 +274,12 @@ public class ListeDesEtudiants{
         Row ligne = null;
         String img;
         Etudiant unEtudiant;
-        String numAdmission;
         DataFormatter formatter = new DataFormatter();
         for (int i=0;((ligne = sheet.getRow(i)) != null);i++){
             try{
                 switch (ligne.getLastCellNum()) {
                     case 2:
-                        numAdmission = formatter.formatCellValue(ligne.getCell(0));
-                        unEtudiant = new Etudiant(String.valueOf(ligne.getCell(0).getNumericCellValue()), ligne.getCell(1).getStringCellValue());
+                        unEtudiant = new Etudiant(formatter.formatCellValue(ligne.getCell(0)), ligne.getCell(1).getStringCellValue(), ligne.getCell(2).getStringCellValue());
                         
                         etudiants.add(unEtudiant);
                         break;
@@ -291,8 +289,7 @@ public class ListeDesEtudiants{
                         else
                             img = ligne.getCell(4).getStringCellValue();
                         
-                        numAdmission = formatter.formatCellValue(ligne.getCell(0));
-                        unEtudiant = new Etudiant(/*String.valueOf((int)ligne.getCell(0).getNumericCellValue())*/numAdmission, ligne.getCell(1).getStringCellValue(), ligne.getCell(2).getStringCellValue(), ligne.getCell(3).getStringCellValue(), img,
+                        unEtudiant = new Etudiant(formatter.formatCellValue(ligne.getCell(0)), ligne.getCell(1).getStringCellValue(), ligne.getCell(2).getStringCellValue(), ligne.getCell(3).getStringCellValue(), img,
                                                    (int)ligne.getCell(5).getNumericCellValue(), (int)ligne.getCell(6).getNumericCellValue(), (int)ligne.getCell(7).getNumericCellValue());
                         if(etudiants.contains(unEtudiant))
                             throw new Exception("2 etudiants ne peuvent pas etre pareil.");
@@ -305,8 +302,7 @@ public class ListeDesEtudiants{
                         else
                             img = ligne.getCell(4).getStringCellValue();
                         
-                        numAdmission = formatter.formatCellValue(ligne.getCell(0));
-                        unEtudiant = new Etudiant(numAdmission, ligne.getCell(1).getStringCellValue(), ligne.getCell(2).getStringCellValue(), ligne.getCell(3).getStringCellValue(), img,
+                        unEtudiant = new Etudiant(formatter.formatCellValue(ligne.getCell(0)), ligne.getCell(1).getStringCellValue(), ligne.getCell(2).getStringCellValue(), ligne.getCell(3).getStringCellValue(), img,
                                                    (int)ligne.getCell(5).getNumericCellValue(), (int)ligne.getCell(6).getNumericCellValue(), (int)ligne.getCell(7).getNumericCellValue());
                         if(etudiants.contains(unEtudiant))
                             throw new Exception("2 etudiants ne peuvent pas etre pareil.");
