@@ -281,6 +281,9 @@ public class ListeDesEtudiants{
                     case 2:
                         unEtudiant = new Etudiant(formatter.formatCellValue(ligne.getCell(0)), ligne.getCell(1).getStringCellValue(), ligne.getCell(2).getStringCellValue());
                         
+                        if(etudiants.contains(unEtudiant))
+                            throw new Exception("2 etudiants ne peuvent pas etre pareil.");
+                        
                         etudiants.add(unEtudiant);
                         break;
                     case MAX_CELLS - NBR_POUVOIRS: // 8 parametres (nbr d'admission, nom, pseudos, role, chemin de l'image, exp, pv, lvl)
