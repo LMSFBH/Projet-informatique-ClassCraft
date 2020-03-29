@@ -28,7 +28,9 @@ class MainFrame extends JFrame implements ActionListener {
     JProgressBar[] progressBar;
     JLabel[] pv;
     String fichierPrincipale;
-    boolean isModif = false;
+    boolean isModif = false, boutonUtilisable;
+    JScrollPane miseEnPage;
+    JButton[][] listePouvoirs;
     
     public MainFrame() throws  FileNotFoundException, IOException, Exception{
         if(!isModif){
@@ -227,18 +229,50 @@ class MainFrame extends JFrame implements ActionListener {
         constraints.gridwidth=1;
         int lv = 0; // niveau ou on gagne un pouvoir
         constraints.gridy++;
-        JButton ListePouvoirs[][] = new JButton[nombreEtudiants][ListeDesEtudiants.NBR_POUVOIRS];
-        for (int i=0; i<ListePouvoirs.length;i++){ 
+        listePouvoirs = new JButton[nombreEtudiants][ListeDesEtudiants.NBR_POUVOIRS];
+        for (int i=0; i<listePouvoirs.length;i++){ 
             for (int j=0; j<ListeDesEtudiants.NBR_POUVOIRS;j++){ 
                 lv+=5;
-                ListePouvoirs[i][j] = new JButton(""+lv);
-                ListePouvoirs[i][j].setMargin(new Insets(0,0,0,0));
-                ListePouvoirs[i][j].setPreferredSize(new Dimension(35,20));
-                ListePouvoirs[i][j].setBackground(new Color(96,96,96));
-                ListePouvoirs[i][j].setForeground(new Color(255,255,255));
-                ListePouvoirs[i][j].setActionCommand("pouvoir "+i+" "+j);
-                ListePouvoirs[i][j].addActionListener(this);
-                panneau.add(ListePouvoirs[i][j],constraints);
+                listePouvoirs[i][j] = new JButton(""+lv);
+                listePouvoirs[i][j].setMargin(new Insets(0,0,0,0));
+                listePouvoirs[i][j].setPreferredSize(new Dimension(35,20));
+                boutonUtilisable = true;
+                if(liste.getEtudiant(i).getNiveau()<5 & j==0){
+                    listePouvoirs[i][j].setBackground(new Color(96,96,96));
+                    listePouvoirs[i][j].setForeground(new Color(255,255,255));
+                    boutonUtilisable=false;
+                }
+                if(liste.getEtudiant(i).getNiveau()<10 & j==1){
+                    listePouvoirs[i][j].setBackground(new Color(96,96,96));
+                    listePouvoirs[i][j].setForeground(new Color(255,255,255));
+                    boutonUtilisable=false;
+                }
+                if(liste.getEtudiant(i).getNiveau()<15 & j==2){
+                    listePouvoirs[i][j].setBackground(new Color(96,96,96));
+                    listePouvoirs[i][j].setForeground(new Color(255,255,255));
+                    boutonUtilisable=false;
+                }
+                if(liste.getEtudiant(i).getNiveau()<20 & j==3){
+                    listePouvoirs[i][j].setBackground(new Color(96,96,96));
+                    listePouvoirs[i][j].setForeground(new Color(255,255,255));
+                    boutonUtilisable=false;
+                }
+                if(liste.getEtudiant(i).getNiveau()<25 & j==4){
+                    listePouvoirs[i][j].setBackground(new Color(96,96,96));
+                    listePouvoirs[i][j].setForeground(new Color(255,255,255));
+                    boutonUtilisable=false;
+                }
+                if(liste.getEtudiant(i).getNiveau()<30 & j==5){
+                    listePouvoirs[i][j].setBackground(new Color(96,96,96));
+                    listePouvoirs[i][j].setForeground(new Color(255,255,255));
+                    boutonUtilisable=false;
+                }
+                if(boutonUtilisable){
+                    listePouvoirs[i][j].setBackground(Color.green);
+                }
+                listePouvoirs[i][j].setActionCommand("pouvoir "+i+" "+j);
+                listePouvoirs[i][j].addActionListener(this);
+                panneau.add(listePouvoirs[i][j],constraints);
                 constraints.gridx++;
             }
             
@@ -315,7 +349,9 @@ class MainFrame extends JFrame implements ActionListener {
             }
         });
         
-        add(panneau);
+        miseEnPage = new JScrollPane(panneau);
+        
+        add(miseEnPage);
     }
     
     public static boolean ouiOuNon(String msg, String titre){
@@ -379,6 +415,43 @@ class MainFrame extends JFrame implements ActionListener {
                         }
                     }
                     progressBar[indexEtudiant].setString("Niv "+(liste.getEtudiant(indexEtudiant).getNiveau()+((liste.getEtudiant(indexEtudiant).getExp() == 1) ? 0.5 : 0))+"                            ");
+                    for (int j=0; j<ListeDesEtudiants.NBR_POUVOIRS;j++){ 
+                            boutonUtilisable = true;
+                            if(liste.getEtudiant(indexEtudiant).getNiveau()<5 & j==0){
+                                listePouvoirs[indexEtudiant][j].setBackground(new Color(96,96,96));
+                                listePouvoirs[indexEtudiant][j].setForeground(new Color(255,255,255));
+                                boutonUtilisable=false;
+                            }
+                            if(liste.getEtudiant(indexEtudiant).getNiveau()<10 & j==1){
+                                listePouvoirs[indexEtudiant][j].setBackground(new Color(96,96,96));
+                                listePouvoirs[indexEtudiant][j].setForeground(new Color(255,255,255));
+                                boutonUtilisable=false;
+                            }
+                            if(liste.getEtudiant(indexEtudiant).getNiveau()<15 & j==2){
+                                listePouvoirs[indexEtudiant][j].setBackground(new Color(96,96,96));
+                                listePouvoirs[indexEtudiant][j].setForeground(new Color(255,255,255));
+                                boutonUtilisable=false;
+                            }
+                            if(liste.getEtudiant(indexEtudiant).getNiveau()<20 & j==3){
+                                listePouvoirs[indexEtudiant][j].setBackground(new Color(96,96,96));
+                                listePouvoirs[indexEtudiant][j].setForeground(new Color(255,255,255));
+                                boutonUtilisable=false;
+                            }
+                            if(liste.getEtudiant(indexEtudiant).getNiveau()<25 & j==4){
+                                listePouvoirs[indexEtudiant][j].setBackground(new Color(96,96,96));
+                                listePouvoirs[indexEtudiant][j].setForeground(new Color(255,255,255));
+                                boutonUtilisable=false;
+                            }
+                            if(liste.getEtudiant(indexEtudiant).getNiveau()<30 & j==5){
+                                listePouvoirs[indexEtudiant][j].setBackground(new Color(96,96,96));
+                                listePouvoirs[indexEtudiant][j].setForeground(new Color(255,255,255));
+                                boutonUtilisable=false;
+                            }
+                            if(boutonUtilisable){
+                                listePouvoirs[indexEtudiant][j].setBackground(Color.green);
+                                listePouvoirs[indexEtudiant][j].setForeground(Color.black);
+                            }
+                        }
                     break;
                 case "pouvoir":
                     
