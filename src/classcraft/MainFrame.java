@@ -9,20 +9,11 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JTextField;
-import javax.swing.JFileChooser;
+import java.awt.event.*;
+import java.awt.Color;
+import java.io.*;
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -32,14 +23,54 @@ class MainFrame extends JFrame implements ActionListener {
     
     ListeDesEtudiants liste;
     JPanel panneau = new JPanel();
-    int nombreEtudiants;
+    int nombreEtudiants, nouveauPV;
     JFileChooser choix;
+    JProgressBar[] progressBar;
+    JLabel[] pv;
+    String fichierPrincipale;
+    boolean isModif = false;
     
     public MainFrame() throws  FileNotFoundException, IOException, Exception{
-        choix = new JFileChooser();
-        choix.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        int resultat = choix.showOpenDialog(this);
-        liste = new ListeDesEtudiants(choix.getSelectedFile().getName());
+        if(!isModif){
+            choix = new JFileChooser(".");
+            choix.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            choix.setDialogTitle("Sauvegarde");
+
+            int resultat = JFileChooser.CANCEL_OPTION;
+
+            while(resultat != JFileChooser.APPROVE_OPTION){
+                resultat = choix.showOpenDialog(this);
+
+                switch (resultat) {
+                    case JFileChooser.ERROR_OPTION:
+                        JOptionPane.showMessageDialog(null, "Une erreur est survenu lors du choix de fichier.");
+
+                        if(!ouiOuNon("Voulez-vous recommencez?", "FERMETURE"))
+                            System.exit(0);
+                        break;
+                    case JFileChooser.CANCEL_OPTION:
+                        System.exit(0);
+                    default:
+                        try{
+                            liste = new ListeDesEtudiants(choix.getSelectedFile());
+                            fichierPrincipale = choix.getSelectedFile().getCanonicalPath();
+                        } catch(FileNotFoundException fnfe){
+                            JOptionPane.showMessageDialog(null, fnfe.getMessage());
+                            resultat = JFileChooser.CANCEL_OPTION;
+                        } catch(IOException ioe){
+                            JOptionPane.showMessageDialog(null, ioe.getMessage());
+                            resultat = JFileChooser.CANCEL_OPTION;
+                        } catch(Exception e){
+                            JOptionPane.showMessageDialog(null, e.getMessage());
+                            resultat = JFileChooser.CANCEL_OPTION;
+                        }
+                        break;
+                }
+
+            }
+        }
+        else isModif = true;
+        
         nombreEtudiants = liste.getEtudiantsSize();
         
         setSize(nombreEtudiants*35, nombreEtudiants*30);
@@ -63,8 +94,18 @@ class MainFrame extends JFrame implements ActionListener {
         
         JLabel[] nomEtudiants = new JLabel[nombreEtudiants];
         for(int i=0; i<nombreEtudiants; i++){
+            Etudiant currEtudiant = liste.getEtudiant(i);
+            
             constraints.gridy++;
-            nomEtudiants[i] = new JLabel(liste.getEtudiant(i).getName());
+            nomEtudiants[i] = new JLabel(currEtudiant.getName());
+            nomEtudiants[i].addMouseListener(new MouseAdapter(){
+                @Override
+                public void mouseClicked(MouseEvent e){
+                    FrameEtudiant frameClique = new FrameEtudiant(currEtudiant, liste, fichierPrincipale);
+                    frameClique.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    frameClique.setVisible(true);
+                }
+            });
             panneau.add(nomEtudiants[i], constraints);
         }
         
@@ -80,7 +121,6 @@ class MainFrame extends JFrame implements ActionListener {
             panneau.add(role[i],constraints);
         }
         
-        
         constraints.gridx++;
         constraints.gridy=0;
         JLabel pseudo = new JLabel("Pseudo");
@@ -90,43 +130,39 @@ class MainFrame extends JFrame implements ActionListener {
         for(int i=0; i<nombreEtudiants; i++){
             constraints.gridy++;
             pseudoEtudiant[i] = new JTextField(liste.getEtudiant(i).getPseudo());
+            //Trouvez un moyen de faire l'action (probablement simple, me disait seulement si on pourrait utiliser autre chose qu'un keylistener)
+            //pseudoEtudiant[i].setActionCommand("pseudo "+i+pseudoEtudiant[i].getText());
+            //pseudoEtudiant[i].addActionListener(this);
             panneau.add(pseudoEtudiant[i], constraints);
         }
         
 	JButton [] Bplus = new JButton[nombreEtudiants];
+	JButton [] Bmoins = new JButton[nombreEtudiants];
+        pv = new JLabel[nombreEtudiants];
 	for (int i=0; i<nombreEtudiants;i++){
             Bplus[i] = new JButton("+");
             Bplus[i].setMargin(new Insets(0,0,0,0));
             Bplus[i].setPreferredSize(new Dimension(20,20));
-            Bplus[i].setActionCommand("inc pv "+i);
+            Bplus[i].setActionCommand("pv inc "+i);
             Bplus[i].addActionListener(this);
-	}
-        
-	JButton [] Bmoins = new JButton[nombreEtudiants];
-	for (int i=0; i<nombreEtudiants;i++){
+            
             Bmoins[i] = new JButton("-");
             Bmoins[i].setMargin(new Insets(0,0,0,0));
             Bmoins[i].setPreferredSize(new Dimension(20,20));
-            Bmoins[i].setActionCommand("dec pv "+i);
+            Bmoins[i].setActionCommand("pv dec "+i);
             Bmoins[i].addActionListener(this);
-	}
+            
+            pv[i] = new JLabel(""+liste.getEtudiant(i).getPv());
+        }
         
-	// Moi: vies c'est le tableau des points de vie des étudiants. j'aivais déja utiliser pv
-	int [] Vies = new int[nombreEtudiants];
-	for (int i=0; i<Vies.length;i++){
-		// ici on va devoir appeler le tableau des etudiants pour chaque vies
-		Vies[i] = liste.getEtudiant(i).getPv();
-	}
-        
-
 	constraints.gridx=4;// Moi: j'ai mis 4 parce qu'il y a classe, liste et avatar avant pv et les bouttons
 	constraints.gridy=0;
-        JLabel pv = new JLabel("Points de Vie");
-	panneau.add(pv,constraints);
+        JLabel textePV = new JLabel("Points de Vie");
+	panneau.add(textePV,constraints);
 	
 	for(int i=0; i<nombreEtudiants;i++){
             constraints.gridy++;
-            panneau.add(new JLabel(""+Vies[i]),constraints);
+            panneau.add(pv[i],constraints);
             constraints.anchor=GridBagConstraints.EAST;
             panneau.add(Bplus[i],constraints);
             constraints.anchor=GridBagConstraints.WEST;
@@ -140,7 +176,7 @@ class MainFrame extends JFrame implements ActionListener {
         panneau.add(exp,constraints);
         
         int ExpMax=2;
-        JProgressBar[] progressBar = new JProgressBar[nombreEtudiants];
+        progressBar = new JProgressBar[nombreEtudiants];
         for(int i=0; i<nombreEtudiants; i++){
             progressBar[i] = new JProgressBar();
             progressBar[i].setMaximum(ExpMax);
@@ -148,7 +184,7 @@ class MainFrame extends JFrame implements ActionListener {
             progressBar[i].setStringPainted(true);
             
             constraints.gridy++;
-            progressBar[i].setString("LV"+liste.getEtudiant(i).getNiveau()+"                            ");
+            progressBar[i].setString("Niv "+(liste.getEtudiant(i).getNiveau()+((liste.getEtudiant(i).getExp() == 1) ? 0.5 : 0))+"                            ");
             progressBar[i].setValue(liste.getEtudiant(i).getExp());	
         }
         
@@ -158,13 +194,13 @@ class MainFrame extends JFrame implements ActionListener {
             BplusExp[i] = new JButton("+");
             BplusExp[i].setMargin(new Insets(0,0,0,0));
             BplusExp[i].setPreferredSize(new Dimension(20,20));
-            BplusExp[i].setActionCommand("inc ex "+i);
+            BplusExp[i].setActionCommand("exp inc "+i);
             BplusExp[i].addActionListener(this);
             
             BmoinsExp[i] = new JButton("-");
             BmoinsExp[i].setMargin(new Insets(0,0,0,0));
             BmoinsExp[i].setPreferredSize(new Dimension(20,20));
-            BmoinsExp[i].setActionCommand("dec ex "+i);
+            BmoinsExp[i].setActionCommand("exp dec "+i);
             BmoinsExp[i].addActionListener(this);
 	}
         
@@ -179,7 +215,7 @@ class MainFrame extends JFrame implements ActionListener {
             panneau.add(BmoinsExp[i],constraints);
             constraints.anchor=GridBagConstraints.CENTER;
 	}
-                
+        
         constraints.gridx=6;
         constraints.gridy=0;
         constraints.gridwidth=6;
@@ -188,93 +224,165 @@ class MainFrame extends JFrame implements ActionListener {
         JLabel pouvoir = new JLabel("Pouvoirs");
         panneau.add(pouvoir,constraints);
         
-         // liste de pouvoirs pour un eleve
-        int POUVOIRS_MAX = 6;
         constraints.gridwidth=1;
         int lv = 0; // niveau ou on gagne un pouvoir
         constraints.gridy++;
-        JButton ListePouvoirs[][] = new JButton[nombreEtudiants][POUVOIRS_MAX];
+        JButton ListePouvoirs[][] = new JButton[nombreEtudiants][ListeDesEtudiants.NBR_POUVOIRS];
         for (int i=0; i<ListePouvoirs.length;i++){ 
-            for (int j=0; j<POUVOIRS_MAX;j++){ 
+            for (int j=0; j<ListeDesEtudiants.NBR_POUVOIRS;j++){ 
                 lv+=5;
                 ListePouvoirs[i][j] = new JButton(""+lv);
                 ListePouvoirs[i][j].setMargin(new Insets(0,0,0,0));
                 ListePouvoirs[i][j].setPreferredSize(new Dimension(35,20));
+                ListePouvoirs[i][j].setBackground(new Color(96,96,96));
+                ListePouvoirs[i][j].setForeground(new Color(255,255,255));
                 ListePouvoirs[i][j].setActionCommand("pouvoir "+i+" "+j);
                 ListePouvoirs[i][j].addActionListener(this);
                 panneau.add(ListePouvoirs[i][j],constraints);
                 constraints.gridx++;
             }
-            constraints.gridy++;
-            constraints.gridx-=POUVOIRS_MAX;
-            lv=0;
             
+            constraints.gridy++;
+            constraints.gridx-=ListeDesEtudiants.NBR_POUVOIRS;
+            lv=0;
         }
         
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent ev) {
-                String[] options = {"Oui", "Non"};
-                if(JOptionPane.showOptionDialog(null, "Etes-vous sure de vouloir fermer l'application?", "FERMETURE", JOptionPane.YES_NO_OPTION,
-                                                 JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 0){
-                    try{
-                        //L'ecriture des images prends beaucoups de temps
-                        String fichierImg = JOptionPane.showInputDialog("Veuillez selectionnez l'emplacement du fichier excel de sauvegarde. \n(L'operation pourrait prendre plus de temps si les images sont a ecrire)");
-                        //if(liste.isModif()){
-                            liste.writeToutEtudiantsEtImages(fichierImg+".xlsx", true);
-                        //else
-                        //    liste.writeToutEtudiantsEtImages(JOptionPane.showInputDialog("Veuillez selectionnez l'emplacement du fichier excel de sauvegarde."), false);
+                if(ouiOuNon("Etes-vous sure de vouloir fermer l'application?", "FERMETURE")){
+                    String fichierImg;
+                    int resultat = JFileChooser.CANCEL_OPTION;
+                    boolean utiliserFichierDemarrage;
+                    
+                    while(resultat != JFileChooser.APPROVE_OPTION){
+                        utiliserFichierDemarrage = ouiOuNon("Voulez-vous utilisez le meme fichier selectionnez au lancement du programme?", "FERMETURE");
+                        
+                        try{
+                            JFileChooser choix = null;
+                            if(!utiliserFichierDemarrage){
+                                choix = new JFileChooser(".");
+                                
+                                /*FileNameExtensionFilter extensionFilter = new FileNameExtensionFilter("Excel Workbook (.xlsx)", ".xlsx");
+                                choix.addChoosableFileFilter(extensionFilter);
+                                choix.setAcceptAllFileFilterUsed(false);
+                                choix.setFileFilter(extensionFilter);*/
+                                choix.setDialogTitle("Sauvegarde");
+                                
+                                resultat = choix.showSaveDialog(null);
+                            } else
+                                resultat = JFileChooser.APPROVE_OPTION;
                             
-                    }catch(FileNotFoundException fnfe){
-                        JOptionPane.showMessageDialog(null, fnfe.getMessage());
-                    } catch(IOException ioe){
-                        JOptionPane.showMessageDialog(null, ioe.getMessage());
-                    } catch(Exception e){
-                        JOptionPane.showMessageDialog(null, e.getMessage());
+                            switch(resultat){
+                                case JFileChooser.ERROR_OPTION:
+                                    JOptionPane.showMessageDialog(null, "Une erreur est survenu lors du choix de fichier.");
+
+                                    if(!ouiOuNon("Voulez-vous recommencez?", "FERMETURE"))
+                                        System.exit(0);
+                                    break;
+                                case JFileChooser.CANCEL_OPTION:
+                                    return;
+                                case JFileChooser.APPROVE_OPTION:
+                                    //L'ecriture des images prends beaucoups de temps, trouver un moyen de ne pas les ecrire chaques fois
+                                    //if(liste.isModif()){
+                                    fichierImg = utiliserFichierDemarrage ? fichierPrincipale : choix.getSelectedFile().getCanonicalPath();
+                                    if(!fichierImg.endsWith(".xlsx"))
+                                        fichierImg += ".xlsx";
+                                    
+                                    if((new File(fichierImg)).exists())
+                                        if(!ouiOuNon("Le fichier existe deja. Voulez-vous le re-ecrire? (le programme vous redemandera si vous selectionnez non)", "FERMETURE")){
+                                            resultat = JFileChooser.CANCEL_OPTION;
+                                            continue;
+                                        }
+                                    
+                                    liste.writeToutEtudiantsEtImages(fichierImg, true);
+                                    System.exit(0);
+                                    //else
+                                    //  liste.writeToutEtudiantsEtImages(JOptionPane.showInputDialog("Veuillez selectionnez l'emplacement du fichier excel de sauvegarde."), false);
+                            }
+
+                        }catch(FileNotFoundException fnfe){
+                            JOptionPane.showMessageDialog(null, fnfe.getMessage());
+                        } catch(IOException ioe){
+                            JOptionPane.showMessageDialog(null, ioe.getMessage());
+                        } catch(Exception e){
+                            JOptionPane.showMessageDialog(null, e.getMessage());
+                        }
                     }
                     
                     System.exit(0);
                 }
-            }  
+            }
         });
         
         add(panneau);
     }
-
+    
+    public static boolean ouiOuNon(String msg, String titre){
+        String[] options = {"Oui", "Non"};
+        return (JOptionPane.showOptionDialog(null, msg, titre, JOptionPane.YES_NO_OPTION,
+                JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 0);
+    }
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         String cmd = e.getActionCommand();
         int indexEtudiant;
-        try{
-            indexEtudiant = Integer.parseInt(cmd.substring(7)); //Soit c'est inc/dec pv, donc l'index est en position 7
-        } catch(NumberFormatException nfe){
-            indexEtudiant = Integer.parseInt(cmd.substring(8,9)); //Soit c'est pouvoir, donc l'index est 8-9
-        }
+        String[] cmds = cmd.split(" ");
         int indexPouvoir = 0;
+        
+        if(cmd.startsWith("pv inc") || cmd.startsWith("pv dec") || cmd.startsWith("exp inc") || cmd.startsWith("exp dec"))
+            indexEtudiant = Integer.parseInt(cmds[2]); //Soit c'est pv/exp inc/dec, donc l'index est apres le 2e espace
+        else{
+            indexEtudiant = Integer.parseInt(cmds[1]); //Soit c'est pouvoir, donc l'index est apres le 1e espace
+            indexPouvoir = Integer.parseInt(cmds[2]);
+        }
         
         Etudiant currEtudiant = liste.getEtudiant(indexEtudiant);
         
         try{
-            switch (cmd.substring(0, 6)) {
-                case "inc pv":
+            switch (cmds[0]) {
+                case "pv":
                     //Faire des verifications quant au max des PVs
-                    currEtudiant.setPv(currEtudiant.getPv()+1);
-                    break;
-                case "dec pv":
-                    currEtudiant.setPv(currEtudiant.getPv()-1);
-                    break;
-                case "inc ex":
-                    if(currEtudiant.getExp()+1 == 2){
-                        currEtudiant.setExp(0);
-                        currEtudiant.setNiveau(currEtudiant.getNiveau()+1);
+                    if(cmds[1].equals("inc")){
+                        nouveauPV = Integer.parseInt(pv[indexEtudiant].getText())+1;
+                        currEtudiant.setPv(currEtudiant.getPv()+1);
                     }
-                    else currEtudiant.setExp(currEtudiant.getExp()+1);
+                    else{
+                        nouveauPV = Integer.parseInt(pv[indexEtudiant].getText())-1;
+                        currEtudiant.setPv(currEtudiant.getPv()-1);
+                    }
+                    pv[indexEtudiant].setText(""+nouveauPV);
                     break;
-                case "dec ex":
-                    currEtudiant.setExp(currEtudiant.getPv()-1);
+                case "exp":
+                    if(cmds[1].equals("inc")){
+                        if(currEtudiant.getExp()+1 == 2){
+                            progressBar[indexEtudiant].setValue(0);
+                            currEtudiant.setExp(0);
+                            currEtudiant.setNiveau(currEtudiant.getNiveau()+1);
+                        }
+                        else {
+                            progressBar[indexEtudiant].setValue(1);
+                            currEtudiant.setExp(currEtudiant.getExp()+1);
+                        }
+                    }
+                    //Probleme: que fait on si le prof veut baisser le niveau de l'eleve (je me disais qu'on fairait une fenetre en edition de toute les infos d'un etudiant)
+                    else{ 
+                        if(currEtudiant.getExp()-1 == -1){
+                            progressBar[indexEtudiant].setValue(1);
+                            currEtudiant.setExp(1);
+                            currEtudiant.setNiveau(currEtudiant.getNiveau()-1);
+                        }
+                        else{
+                            progressBar[indexEtudiant].setValue(0);
+                            currEtudiant.setExp(currEtudiant.getExp()-1);
+                        }
+                    }
+                    progressBar[indexEtudiant].setString("Niv "+(liste.getEtudiant(indexEtudiant).getNiveau()+((liste.getEtudiant(indexEtudiant).getExp() == 1) ? 0.5 : 0))+"                            ");
                     break;
-                case "pouvoi":
-                    indexPouvoir = Integer.parseInt(cmd.substring(10,11));
+                case "pouvoir":
+                    
+                    break;
                 default:
                     break;
             }
@@ -283,6 +391,9 @@ class MainFrame extends JFrame implements ActionListener {
         }
 	
 	liste.setEtudiant(indexEtudiant, currEtudiant);
+        isModif = false;
+        
+        revalidate();
         repaint();
     }
 }
