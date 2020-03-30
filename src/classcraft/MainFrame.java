@@ -5,10 +5,7 @@
  */
 package classcraft;
 
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
@@ -22,51 +19,53 @@ class MainFrame extends JFrame{
     
     ListeDesEtudiants liste;
     JPanel panneau = new JPanel();
-    int nombreEtudiants;
+    int nombreEtudiants, nouveauPV;
     JFileChooser choix;
+    
+    JProgressBar[] progressBar;
+    JLabel[] pv;
     String fichierPrincipale;
-    boolean isModif = false;
+    boolean boutonUtilisable;
+    JScrollPane miseEnPage;
+    JButton[][] listePouvoirs;
     
     public MainFrame() throws  FileNotFoundException, IOException, Exception{
-        if(!isModif){
-            choix = new JFileChooser(".");
-            choix.setFileSelectionMode(JFileChooser.FILES_ONLY);
-            choix.setDialogTitle("Sauvegarde");
+        choix = new JFileChooser(".");
+        choix.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        choix.setDialogTitle("Sauvegarde");
 
-            int resultat = JFileChooser.CANCEL_OPTION;
+        int resultat = JFileChooser.CANCEL_OPTION;
 
-            while(resultat != JFileChooser.APPROVE_OPTION){
-                resultat = choix.showOpenDialog(this);
+        while(resultat != JFileChooser.APPROVE_OPTION){
+            resultat = choix.showOpenDialog(this);
 
-                switch (resultat) {
-                    case JFileChooser.ERROR_OPTION:
-                        JOptionPane.showMessageDialog(null, "Une erreur est survenu lors du choix de fichier.");
+            switch (resultat) {
+                case JFileChooser.ERROR_OPTION:
+                    JOptionPane.showMessageDialog(null, "Une erreur est survenu lors du choix de fichier.");
 
-                        if(!ouiOuNon("Voulez-vous recommencez?", "FERMETURE"))
-                            System.exit(0);
-                        break;
-                    case JFileChooser.CANCEL_OPTION:
+                    if(!ouiOuNon("Voulez-vous recommencez?", "FERMETURE"))
                         System.exit(0);
-                    default:
-                        try{
-                            liste = new ListeDesEtudiants(choix.getSelectedFile());
-                            fichierPrincipale = choix.getSelectedFile().getCanonicalPath();
-                        } catch(FileNotFoundException fnfe){
-                            JOptionPane.showMessageDialog(null, fnfe.getMessage());
-                            resultat = JFileChooser.CANCEL_OPTION;
-                        } catch(IOException ioe){
-                            JOptionPane.showMessageDialog(null, ioe.getMessage());
-                            resultat = JFileChooser.CANCEL_OPTION;
-                        } catch(Exception e){
-                            JOptionPane.showMessageDialog(null, e.getMessage());
-                            resultat = JFileChooser.CANCEL_OPTION;
-                        }
-                        break;
-                }
-
+                    break;
+                case JFileChooser.CANCEL_OPTION:
+                    System.exit(0);
+                default:
+                    try{
+                        liste = new ListeDesEtudiants(choix.getSelectedFile());
+                        fichierPrincipale = choix.getSelectedFile().getCanonicalPath();
+                    } catch(FileNotFoundException fnfe){
+                        JOptionPane.showMessageDialog(null, fnfe.getMessage());
+                        resultat = JFileChooser.CANCEL_OPTION;
+                    } catch(IOException ioe){
+                        JOptionPane.showMessageDialog(null, ioe.getMessage());
+                        resultat = JFileChooser.CANCEL_OPTION;
+                    } catch(Exception e){
+                        JOptionPane.showMessageDialog(null, e.getMessage());
+                        resultat = JFileChooser.CANCEL_OPTION;
+                    }
+                    break;
             }
+
         }
-        else isModif = true;
         
         nombreEtudiants = liste.getEtudiantsSize();
         
@@ -128,15 +127,15 @@ class MainFrame extends JFrame{
             constraints.gridy++;
             pseudoEtudiant[i] = new JTextField(liste.getEtudiant(i).getPseudo());
             //Trouvez un moyen de faire l'action (probablement simple, me disait seulement si on pourrait utiliser autre chose qu'un keylistener)
-            
             pseudoEtudiant[i].addActionListener(new GestAction());
             pseudoEtudiant[i].setActionCommand("pseudo "+i);
-            
             panneau.add(pseudoEtudiant[i], constraints);
         }
         
 	JButton [] Bplus = new JButton[nombreEtudiants];
 	JButton [] Bmoins = new JButton[nombreEtudiants];
+        pv = new JLabel[nombreEtudiants];
+        
 	for (int i=0; i<nombreEtudiants;i++){
             Bplus[i] = new JButton("+");
             Bplus[i].setMargin(new Insets(0,0,0,0));
@@ -149,16 +148,18 @@ class MainFrame extends JFrame{
             Bmoins[i].setPreferredSize(new Dimension(20,20));
             Bmoins[i].setActionCommand("pv dec "+i);
             Bmoins[i].addActionListener(new GestAction());
+            
+            pv[i] = new JLabel(""+liste.getEtudiant(i).getPv());
         }
         
 	constraints.gridx=4;// Moi: j'ai mis 4 parce qu'il y a classe, liste et avatar avant pv et les bouttons
 	constraints.gridy=0;
-        JLabel pv = new JLabel("Points de Vie");
-	panneau.add(pv,constraints);
+        JLabel textePV = new JLabel("Points de Vie");
+	panneau.add(textePV,constraints);
 	
 	for(int i=0; i<nombreEtudiants;i++){
             constraints.gridy++;
-            panneau.add(new JLabel(""+liste.getEtudiant(i).getPv()),constraints);
+            panneau.add(pv[i],constraints);
             constraints.anchor=GridBagConstraints.EAST;
             panneau.add(Bplus[i],constraints);
             constraints.anchor=GridBagConstraints.WEST;
@@ -172,7 +173,7 @@ class MainFrame extends JFrame{
         panneau.add(exp,constraints);
         
         int ExpMax=2;
-        JProgressBar[] progressBar = new JProgressBar[nombreEtudiants];
+        progressBar = new JProgressBar[nombreEtudiants];
         for(int i=0; i<nombreEtudiants; i++){
             progressBar[i] = new JProgressBar();
             progressBar[i].setMaximum(ExpMax);
@@ -180,7 +181,7 @@ class MainFrame extends JFrame{
             progressBar[i].setStringPainted(true);
             
             constraints.gridy++;
-            progressBar[i].setString("LV"+(liste.getEtudiant(i).getNiveau()+((liste.getEtudiant(i).getExp() == 1) ? 0.5 : 0))+"                            ");
+            progressBar[i].setString("Niv "+(liste.getEtudiant(i).getNiveau()+((liste.getEtudiant(i).getExp() == 1) ? 0.5 : 0))+"                            ");
             progressBar[i].setValue(liste.getEtudiant(i).getExp());	
         }
         
@@ -223,16 +224,51 @@ class MainFrame extends JFrame{
         constraints.gridwidth=1;
         int lv = 0; // niveau ou on gagne un pouvoir
         constraints.gridy++;
-        JButton ListePouvoirs[][] = new JButton[nombreEtudiants][ListeDesEtudiants.NBR_POUVOIRS];
-        for (int i=0; i<ListePouvoirs.length;i++){ 
+        
+        listePouvoirs = new JButton[nombreEtudiants][ListeDesEtudiants.NBR_POUVOIRS];
+        for (int i=0; i<listePouvoirs.length;i++){ 
             for (int j=0; j<ListeDesEtudiants.NBR_POUVOIRS;j++){ 
                 lv+=5;
-                ListePouvoirs[i][j] = new JButton(""+lv);
-                ListePouvoirs[i][j].setMargin(new Insets(0,0,0,0));
-                ListePouvoirs[i][j].setPreferredSize(new Dimension(35,20));
-                ListePouvoirs[i][j].setActionCommand("pouvoir "+i+" "+j);
-                ListePouvoirs[i][j].addActionListener(new GestAction());
-                panneau.add(ListePouvoirs[i][j],constraints);
+                listePouvoirs[i][j] = new JButton(""+lv);
+                listePouvoirs[i][j].setMargin(new Insets(0,0,0,0));
+                listePouvoirs[i][j].setPreferredSize(new Dimension(35,20));
+                boutonUtilisable = true;
+                if(liste.getEtudiant(i).getNiveau()<5 & j==0){
+                    listePouvoirs[i][j].setBackground(new Color(96,96,96));
+                    listePouvoirs[i][j].setForeground(new Color(255,255,255));
+                    boutonUtilisable=false;
+                }
+                if(liste.getEtudiant(i).getNiveau()<10 & j==1){
+                    listePouvoirs[i][j].setBackground(new Color(96,96,96));
+                    listePouvoirs[i][j].setForeground(new Color(255,255,255));
+                    boutonUtilisable=false;
+                }
+                if(liste.getEtudiant(i).getNiveau()<15 & j==2){
+                    listePouvoirs[i][j].setBackground(new Color(96,96,96));
+                    listePouvoirs[i][j].setForeground(new Color(255,255,255));
+                    boutonUtilisable=false;
+                }
+                if(liste.getEtudiant(i).getNiveau()<20 & j==3){
+                    listePouvoirs[i][j].setBackground(new Color(96,96,96));
+                    listePouvoirs[i][j].setForeground(new Color(255,255,255));
+                    boutonUtilisable=false;
+                }
+                if(liste.getEtudiant(i).getNiveau()<25 & j==4){
+                    listePouvoirs[i][j].setBackground(new Color(96,96,96));
+                    listePouvoirs[i][j].setForeground(new Color(255,255,255));
+                    boutonUtilisable=false;
+                }
+                if(liste.getEtudiant(i).getNiveau()<30 & j==5){
+                    listePouvoirs[i][j].setBackground(new Color(96,96,96));
+                    listePouvoirs[i][j].setForeground(new Color(255,255,255));
+                    boutonUtilisable=false;
+                }
+                if(boutonUtilisable){
+                    listePouvoirs[i][j].setBackground(Color.green);
+                }
+                listePouvoirs[i][j].setActionCommand("pouvoir "+i+" "+j);
+                listePouvoirs[i][j].addActionListener(new GestAction());
+                panneau.add(listePouvoirs[i][j],constraints);
                 constraints.gridx++;
             }
             
@@ -309,7 +345,9 @@ class MainFrame extends JFrame{
             }
         });
         
-        add(panneau);
+        miseEnPage = new JScrollPane(panneau);
+        
+        add(miseEnPage);
     }
     
     public static boolean ouiOuNon(String msg, String titre){
@@ -341,22 +379,85 @@ class MainFrame extends JFrame{
                 switch (cmds[0]) {
                     case "pv":
                         //Faire des verifications quant au max des PVs
-                        if(cmds[1].equals("inc"))
+                        if(cmds[1].equals("inc")){
+                            nouveauPV = Integer.parseInt(pv[indexEtudiant].getText())+1;
                             currEtudiant.setPv(currEtudiant.getPv()+1);
-                        else currEtudiant.setPv(currEtudiant.getPv()-1);
+                        }
+                        else{
+                            nouveauPV = Integer.parseInt(pv[indexEtudiant].getText())-1;
+                            currEtudiant.setPv(currEtudiant.getPv()-1);
+                        }
+                        pv[indexEtudiant].setText(""+nouveauPV);
                         break;
                     case "exp":
                         if(cmds[1].equals("inc")){
                             if(currEtudiant.getExp()+1 == 2){
+                                progressBar[indexEtudiant].setValue(0);
                                 currEtudiant.setExp(0);
                                 currEtudiant.setNiveau(currEtudiant.getNiveau()+1);
                             }
-                            else currEtudiant.setExp(currEtudiant.getExp()+1);
+                            else {
+                                progressBar[indexEtudiant].setValue(1);
+                                currEtudiant.setExp(currEtudiant.getExp()+1);
+                            }
                         }
                         //Probleme: que fait on si le prof veut baisser le niveau de l'eleve (je me disais qu'on fairait une fenetre en edition de toute les infos d'un etudiant)
-                        else currEtudiant.setExp(currEtudiant.getExp()-1);
-                        break;
-                    case "pseudo":
+                        else{ 
+                            if(currEtudiant.getExp()-1 == -1){
+                                progressBar[indexEtudiant].setValue(1);
+                                currEtudiant.setExp(1);
+                                currEtudiant.setNiveau(currEtudiant.getNiveau()-1);
+                            }
+                            else{
+                                progressBar[indexEtudiant].setValue(0);
+                                currEtudiant.setExp(currEtudiant.getExp()-1);
+                            }
+                        }
+
+                        progressBar[indexEtudiant].setString("Niv "+(liste.getEtudiant(indexEtudiant).getNiveau()+((liste.getEtudiant(indexEtudiant).getExp() == 1) ? 0.5 : 0))+"                            ");
+                        for (int j=0; j<ListeDesEtudiants.NBR_POUVOIRS;j++){ 
+                                boutonUtilisable = true;
+                                if(liste.getEtudiant(indexEtudiant).getNiveau()<5 & j==0){
+                                    listePouvoirs[indexEtudiant][j].setBackground(new Color(96,96,96));
+                                    listePouvoirs[indexEtudiant][j].setForeground(new Color(255,255,255));
+                                    boutonUtilisable=false;
+                                }
+
+                                if(liste.getEtudiant(indexEtudiant).getNiveau()<10 & j==1){
+                                    listePouvoirs[indexEtudiant][j].setBackground(new Color(96,96,96));
+                                    listePouvoirs[indexEtudiant][j].setForeground(new Color(255,255,255));
+                                    boutonUtilisable=false;
+                                }
+
+                                if(liste.getEtudiant(indexEtudiant).getNiveau()<15 & j==2){
+                                    listePouvoirs[indexEtudiant][j].setBackground(new Color(96,96,96));
+                                    listePouvoirs[indexEtudiant][j].setForeground(new Color(255,255,255));
+                                    boutonUtilisable=false;
+                                }
+
+                                if(liste.getEtudiant(indexEtudiant).getNiveau()<20 & j==3){
+                                    listePouvoirs[indexEtudiant][j].setBackground(new Color(96,96,96));
+                                    listePouvoirs[indexEtudiant][j].setForeground(new Color(255,255,255));
+                                    boutonUtilisable=false;
+                                }
+
+                                if(liste.getEtudiant(indexEtudiant).getNiveau()<25 & j==4){
+                                    listePouvoirs[indexEtudiant][j].setBackground(new Color(96,96,96));
+                                    listePouvoirs[indexEtudiant][j].setForeground(new Color(255,255,255));
+                                    boutonUtilisable=false;
+                                }
+
+                                if(liste.getEtudiant(indexEtudiant).getNiveau()<30 & j==5){
+                                    listePouvoirs[indexEtudiant][j].setBackground(new Color(96,96,96));
+                                    listePouvoirs[indexEtudiant][j].setForeground(new Color(255,255,255));
+                                    boutonUtilisable=false;
+                                }
+
+                                if(boutonUtilisable){
+                                    listePouvoirs[indexEtudiant][j].setBackground(Color.green);
+                                    listePouvoirs[indexEtudiant][j].setForeground(Color.black);
+                                }
+                            }
                         break;
                     case "pouvoir":
 
@@ -364,12 +465,12 @@ class MainFrame extends JFrame{
                     default:
                         break;
                 }
+            
             } catch(IllegalArgumentException iae){
                 JOptionPane.showMessageDialog(null, iae.getMessage());
             }
 
             liste.setEtudiant(indexEtudiant, currEtudiant);
-            isModif = false;
 
             revalidate();
             repaint();
