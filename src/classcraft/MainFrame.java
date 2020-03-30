@@ -18,7 +18,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  *
  * @author usager
  */
-class MainFrame extends JFrame implements ActionListener { 
+class MainFrame extends JFrame{ 
     
     ListeDesEtudiants liste;
     JPanel panneau = new JPanel();
@@ -128,8 +128,10 @@ class MainFrame extends JFrame implements ActionListener {
             constraints.gridy++;
             pseudoEtudiant[i] = new JTextField(liste.getEtudiant(i).getPseudo());
             //Trouvez un moyen de faire l'action (probablement simple, me disait seulement si on pourrait utiliser autre chose qu'un keylistener)
-            //pseudoEtudiant[i].setActionCommand("pseudo "+i+pseudoEtudiant[i].getText());
-            //pseudoEtudiant[i].addActionListener(this);
+            
+            pseudoEtudiant[i].addActionListener(new GestAction());
+            pseudoEtudiant[i].setActionCommand("pseudo "+i);
+            
             panneau.add(pseudoEtudiant[i], constraints);
         }
         
@@ -140,13 +142,13 @@ class MainFrame extends JFrame implements ActionListener {
             Bplus[i].setMargin(new Insets(0,0,0,0));
             Bplus[i].setPreferredSize(new Dimension(20,20));
             Bplus[i].setActionCommand("pv inc "+i);
-            Bplus[i].addActionListener(this);
+            Bplus[i].addActionListener(new GestAction());
             
             Bmoins[i] = new JButton("-");
             Bmoins[i].setMargin(new Insets(0,0,0,0));
             Bmoins[i].setPreferredSize(new Dimension(20,20));
             Bmoins[i].setActionCommand("pv dec "+i);
-            Bmoins[i].addActionListener(this);
+            Bmoins[i].addActionListener(new GestAction());
         }
         
 	constraints.gridx=4;// Moi: j'ai mis 4 parce qu'il y a classe, liste et avatar avant pv et les bouttons
@@ -189,13 +191,13 @@ class MainFrame extends JFrame implements ActionListener {
             BplusExp[i].setMargin(new Insets(0,0,0,0));
             BplusExp[i].setPreferredSize(new Dimension(20,20));
             BplusExp[i].setActionCommand("exp inc "+i);
-            BplusExp[i].addActionListener(this);
+            BplusExp[i].addActionListener(new GestAction());
             
             BmoinsExp[i] = new JButton("-");
             BmoinsExp[i].setMargin(new Insets(0,0,0,0));
             BmoinsExp[i].setPreferredSize(new Dimension(20,20));
             BmoinsExp[i].setActionCommand("exp dec "+i);
-            BmoinsExp[i].addActionListener(this);
+            BmoinsExp[i].addActionListener(new GestAction());
 	}
         
         constraints.gridx=5;
@@ -229,7 +231,7 @@ class MainFrame extends JFrame implements ActionListener {
                 ListePouvoirs[i][j].setMargin(new Insets(0,0,0,0));
                 ListePouvoirs[i][j].setPreferredSize(new Dimension(35,20));
                 ListePouvoirs[i][j].setActionCommand("pouvoir "+i+" "+j);
-                ListePouvoirs[i][j].addActionListener(this);
+                ListePouvoirs[i][j].addActionListener(new GestAction());
                 panneau.add(ListePouvoirs[i][j],constraints);
                 constraints.gridx++;
             }
@@ -316,55 +318,61 @@ class MainFrame extends JFrame implements ActionListener {
                 JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 0);
     }
     
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        String cmd = e.getActionCommand();
-        int indexEtudiant;
-        String[] cmds = cmd.split(" ");
-        int indexPouvoir = 0;
-        
-        if(cmd.startsWith("pv inc") || cmd.startsWith("pv dec") || cmd.startsWith("exp inc") || cmd.startsWith("exp dec"))
-            indexEtudiant = Integer.parseInt(cmds[2]); //Soit c'est pv/exp inc/dec, donc l'index est apres le 2e espace
-        else{
-            indexEtudiant = Integer.parseInt(cmds[1]); //Soit c'est pouvoir, donc l'index est apres le 1e espace
-            indexPouvoir = Integer.parseInt(cmds[2]);
-        }
-        
-        Etudiant currEtudiant = liste.getEtudiant(indexEtudiant);
-        
-        try{
-            switch (cmds[0]) {
-                case "pv":
-                    //Faire des verifications quant au max des PVs
-                    if(cmds[1].equals("inc"))
-                        currEtudiant.setPv(currEtudiant.getPv()+1);
-                    else currEtudiant.setPv(currEtudiant.getPv()-1);
-                    break;
-                case "exp":
-                    if(cmds[1].equals("inc")){
-                        if(currEtudiant.getExp()+1 == 2){
-                            currEtudiant.setExp(0);
-                            currEtudiant.setNiveau(currEtudiant.getNiveau()+1);
-                        }
-                        else currEtudiant.setExp(currEtudiant.getExp()+1);
-                    }
-                    //Probleme: que fait on si le prof veut baisser le niveau de l'eleve (je me disais qu'on fairait une fenetre en edition de toute les infos d'un etudiant)
-                    else currEtudiant.setExp(currEtudiant.getExp()-1);
-                    break;
-                case "pouvoir":
-                    
-                    break;
-                default:
-                    break;
+    private class GestAction implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String cmd = e.getActionCommand();
+            int indexEtudiant;
+            String[] cmds = cmd.split(" ");
+            int indexPouvoir = 0;
+
+            if(cmd.startsWith("pv inc") || cmd.startsWith("pv dec") || cmd.startsWith("exp inc") || cmd.startsWith("exp dec"))
+                indexEtudiant = Integer.parseInt(cmds[2]); //Soit c'est pv/exp inc/dec, donc l'index est apres le 2e espace
+            else if(cmd.startsWith("pseudo"))
+                indexEtudiant = Integer.parseInt(cmds[1]);
+            else{
+                indexEtudiant = Integer.parseInt(cmds[1]); //Soit c'est pouvoir, donc l'index est apres le 1e espace
+                indexPouvoir = Integer.parseInt(cmds[2]);
             }
-        } catch(IllegalArgumentException iae){
-            JOptionPane.showMessageDialog(null, iae.getMessage());
+
+            Etudiant currEtudiant = liste.getEtudiant(indexEtudiant);
+
+            try{
+                switch (cmds[0]) {
+                    case "pv":
+                        //Faire des verifications quant au max des PVs
+                        if(cmds[1].equals("inc"))
+                            currEtudiant.setPv(currEtudiant.getPv()+1);
+                        else currEtudiant.setPv(currEtudiant.getPv()-1);
+                        break;
+                    case "exp":
+                        if(cmds[1].equals("inc")){
+                            if(currEtudiant.getExp()+1 == 2){
+                                currEtudiant.setExp(0);
+                                currEtudiant.setNiveau(currEtudiant.getNiveau()+1);
+                            }
+                            else currEtudiant.setExp(currEtudiant.getExp()+1);
+                        }
+                        //Probleme: que fait on si le prof veut baisser le niveau de l'eleve (je me disais qu'on fairait une fenetre en edition de toute les infos d'un etudiant)
+                        else currEtudiant.setExp(currEtudiant.getExp()-1);
+                        break;
+                    case "pseudo":
+                        break;
+                    case "pouvoir":
+
+                        break;
+                    default:
+                        break;
+                }
+            } catch(IllegalArgumentException iae){
+                JOptionPane.showMessageDialog(null, iae.getMessage());
+            }
+
+            liste.setEtudiant(indexEtudiant, currEtudiant);
+            isModif = false;
+
+            revalidate();
+            repaint();
         }
-	
-	liste.setEtudiant(indexEtudiant, currEtudiant);
-        isModif = false;
-        
-        revalidate();
-        repaint();
     }
 }
