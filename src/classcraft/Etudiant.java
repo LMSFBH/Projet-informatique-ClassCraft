@@ -16,9 +16,18 @@ public class Etudiant {
     
     public static final int MAX_EXP = 1;
     
-    public Etudiant(String nAdmission, String nom){
+    public Etudiant(String nAdmission, String nom, String role){
         setName(nom);
         setNAdmission(nom);
+        
+        //Devrait on demander le role ici?
+        setRole(role);
+        
+        setExp(0);
+        setNiveau(1);
+        //setPv(job.MAX_PV);
+        
+        setCheminImage(null);
     }
     
     public Etudiant(String nAdmission, String nom, String role, String pseudo, String cheminImage, int exp, int niveau, int pv){
@@ -28,7 +37,7 @@ public class Etudiant {
         setPseudo(pseudo);
         setExp(exp);
         setNiveau(niveau);
-        setpv(pv);
+        setPv(pv);
         setCheminImage(cheminImage);
     }
     
@@ -100,7 +109,7 @@ public class Etudiant {
     }
     
     //On fait ca
-    public void setpv(int pv){
+    public void setPv(int pv){
         if(pv < 0)
             throw new IllegalArgumentException("Les pv ne peuvent pas etre negatif.");
         
@@ -109,7 +118,7 @@ public class Etudiant {
     
     //Ou ca
     //Plus debatable dans ce cas, vu que je ne sais pas si un heal donne tout les pvs
-    public void decpv(boolean isInit){
+    public void decPv(boolean isInit){
         //if(isInit || ((pv-1) == 0))
         //    pv = Role.PV_ROLE_BASE;
         //else

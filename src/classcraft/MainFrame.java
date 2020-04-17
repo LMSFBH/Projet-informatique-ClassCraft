@@ -8,9 +8,11 @@ package classcraft;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-import javax.imageio.ImageIO;
+
+
+
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
+
 
 /**
  *
@@ -151,6 +153,7 @@ class MainFrame extends JFrame{
 	JButton [] Bmoins = new JButton[nombreEtudiants];
         pv = new JLabel[nombreEtudiants];
         teteMorts =  new JLabel[nombreEtudiants];
+
         
 	for (int i=0; i<nombreEtudiants;i++){
             Bplus[i] = new JButton("+");
@@ -166,6 +169,7 @@ class MainFrame extends JFrame{
             Bmoins[i].addActionListener(new GestAction());
             
             pv[i] = new JLabel(""+liste.getEtudiant(i).getPv());
+
             teteMorts[i] = new JLabel(cerveau);
         }
         
@@ -189,6 +193,7 @@ class MainFrame extends JFrame{
             
             
             
+
             constraints.anchor=GridBagConstraints.EAST;
             panneau.add(Bplus[i],constraints);
             constraints.anchor=GridBagConstraints.WEST;
@@ -304,7 +309,7 @@ class MainFrame extends JFrame{
             constraints.gridy++;
             constraints.gridx-=ListeDesEtudiants.NBR_POUVOIRS;
             lv=0;
-                        
+
         }
         
         addWindowListener(new WindowAdapter() {
@@ -375,33 +380,14 @@ class MainFrame extends JFrame{
             }
         });
         
-        
-        
-        
-        
-        
-        
-
 
         
         
         miseEnPage = new JScrollPane(panneau);
         add(miseEnPage);
         //arrierePlan.add(miseEnPage);
-        //add(arrierePlan)
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+        //add(arrierePlan)    
+
     }
     
     public static boolean ouiOuNon(String msg, String titre){
@@ -440,6 +426,7 @@ class MainFrame extends JFrame{
                         else{
                             nouveauPV = Integer.parseInt(pv[indexEtudiant].getText())-1;
                             currEtudiant.setPv(currEtudiant.getPv()-1);
+
                             //Moi: je n'ai pas mis de message de validation pour les pv plus bas que 0
                             if(nouveauPV<0){
                                 nouveauPV =0;
@@ -458,7 +445,6 @@ class MainFrame extends JFrame{
                             pv[indexEtudiant].setVisible(true);
                         }
    
-                        
                         break;
                     case "exp":
                         if(cmds[1].equals("inc")){
@@ -500,11 +486,13 @@ class MainFrame extends JFrame{
                                     boutonUtilisable=false;
                                 }
 
+
                                 if(liste.getEtudiant(indexEtudiant).getNiveau()<15 & j==2){
                                     listePouvoirs[indexEtudiant][j].setBackground(new Color(96,96,96));
                                     listePouvoirs[indexEtudiant][j].setForeground(new Color(255,255,255));
                                     boutonUtilisable=false;
                                 }
+
 
                                 if(liste.getEtudiant(indexEtudiant).getNiveau()<20 & j==3){
                                     listePouvoirs[indexEtudiant][j].setBackground(new Color(96,96,96));
@@ -542,7 +530,7 @@ class MainFrame extends JFrame{
             }
 
             liste.setEtudiant(indexEtudiant, currEtudiant);
-            
+
             revalidate();
             repaint();
         }
