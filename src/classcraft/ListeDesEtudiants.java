@@ -159,12 +159,22 @@ public class ListeDesEtudiants{
     
     //Obtient une image du fichier fileName
     public XSSFPictureData getImage(Etudiant etudiant, String fileName) throws IllegalArgumentException, FileNotFoundException, IOException, Exception{
-        ArrayList<XSSFPictureData> ret = getAllImages(fileName);
+        int index = etudiants.indexOf(etudiant);
         
-        if(etudiants.indexOf(etudiant) == -1)
+        if(index == -1)
             throw new Exception("L'etudiant "+etudiant.getName()+" de numero de DA "+etudiant.getNAdmission()+" n'est pas dans la liste.");
         
-        return ret.get(etudiants.indexOf(etudiant));
+        return getImage(index, fileName);
+    }
+    
+    //Obtient une image du fichier fileName
+    public XSSFPictureData getImage(int index, String fileName) throws IllegalArgumentException, FileNotFoundException, IOException, Exception{
+        ArrayList<XSSFPictureData> ret = getAllImages(fileName);
+        
+        if((index < 0) || (index > etudiants.size()))
+            throw new Exception("L'etudiant d'index "+index+" n'est pas dans la liste.");
+        
+        return ret.get(index);
     }
     
     //Ecrit tout les etudiants et les images liee de cet objet dans un fichier excel de nom fileName
