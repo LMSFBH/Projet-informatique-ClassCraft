@@ -23,11 +23,17 @@ class MainFrame extends JFrame{
     JFileChooser choix;
     
     JProgressBar[] progressBar;
-    JLabel[] pv;
+    static JLabel[] pv, nomEtudiants, teteDeMort;
+    static JTextField[] pseudoEtudiant;
     String fichierPrincipale;
     boolean boutonUtilisable;
     JScrollPane miseEnPage;
     JButton[][] listePouvoirs;
+    Etudiant currEtudiant;
+    
+    Image tete =getToolkit().getImage("teteMort.png");
+    Image crane=tete.getScaledInstance(20,20,0);
+    ImageIcon cerveau = new ImageIcon(crane);
     
     public MainFrame() throws  FileNotFoundException, IOException, Exception{
         choix = new JFileChooser(".");
@@ -88,7 +94,7 @@ class MainFrame extends JFrame{
         JLabel nom = new JLabel("Nom");
         panneau.add(nom, constraints);
         
-        JLabel[] nomEtudiants = new JLabel[nombreEtudiants];
+        nomEtudiants = new JLabel[nombreEtudiants];
         for(int i=0; i<nombreEtudiants; i++){
             Etudiant currEtudiant = liste.getEtudiant(i);
             
@@ -122,7 +128,7 @@ class MainFrame extends JFrame{
         JLabel pseudo = new JLabel("Pseudo");
         panneau.add(pseudo, constraints);
         
-        JTextField[] pseudoEtudiant = new JTextField[nombreEtudiants];
+        pseudoEtudiant = new JTextField[nombreEtudiants];
         for(int i=0; i<nombreEtudiants; i++){
             constraints.gridy++;
             pseudoEtudiant[i] = new JTextField(liste.getEtudiant(i).getPseudo());
@@ -135,6 +141,7 @@ class MainFrame extends JFrame{
 	JButton [] Bplus = new JButton[nombreEtudiants];
 	JButton [] Bmoins = new JButton[nombreEtudiants];
         pv = new JLabel[nombreEtudiants];
+        teteDeMort = new JLabel[nombreEtudiants];
         
 	for (int i=0; i<nombreEtudiants;i++){
             Bplus[i] = new JButton("+");
@@ -150,6 +157,7 @@ class MainFrame extends JFrame{
             Bmoins[i].addActionListener(new GestAction());
             
             pv[i] = new JLabel(""+liste.getEtudiant(i).getPv());
+            teteDeMort[i] = new JLabel(cerveau);
         }
         
 	constraints.gridx=4;// Moi: j'ai mis 4 parce qu'il y a classe, liste et avatar avant pv et les bouttons
@@ -160,6 +168,14 @@ class MainFrame extends JFrame{
 	for(int i=0; i<nombreEtudiants;i++){
             constraints.gridy++;
             panneau.add(pv[i],constraints);
+            panneau.add(teteDeMort[i],constraints);
+            if(Integer.parseInt(pv[i].getText())==0){
+                teteDeMort[i].setVisible(true);
+                pv[i].setVisible(false);
+            }else{
+                teteDeMort[i].setVisible(false);
+                pv[i].setVisible(true);
+            }
             constraints.anchor=GridBagConstraints.EAST;
             panneau.add(Bplus[i],constraints);
             constraints.anchor=GridBagConstraints.WEST;
@@ -265,6 +281,9 @@ class MainFrame extends JFrame{
                 }
                 if(boutonUtilisable){
                     listePouvoirs[i][j].setBackground(Color.green);
+                }
+                if(liste.getEtudiant(i).getPv()==0){
+                    listePouvoirs[i][j].setBackground(Color.red);
                 }
                 listePouvoirs[i][j].setActionCommand("pouvoir "+i+" "+j);
                 listePouvoirs[i][j].addActionListener(new GestAction());
@@ -373,7 +392,7 @@ class MainFrame extends JFrame{
                 indexPouvoir = Integer.parseInt(cmds[2]);
             }
 
-            Etudiant currEtudiant = liste.getEtudiant(indexEtudiant);
+            currEtudiant = liste.getEtudiant(indexEtudiant);
 
             try{
                 switch (cmds[0]) {
@@ -386,8 +405,19 @@ class MainFrame extends JFrame{
                         else{
                             nouveauPV = Integer.parseInt(pv[indexEtudiant].getText())-1;
                             currEtudiant.setPv(currEtudiant.getPv()-1);
+                            if(nouveauPV<0){
+                                nouveauPV =0;
+                                currEtudiant.setPv(0);
+                            }
                         }
                         pv[indexEtudiant].setText(""+nouveauPV);
+                        if(Integer.parseInt(pv[indexEtudiant].getText())==0){                                                
+                            teteDeMort[indexEtudiant].setVisible(true);
+                            pv[indexEtudiant].setVisible(false);
+                        }else{
+                            teteDeMort[indexEtudiant].setVisible(false);
+                            pv[indexEtudiant].setVisible(true);
+                        }
                         break;
                     case "exp":
                         if(cmds[1].equals("inc")){
@@ -404,9 +434,14 @@ class MainFrame extends JFrame{
                         //Probleme: que fait on si le prof veut baisser le niveau de l'eleve (je me disais qu'on fairait une fenetre en edition de toute les infos d'un etudiant)
                         else{ 
                             if(currEtudiant.getExp()-1 == -1){
-                                progressBar[indexEtudiant].setValue(1);
-                                currEtudiant.setExp(1);
                                 currEtudiant.setNiveau(currEtudiant.getNiveau()-1);
+                                if(currEtudiant.getNiveau()==-1){
+                                    progressBar[indexEtudiant].setValue(0);
+                                    currEtudiant.setExp(0);
+                                }else{
+                                   progressBar[indexEtudiant].setValue(1);
+                                   currEtudiant.setExp(1); 
+                                }
                             }
                             else{
                                 progressBar[indexEtudiant].setValue(0);
@@ -456,6 +491,11 @@ class MainFrame extends JFrame{
                                 if(boutonUtilisable){
                                     listePouvoirs[indexEtudiant][j].setBackground(Color.green);
                                     listePouvoirs[indexEtudiant][j].setForeground(Color.black);
+                                }
+                                
+                                if(liste.getEtudiant(indexEtudiant).getPv()==0){
+                                    listePouvoirs[indexEtudiant][j].setBackground(Color.red);
+                                    listePouvoirs[indexEtudiant][j].setForeground(Color.white);
                                 }
                             }
                         break;

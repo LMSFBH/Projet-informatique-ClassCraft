@@ -21,7 +21,7 @@ public class FrameChangement extends JFrame{
     JTextArea nomChangement, pseudoChangement;
     JComboBox roleChangement;
     
-    public FrameChangement(Etudiant unEtudiant, String fileName){
+    public FrameChangement(Etudiant unEtudiant, ListeDesEtudiants liste, String fileName){
         changementInfo = new JPanel();
         setSize(500,500);
         JLabel nom = new JLabel("Nom: ");
@@ -37,11 +37,14 @@ public class FrameChangement extends JFrame{
             public void actionPerformed(ActionEvent e){
                 unEtudiant.setName(nomChangement.getText());
                 FrameEtudiant.nomEtPrenom.setText("Nom et prénom: "+unEtudiant.getName());
+                MainFrame.nomEtudiants[liste.getIndex(unEtudiant)].setText(unEtudiant.getName());
 
                 unEtudiant.setPseudo(pseudoChangement.getText());
                 FrameEtudiant.pseudo.setText("Pseudo: "+unEtudiant.getPseudo());
+                MainFrame.pseudoEtudiant[liste.getIndex(unEtudiant)].setText(unEtudiant.getPseudo());
                 //rajouter le changement du role quand la classe sera faite//rajouter le changement du role quand la classe sera faite
                 JOptionPane.showMessageDialog(null, "Modification effectuée");
+                dispose();
             }
         });
         
@@ -50,6 +53,7 @@ public class FrameChangement extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e){
                 JOptionPane.showMessageDialog(null, "Modification annulée");
+                dispose();
             }
         });
         

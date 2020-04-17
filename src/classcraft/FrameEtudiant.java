@@ -117,7 +117,7 @@ public class FrameEtudiant extends JFrame {
     protected class GestAction implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e){
-            FrameChangement changement = new FrameChangement(unEtudiant, fileName);
+            FrameChangement changement = new FrameChangement(unEtudiant, liste, fileName);
             changement.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             changement.setVisible(true);
             

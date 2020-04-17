@@ -47,6 +47,10 @@ public class ListeDesEtudiants{
         return etudiants.size();
     }
     
+    public int getIndex(Etudiant unEtudiant){
+        return etudiants.indexOf(unEtudiant);
+    }
+    
     //Adapte de https://stackoverflow.com/a/52875928
     public static void convertCsvToXlsx(String xlsLocation, String csvLocation) throws FileNotFoundException, IOException, Exception {
         if((csvLocation == null) || (csvLocation.isEmpty()))

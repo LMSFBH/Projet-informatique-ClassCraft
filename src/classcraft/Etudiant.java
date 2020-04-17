@@ -84,8 +84,9 @@ public class Etudiant {
     
     //Est-ce qu'on fait ca
     public void setExp(int exp){
-        if((exp < 0) || (exp > MAX_EXP))
+        if((exp < 0) || (exp > MAX_EXP)){
             throw new IllegalArgumentException("L'exp doit etre soit 0 ou 1.");
+        }
         
         this.exp=exp;
     }
@@ -102,7 +103,7 @@ public class Etudiant {
     
     //Meme chose, on a jamais besoins de set le niveau si incExp s'en charge
     public void setNiveau(int niveau){
-        if(niveau <= 0)
+        if(niveau <= -1)
             throw new IllegalArgumentException("Le niveau ne peut pas etre negatif ou nulle.");
         
         this.niveau=niveau;
