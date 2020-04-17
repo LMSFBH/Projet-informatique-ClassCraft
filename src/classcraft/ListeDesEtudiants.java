@@ -28,7 +28,6 @@ public class ListeDesEtudiants{
     public static final int IMG_POS = 15;
     public static final String DEFAULT_IMAGE = "default.png"; 
     
-    private boolean modifier = false;
     private ArrayList<Etudiant> etudiants = new ArrayList<>();
     
     //Initialise la liste d'etudiant avec un fichier de chemin fichierAvatar
@@ -96,16 +95,11 @@ public class ListeDesEtudiants{
         etudiants.set(index, unEtudiant);
     }
     
-    public boolean isModif(){
-        return modifier;
-    }
-    
     //Ajoute un etudiant et reorganise la liste
     public void addEtudiant(Etudiant unEtudiant) throws Exception{
         if(!etudiants.add(unEtudiant))
             throw new Exception("L'etudiant "+unEtudiant.getName()+" de numero de DA "+unEtudiant.getNAdmission()+" n'a pas pu etre ajouter.");
         
-        modifier = true;
         organisezAlphabet();
     }
     
@@ -114,7 +108,6 @@ public class ListeDesEtudiants{
         if(!etudiants.remove(unEtudiant))
             throw new Exception("L'etudiant "+unEtudiant.getName()+" de numero de DA "+unEtudiant.getNAdmission()+" n'a pas pu etre supprimer.");
         
-        modifier = true;
         organisezAlphabet();
     }
     
@@ -142,16 +135,11 @@ public class ListeDesEtudiants{
         });
     }
     
-    //Obtient une image du fichier fileName
-    public XSSFPictureData getImage(Etudiant etudiant, String fileName) throws IllegalArgumentException, FileNotFoundException, IOException, Exception{
+    public static ArrayList<XSSFPictureData> getAllImages(String fileName) throws IllegalArgumentException, FileNotFoundException, IOException, Exception{
         if((fileName == null) || (fileName.isEmpty()))
             throw new IllegalArgumentException("Un fichier d'entree est vide.");
         
         XSSFWorkbook wb = null;
-        
-        int index = etudiants.indexOf(etudiant);
-        if(index == -1)
-            throw new IllegalArgumentException("L'etudiant "+etudiant.getName()+" de numero de DA "+etudiant.getNAdmission()+" n'est pas dans le fichier "+fileName);
         
         try{
             wb = new XSSFWorkbook(new FileInputStream(fileName));
@@ -160,18 +148,27 @@ public class ListeDesEtudiants{
         } catch(IOException ioe){
             throw new IOException("Erreur d'I/O lors de la lecture de la liste d'etudiant "+fileName+" lors de la lecture d'image.");
         } catch(Exception e){
-            throw new Exception("Erreur d'exception lors de la lecture de la liste d'etudiant "+fileName+" lors de la lecture d'image.");
+            throw new Exception("Erreur lors de la lecture de la liste d'etudiant "+fileName+" lors de la lecture d'image.");
         }
         
         ArrayList<XSSFPictureData> ret = (ArrayList<XSSFPictureData>) wb.getAllPictures();
         closeWorkBook(fileName, wb, false);
         
-        return ret.get(index);
+        return ret;
+    }
+    
+    //Obtient une image du fichier fileName
+    public XSSFPictureData getImage(Etudiant etudiant, String fileName) throws IllegalArgumentException, FileNotFoundException, IOException, Exception{
+        ArrayList<XSSFPictureData> ret = getAllImages(fileName);
+        
+        if(etudiants.indexOf(etudiant) == -1)
+            throw new Exception("L'etudiant "+etudiant.getName()+" de numero de DA "+etudiant.getNAdmission()+" n'est pas dans la liste.");
+        
+        return ret.get(etudiants.indexOf(etudiant));
     }
     
     //Ecrit tout les etudiants et les images liee de cet objet dans un fichier excel de nom fileName
     //ecrit ou pas les images selon writeImage, a faire que si un etudiant a ete ajouter/retirer ou la premiere ecriture du fichier
-    //Important: verifiez si un fichier rempli d'etudiant et d'image atteint la limite de POI (ca ne devrait pas)
     public void writeToutEtudiantsEtImages(String fileName, boolean writeImage) throws IllegalArgumentException, FileNotFoundException, IOException, EOFException, Exception{
         if((fileName == null) || (fileName.isEmpty()))
             throw new IllegalArgumentException("Un fichier d'entree est vide.");
@@ -273,11 +270,15 @@ public class ListeDesEtudiants{
         Row ligne = null;
         String img;
         Etudiant unEtudiant;
+        DataFormatter formatter = new DataFormatter();
         for (int i=0;((ligne = sheet.getRow(i)) != null);i++){
             try{
                 switch (ligne.getLastCellNum()) {
                     case 2:
-                        unEtudiant = new Etudiant(String.valueOf(ligne.getCell(0).getNumericCellValue()), ligne.getCell(1).getStringCellValue());
+                        unEtudiant = new Etudiant(formatter.formatCellValue(ligne.getCell(0)), ligne.getCell(1).getStringCellValue(), ligne.getCell(2).getStringCellValue());
+                        
+                        if(etudiants.contains(unEtudiant))
+                            throw new Exception("2 etudiants ne peuvent pas etre pareil.");
                         
                         etudiants.add(unEtudiant);
                         break;
@@ -287,7 +288,7 @@ public class ListeDesEtudiants{
                         else
                             img = ligne.getCell(4).getStringCellValue();
                         
-                        unEtudiant = new Etudiant(String.valueOf((int)ligne.getCell(0).getNumericCellValue()), ligne.getCell(1).getStringCellValue(), ligne.getCell(2).getStringCellValue(), ligne.getCell(3).getStringCellValue(), img,
+                        unEtudiant = new Etudiant(formatter.formatCellValue(ligne.getCell(0)), ligne.getCell(1).getStringCellValue(), ligne.getCell(2).getStringCellValue(), ligne.getCell(3).getStringCellValue(), img,
                                                    (int)ligne.getCell(5).getNumericCellValue(), (int)ligne.getCell(6).getNumericCellValue(), (int)ligne.getCell(7).getNumericCellValue());
                         if(etudiants.contains(unEtudiant))
                             throw new Exception("2 etudiants ne peuvent pas etre pareil.");
@@ -300,7 +301,7 @@ public class ListeDesEtudiants{
                         else
                             img = ligne.getCell(4).getStringCellValue();
                         
-                        unEtudiant = new Etudiant(String.valueOf((int)ligne.getCell(0).getNumericCellValue()), ligne.getCell(1).getStringCellValue(), ligne.getCell(2).getStringCellValue(), ligne.getCell(3).getStringCellValue(), img,
+                        unEtudiant = new Etudiant(formatter.formatCellValue(ligne.getCell(0)), ligne.getCell(1).getStringCellValue(), ligne.getCell(2).getStringCellValue(), ligne.getCell(3).getStringCellValue(), img,
                                                    (int)ligne.getCell(5).getNumericCellValue(), (int)ligne.getCell(6).getNumericCellValue(), (int)ligne.getCell(7).getNumericCellValue());
                         if(etudiants.contains(unEtudiant))
                             throw new Exception("2 etudiants ne peuvent pas etre pareil.");
@@ -325,7 +326,7 @@ public class ListeDesEtudiants{
     }
     
     //Ne devrait pas etre appeler par quoi que ce soit
-    public void closeWorkBook(String fileName, XSSFWorkbook wb, boolean isWrite) throws IllegalArgumentException, FileNotFoundException, IOException, EOFException, Exception{
+    public static void closeWorkBook(String fileName, XSSFWorkbook wb, boolean isWrite) throws IllegalArgumentException, FileNotFoundException, IOException, EOFException, Exception{
         if((fileName == null) || (fileName.isEmpty()))
             throw new IllegalArgumentException("Un fichier d'entree est vide.");
         

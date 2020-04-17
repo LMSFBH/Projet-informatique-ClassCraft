@@ -5,46 +5,91 @@
  */
 package classcraft;
 
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JTextField;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
  * @author usager
  */
-class MainFrame extends JFrame implements ActionListener { 
+class MainFrame extends JFrame{ 
     
+    //MOi: ajout de l'image     
+    
+    DessinFond arrierePlan = new DessinFond();
+    
+    
+    Image tete =getToolkit().getImage("teteMort.png");
+    Image crane=tete.getScaledInstance(20,20,0);
+    ImageIcon cerveau = new ImageIcon(crane);
+                            
+    // GridBagLayout
+    GridBagLayout gbl = new GridBagLayout();
+    GridBagConstraints constraints = new GridBagConstraints();
+    
+    JLabel[] pv;
+    JLabel[] teteMorts;
+            
     ListeDesEtudiants liste;
     JPanel panneau = new JPanel();
-    JLabel pv = new JLabel("Points de Vie");
-    int nombreEtudiants;
+    int nombreEtudiants, nouveauPV;
+    JFileChooser choix;
+    
+    JProgressBar[] progressBar;    
+    String fichierPrincipale;
+    boolean boutonUtilisable;
+    JScrollPane miseEnPage;
+    JButton[][] listePouvoirs;
     
     public MainFrame() throws  FileNotFoundException, IOException, Exception{
-        liste = new ListeDesEtudiants("Classeur1.xlsx");
-        nombreEtudiants = liste.getEtudiantsSize();
+        choix = new JFileChooser(".");
+        choix.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        choix.setDialogTitle("Sauvegarde");
+
+        int resultat = JFileChooser.CANCEL_OPTION;
+
+        while(resultat != JFileChooser.APPROVE_OPTION){
+            resultat = choix.showOpenDialog(this);
+
+            switch (resultat) {
+                case JFileChooser.ERROR_OPTION:
+                    JOptionPane.showMessageDialog(null, "Une erreur est survenu lors du choix de fichier.");
+
+                    if(!ouiOuNon("Voulez-vous recommencez?", "FERMETURE"))
+                        System.exit(0);
+                    break;
+                case JFileChooser.CANCEL_OPTION:
+                    System.exit(0);
+                default:
+                    try{
+                        liste = new ListeDesEtudiants(choix.getSelectedFile());
+                        fichierPrincipale = choix.getSelectedFile().getCanonicalPath();
+                    } catch(FileNotFoundException fnfe){
+                        JOptionPane.showMessageDialog(null, fnfe.getMessage());
+                        resultat = JFileChooser.CANCEL_OPTION;
+                    } catch(IOException ioe){
+                        JOptionPane.showMessageDialog(null, ioe.getMessage());
+                        resultat = JFileChooser.CANCEL_OPTION;
+                    } catch(Exception e){
+                        JOptionPane.showMessageDialog(null, e.getMessage());
+                        resultat = JFileChooser.CANCEL_OPTION;
+                    }
+                    break;
+            }
+
+        }
         
+        nombreEtudiants = liste.getEtudiantsSize();
         
         setSize(nombreEtudiants*35, nombreEtudiants*30);
         
-        // GridBagLayout
-        GridBagLayout gbl = new GridBagLayout();
+
 	panneau.setLayout(gbl);
-	GridBagConstraints constraints = new GridBagConstraints();
+	
         constraints.gridx=0;
 	constraints.gridy=0;
         constraints.weightx=1;
@@ -60,15 +105,23 @@ class MainFrame extends JFrame implements ActionListener {
         
         JLabel[] nomEtudiants = new JLabel[nombreEtudiants];
         for(int i=0; i<nombreEtudiants; i++){
+            Etudiant currEtudiant = liste.getEtudiant(i);
+            
             constraints.gridy++;
-            nomEtudiants[i] = new JLabel(liste.getEtudiant(i).getName());
+            nomEtudiants[i] = new JLabel(currEtudiant.getName());
+            nomEtudiants[i].addMouseListener(new MouseAdapter(){
+                @Override
+                public void mouseClicked(MouseEvent e){
+                    FrameEtudiant frameClique = new FrameEtudiant(currEtudiant, liste, fichierPrincipale);
+                    frameClique.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    frameClique.setVisible(true);
+                }
+            });
             panneau.add(nomEtudiants[i], constraints);
         }
         
-        
         constraints.gridx++;
         constraints.gridy=0;
-        
         JLabel classe = new JLabel("classe");
         panneau.add(classe, constraints);
         
@@ -79,7 +132,6 @@ class MainFrame extends JFrame implements ActionListener {
             panneau.add(role[i],constraints);
         }
         
-        
         constraints.gridx++;
         constraints.gridy=0;
         JLabel pseudo = new JLabel("Pseudo");
@@ -89,37 +141,54 @@ class MainFrame extends JFrame implements ActionListener {
         for(int i=0; i<nombreEtudiants; i++){
             constraints.gridy++;
             pseudoEtudiant[i] = new JTextField(liste.getEtudiant(i).getPseudo());
+            //Trouvez un moyen de faire l'action (probablement simple, me disait seulement si on pourrait utiliser autre chose qu'un keylistener)
+            pseudoEtudiant[i].addActionListener(new GestAction());
+            pseudoEtudiant[i].setActionCommand("pseudo "+i);
             panneau.add(pseudoEtudiant[i], constraints);
         }
         
 	JButton [] Bplus = new JButton[nombreEtudiants];
+	JButton [] Bmoins = new JButton[nombreEtudiants];
+        pv = new JLabel[nombreEtudiants];
+        teteMorts =  new JLabel[nombreEtudiants];
+        
 	for (int i=0; i<nombreEtudiants;i++){
             Bplus[i] = new JButton("+");
             Bplus[i].setMargin(new Insets(0,0,0,0));
             Bplus[i].setPreferredSize(new Dimension(20,20));
-	}
-	JButton [] Bmoins = new JButton[nombreEtudiants];
-	for (int i=0; i<nombreEtudiants;i++){
+            Bplus[i].setActionCommand("pv inc "+i);
+            Bplus[i].addActionListener(new GestAction());
+            
             Bmoins[i] = new JButton("-");
             Bmoins[i].setMargin(new Insets(0,0,0,0));
             Bmoins[i].setPreferredSize(new Dimension(20,20));
-
-	}
-	// Moi: vies c'est le tableau des points de vie des étudiants. j'aivais déja utiliser pv
-	int [] Vies = new int[nombreEtudiants];
-	for (int i=0; i<Vies.length;i++){
-		// ici on va devoir appeler le tableau des etudiants pour chaque vies
-		Vies[i] = liste.getEtudiant(i).getPv();
-	}
+            Bmoins[i].setActionCommand("pv dec "+i);
+            Bmoins[i].addActionListener(new GestAction());
+            
+            pv[i] = new JLabel(""+liste.getEtudiant(i).getPv());
+            teteMorts[i] = new JLabel(cerveau);
+        }
         
-
 	constraints.gridx=4;// Moi: j'ai mis 4 parce qu'il y a classe, liste et avatar avant pv et les bouttons
 	constraints.gridy=0;
-	panneau.add(pv,constraints);
+        JLabel textePV = new JLabel("Points de Vie");
+	panneau.add(textePV,constraints);
 	
 	for(int i=0; i<nombreEtudiants;i++){
             constraints.gridy++;
-            panneau.add(new JLabel(""+Vies[i]),constraints);
+            panneau.add(pv[i],constraints);        
+            // MOi: 
+            panneau.add(teteMorts[i],constraints);
+            if(Integer.parseInt(pv[i].getText())==0){
+                teteMorts[i].setVisible(true);
+                pv[i].setVisible(false);
+            }else{
+                teteMorts[i].setVisible(false);
+                pv[i].setVisible(true);
+            }
+            
+            
+            
             constraints.anchor=GridBagConstraints.EAST;
             panneau.add(Bplus[i],constraints);
             constraints.anchor=GridBagConstraints.WEST;
@@ -133,24 +202,46 @@ class MainFrame extends JFrame implements ActionListener {
         panneau.add(exp,constraints);
         
         int ExpMax=2;
-        int Exp=0;
-        JProgressBar[] progressBar = new JProgressBar[nombreEtudiants];
+        progressBar = new JProgressBar[nombreEtudiants];
         for(int i=0; i<nombreEtudiants; i++){
             progressBar[i] = new JProgressBar();
             progressBar[i].setMaximum(ExpMax);
             progressBar[i].setValue(0);
             progressBar[i].setStringPainted(true);
-        }
-        
-        
-        
-        for(int i=0; i<nombreEtudiants; i++){
+            
             constraints.gridy++;
-            progressBar[i].setString("LV"+liste.getEtudiant(i).getNiveau()+"                            ");
-            progressBar[i].setValue(liste.getEtudiant(i).getExp());
-            panneau.add(progressBar[i],constraints);	
+            progressBar[i].setString("Niv "+(liste.getEtudiant(i).getNiveau()+((liste.getEtudiant(i).getExp() == 1) ? 0.5 : 0))+"                            ");
+            progressBar[i].setValue(liste.getEtudiant(i).getExp());	
         }
-                
+        
+        JButton[] BplusExp = new JButton[nombreEtudiants];
+	JButton[] BmoinsExp = new JButton[nombreEtudiants];
+	for (int i=0; i<nombreEtudiants;i++){
+            BplusExp[i] = new JButton("+");
+            BplusExp[i].setMargin(new Insets(0,0,0,0));
+            BplusExp[i].setPreferredSize(new Dimension(20,20));
+            BplusExp[i].setActionCommand("exp inc "+i);
+            BplusExp[i].addActionListener(new GestAction());
+            
+            BmoinsExp[i] = new JButton("-");
+            BmoinsExp[i].setMargin(new Insets(0,0,0,0));
+            BmoinsExp[i].setPreferredSize(new Dimension(20,20));
+            BmoinsExp[i].setActionCommand("exp dec "+i);
+            BmoinsExp[i].addActionListener(new GestAction());
+	}
+        
+        constraints.gridx=5;
+        constraints.gridy=0;
+        for(int i=0; i<nombreEtudiants;i++){
+            constraints.gridy++;
+            panneau.add(progressBar[i],constraints);
+            constraints.anchor=GridBagConstraints.EAST;
+            panneau.add(BplusExp[i],constraints);
+            constraints.anchor=GridBagConstraints.WEST;
+            panneau.add(BmoinsExp[i],constraints);
+            constraints.anchor=GridBagConstraints.CENTER;
+	}
+        
         constraints.gridx=6;
         constraints.gridy=0;
         constraints.gridwidth=6;
@@ -159,58 +250,321 @@ class MainFrame extends JFrame implements ActionListener {
         JLabel pouvoir = new JLabel("Pouvoirs");
         panneau.add(pouvoir,constraints);
         
-         // liste de pouvoirs pour un eleve
-        int POUVOIRS_MAX = 6;
         constraints.gridwidth=1;
         int lv = 0; // niveau ou on gagne un pouvoir
         constraints.gridy++;
-        JButton ListePouvoirs[][] = new JButton[nombreEtudiants][POUVOIRS_MAX];
-        for (int i=0; i<ListePouvoirs.length;i++){ 
-            for (int j=0; j<POUVOIRS_MAX;j++){ 
+        
+        listePouvoirs = new JButton[nombreEtudiants][ListeDesEtudiants.NBR_POUVOIRS];
+        for (int i=0; i<listePouvoirs.length;i++){ 
+            for (int j=0; j<ListeDesEtudiants.NBR_POUVOIRS;j++){ 
                 lv+=5;
-                ListePouvoirs[i][j] = new JButton(""+lv);
-                ListePouvoirs[i][j].setMargin(new Insets(0,0,0,0));
-                ListePouvoirs[i][j].setPreferredSize(new Dimension(35,20));
-                panneau.add(ListePouvoirs[i][j],constraints);
+                listePouvoirs[i][j] = new JButton(""+lv);
+                listePouvoirs[i][j].setMargin(new Insets(0,0,0,0));
+                listePouvoirs[i][j].setPreferredSize(new Dimension(35,20));
+                boutonUtilisable = true;
+                if(liste.getEtudiant(i).getNiveau()<5 & j==0){
+                    listePouvoirs[i][j].setBackground(new Color(96,96,96));
+                    listePouvoirs[i][j].setForeground(new Color(255,255,255));
+                    boutonUtilisable=false;
+                }
+                if(liste.getEtudiant(i).getNiveau()<10 & j==1){
+                    listePouvoirs[i][j].setBackground(new Color(96,96,96));
+                    listePouvoirs[i][j].setForeground(new Color(255,255,255));
+                    boutonUtilisable=false;
+                }
+                if(liste.getEtudiant(i).getNiveau()<15 & j==2){
+                    listePouvoirs[i][j].setBackground(new Color(96,96,96));
+                    listePouvoirs[i][j].setForeground(new Color(255,255,255));
+                    boutonUtilisable=false;
+                }
+                if(liste.getEtudiant(i).getNiveau()<20 & j==3){
+                    listePouvoirs[i][j].setBackground(new Color(96,96,96));
+                    listePouvoirs[i][j].setForeground(new Color(255,255,255));
+                    boutonUtilisable=false;
+                }
+                if(liste.getEtudiant(i).getNiveau()<25 & j==4){
+                    listePouvoirs[i][j].setBackground(new Color(96,96,96));
+                    listePouvoirs[i][j].setForeground(new Color(255,255,255));
+                    boutonUtilisable=false;
+                }
+                if(liste.getEtudiant(i).getNiveau()<30 & j==5){
+                    listePouvoirs[i][j].setBackground(new Color(96,96,96));
+                    listePouvoirs[i][j].setForeground(new Color(255,255,255));
+                    boutonUtilisable=false;
+                }
+                if(boutonUtilisable){
+                    listePouvoirs[i][j].setBackground(Color.green);
+                }
+                listePouvoirs[i][j].setActionCommand("pouvoir "+i+" "+j);
+                listePouvoirs[i][j].addActionListener(new GestAction());
+                panneau.add(listePouvoirs[i][j],constraints);
                 constraints.gridx++;
             }
-            constraints.gridy++;
-            constraints.gridx-=POUVOIRS_MAX;
-            lv=0;
             
+            constraints.gridy++;
+            constraints.gridx-=ListeDesEtudiants.NBR_POUVOIRS;
+            lv=0;
+                        
         }
         
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent ev) {
-                String[] options = {"Oui", "Non"};
-                if(JOptionPane.showOptionDialog(null, "Etes-vous sure de vouloir fermer l'application?", "FERMETURE", JOptionPane.YES_NO_OPTION,
-                                                 JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 0){
-                    try{
-                        //L'ecriture des images prends beaucoups de temps
-                        //if(liste.isModif())
-                            String fichierImg = JOptionPane.showInputDialog("Veuillez selectionnez l'emplacement du fichier excel de sauvegarde. \n(L'operation peut prendre plus de temps a cause des images)");
-                            liste.writeToutEtudiantsEtImages(fichierImg, true);
-                        //else
-                        //    liste.writeToutEtudiantsEtImages(JOptionPane.showInputDialog("Veuillez selectionnez l'emplacement du fichier excel de sauvegarde."), false);
-                    }catch(FileNotFoundException fnfe){
-                        JOptionPane.showMessageDialog(null, fnfe.getMessage());
-                    } catch(IOException ioe){
-                        JOptionPane.showMessageDialog(null, ioe.getMessage());
-                    } catch(Exception e){
-                        JOptionPane.showMessageDialog(null, e.getMessage());
+                if(ouiOuNon("Etes-vous sure de vouloir fermer l'application?", "FERMETURE")){
+                    String fichierImg;
+                    int resultat = JFileChooser.CANCEL_OPTION;
+                    boolean utiliserFichierDemarrage;
+                    
+                    while(resultat != JFileChooser.APPROVE_OPTION){
+                        utiliserFichierDemarrage = ouiOuNon("Voulez-vous utilisez le meme fichier selectionnez au lancement du programme?", "FERMETURE");
+                        
+                        try{
+                            JFileChooser choix = null;
+                            if(!utiliserFichierDemarrage){
+                                choix = new JFileChooser(".");
+                                
+                                /*FileNameExtensionFilter extensionFilter = new FileNameExtensionFilter("Excel Workbook (.xlsx)", ".xlsx");
+                                choix.addChoosableFileFilter(extensionFilter);
+                                choix.setAcceptAllFileFilterUsed(false);
+                                choix.setFileFilter(extensionFilter);*/
+                                choix.setDialogTitle("Sauvegarde");
+                                
+                                resultat = choix.showSaveDialog(null);
+                            } else
+                                resultat = JFileChooser.APPROVE_OPTION;
+                            
+                            switch(resultat){
+                                case JFileChooser.ERROR_OPTION:
+                                    JOptionPane.showMessageDialog(null, "Une erreur est survenu lors du choix de fichier.");
+
+                                    if(!ouiOuNon("Voulez-vous recommencez?", "FERMETURE"))
+                                        System.exit(0);
+                                    break;
+                                case JFileChooser.CANCEL_OPTION:
+                                    return;
+                                case JFileChooser.APPROVE_OPTION:
+                                    //L'ecriture des images prends beaucoups de temps, trouver un moyen de ne pas les ecrire chaques fois
+                                    //if(liste.isModif()){
+                                    fichierImg = utiliserFichierDemarrage ? fichierPrincipale : choix.getSelectedFile().getCanonicalPath();
+                                    if(!fichierImg.endsWith(".xlsx"))
+                                        fichierImg += ".xlsx";
+                                    
+                                    if((new File(fichierImg)).exists())
+                                        if(!ouiOuNon("Le fichier existe deja. Voulez-vous le re-ecrire? (le programme vous redemandera si vous selectionnez non)", "FERMETURE")){
+                                            resultat = JFileChooser.CANCEL_OPTION;
+                                            continue;
+                                        }
+                                    
+                                    liste.writeToutEtudiantsEtImages(fichierImg, true);
+                                    System.exit(0);
+                                    //else
+                                    //  liste.writeToutEtudiantsEtImages(JOptionPane.showInputDialog("Veuillez selectionnez l'emplacement du fichier excel de sauvegarde."), false);
+                            }
+
+                        }catch(FileNotFoundException fnfe){
+                            JOptionPane.showMessageDialog(null, fnfe.getMessage());
+                        } catch(IOException ioe){
+                            JOptionPane.showMessageDialog(null, ioe.getMessage());
+                        } catch(Exception e){
+                            JOptionPane.showMessageDialog(null, e.getMessage());
+                        }
                     }
                     
                     System.exit(0);
                 }
-            }  
+            }
         });
         
-        add(panneau);
-    }
+        
+        
+        
+        
+        
+        
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet.");
+
+        
+        
+        miseEnPage = new JScrollPane(panneau);
+        add(miseEnPage);
+        //arrierePlan.add(miseEnPage);
+        //add(arrierePlan)
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     }
+    
+    public static boolean ouiOuNon(String msg, String titre){
+        String[] options = {"Oui", "Non"};
+        return (JOptionPane.showOptionDialog(null, msg, titre, JOptionPane.YES_NO_OPTION,
+                JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 0);
+    }
+    
+    private class GestAction implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String cmd = e.getActionCommand();
+            int indexEtudiant;
+            String[] cmds = cmd.split(" ");
+            int indexPouvoir = 0;
+
+            if(cmd.startsWith("pv inc") || cmd.startsWith("pv dec") || cmd.startsWith("exp inc") || cmd.startsWith("exp dec"))
+                indexEtudiant = Integer.parseInt(cmds[2]); //Soit c'est pv/exp inc/dec, donc l'index est apres le 2e espace
+            else if(cmd.startsWith("pseudo"))
+                indexEtudiant = Integer.parseInt(cmds[1]);
+            else{
+                indexEtudiant = Integer.parseInt(cmds[1]); //Soit c'est pouvoir, donc l'index est apres le 1e espace
+                indexPouvoir = Integer.parseInt(cmds[2]);
+            }
+
+            Etudiant currEtudiant = liste.getEtudiant(indexEtudiant);
+
+            try{
+                switch (cmds[0]) {
+                    case "pv":
+                        //Faire des verifications quant au max des PVs
+                        if(cmds[1].equals("inc")){
+                            nouveauPV = Integer.parseInt(pv[indexEtudiant].getText())+1;
+                            currEtudiant.setPv(currEtudiant.getPv()+1);
+                        }
+                        else{
+                            nouveauPV = Integer.parseInt(pv[indexEtudiant].getText())-1;
+                            currEtudiant.setPv(currEtudiant.getPv()-1);
+                            //Moi: je n'ai pas mis de message de validation pour les pv plus bas que 0
+                            if(nouveauPV<0){
+                                nouveauPV =0;
+                                currEtudiant.setPv(0);
+                            }
+                         
+                        }
+                        pv[indexEtudiant].setText(""+nouveauPV);
+                        
+                        // MOI:  modifications tete de mort
+                        if(Integer.parseInt(pv[indexEtudiant].getText())==0){                                                
+                            teteMorts[indexEtudiant].setVisible(true);
+                            pv[indexEtudiant].setVisible(false);
+                        }else{
+                            teteMorts[indexEtudiant].setVisible(false);
+                            pv[indexEtudiant].setVisible(true);
+                        }
+   
+                        
+                        break;
+                    case "exp":
+                        if(cmds[1].equals("inc")){
+                            if(currEtudiant.getExp()+1 == 2){
+                                progressBar[indexEtudiant].setValue(0);
+                                currEtudiant.setExp(0);
+                                currEtudiant.setNiveau(currEtudiant.getNiveau()+1);
+                            }
+                            else {
+                                progressBar[indexEtudiant].setValue(1);
+                                currEtudiant.setExp(currEtudiant.getExp()+1);
+                            }
+                        }
+                        //Probleme: que fait on si le prof veut baisser le niveau de l'eleve (je me disais qu'on fairait une fenetre en edition de toute les infos d'un etudiant)
+                        else{ 
+                            if(currEtudiant.getExp()-1 == -1){
+                                progressBar[indexEtudiant].setValue(1);
+                                currEtudiant.setExp(1);
+                                currEtudiant.setNiveau(currEtudiant.getNiveau()-1);
+                            }
+                            else{
+                                progressBar[indexEtudiant].setValue(0);
+                                currEtudiant.setExp(currEtudiant.getExp()-1);
+                            }
+                        }
+
+                        progressBar[indexEtudiant].setString("Niv "+(liste.getEtudiant(indexEtudiant).getNiveau()+((liste.getEtudiant(indexEtudiant).getExp() == 1) ? 0.5 : 0))+"                            ");
+                        for (int j=0; j<ListeDesEtudiants.NBR_POUVOIRS;j++){ 
+                                boutonUtilisable = true;
+                                if(liste.getEtudiant(indexEtudiant).getNiveau()<5 & j==0){
+                                    listePouvoirs[indexEtudiant][j].setBackground(new Color(96,96,96));
+                                    listePouvoirs[indexEtudiant][j].setForeground(new Color(255,255,255));
+                                    boutonUtilisable=false;
+                                }
+
+                                if(liste.getEtudiant(indexEtudiant).getNiveau()<10 & j==1){
+                                    listePouvoirs[indexEtudiant][j].setBackground(new Color(96,96,96));
+                                    listePouvoirs[indexEtudiant][j].setForeground(new Color(255,255,255));
+                                    boutonUtilisable=false;
+                                }
+
+                                if(liste.getEtudiant(indexEtudiant).getNiveau()<15 & j==2){
+                                    listePouvoirs[indexEtudiant][j].setBackground(new Color(96,96,96));
+                                    listePouvoirs[indexEtudiant][j].setForeground(new Color(255,255,255));
+                                    boutonUtilisable=false;
+                                }
+
+                                if(liste.getEtudiant(indexEtudiant).getNiveau()<20 & j==3){
+                                    listePouvoirs[indexEtudiant][j].setBackground(new Color(96,96,96));
+                                    listePouvoirs[indexEtudiant][j].setForeground(new Color(255,255,255));
+                                    boutonUtilisable=false;
+                                }
+
+                                if(liste.getEtudiant(indexEtudiant).getNiveau()<25 & j==4){
+                                    listePouvoirs[indexEtudiant][j].setBackground(new Color(96,96,96));
+                                    listePouvoirs[indexEtudiant][j].setForeground(new Color(255,255,255));
+                                    boutonUtilisable=false;
+                                }
+
+                                if(liste.getEtudiant(indexEtudiant).getNiveau()<30 & j==5){
+                                    listePouvoirs[indexEtudiant][j].setBackground(new Color(96,96,96));
+                                    listePouvoirs[indexEtudiant][j].setForeground(new Color(255,255,255));
+                                    boutonUtilisable=false;
+                                }
+
+                                if(boutonUtilisable){
+                                    listePouvoirs[indexEtudiant][j].setBackground(Color.green);
+                                    listePouvoirs[indexEtudiant][j].setForeground(Color.black);
+                                }
+                            }
+                        break;
+                    case "pouvoir":
+
+                        break;
+                    default:
+                        break;
+                }
+            
+            } catch(IllegalArgumentException iae){
+                JOptionPane.showMessageDialog(null, iae.getMessage());
+            }
+
+            liste.setEtudiant(indexEtudiant, currEtudiant);
+            
+            revalidate();
+            repaint();
+        }
+    }
+    //moi: image de fond 
+ class DessinFond extends JPanel {
+	public void paint(Graphics g) {
+		super.paint(g);
+		Graphics2D g2D = (Graphics2D)g;
+		g2D.setFont(new Font("Arial", Font.BOLD, 20));
+		FontMetrics metric = g2D.getFontMetrics();
+		int tailleX = nombreEtudiants*20;
+		int tailleY = nombreEtudiants*20;
+		
+	
+		Image fond = getToolkit().getImage("fond.png");
+                
+		g2D.drawImage(fond, 0, 0, tailleX, tailleY, this);
+	}
+}          
+ 
+    
+    
+    
 }
