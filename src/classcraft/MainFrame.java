@@ -17,6 +17,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 class MainFrame extends JFrame{ 
     
+    public static final int NOMBRE_ETUDIANT_CLASSEMENT = 10;
+    
     ListeDesEtudiants liste;
     JPanel panneau = new JPanel();
     int nombreEtudiants, nouveauPV;
@@ -84,6 +86,43 @@ class MainFrame extends JFrame{
 	constraints.gridheight=1;
 	constraints.anchor=GridBagConstraints.CENTER;
         
+        JButton changement = new JButton("Afficher le classement");
+        changement.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame frameOrdre = new JFrame();
+                JPanel panneau = new JPanel();
+                
+                GridBagLayout gbl = new GridBagLayout();
+                panneau.setLayout(gbl);
+                GridBagConstraints constraints = new GridBagConstraints();
+                constraints.gridx = 0;
+
+                frameOrdre.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+                liste.organisezClassement(false);
+                
+                for(int i=0;i<NOMBRE_ETUDIANT_CLASSEMENT;i++){
+                    constraints.gridy = i;
+                    
+                    if(i > liste.getEtudiantsSize())
+                        break;
+                    
+                    Etudiant currEtudiant = liste.getEtudiant(i);
+                    JLabel etudiantLabel = new JLabel("Nom et prenom:"+currEtudiant.getName()+", Numero d'admission: "+currEtudiant.getNAdmission()+
+                                                      ", Role: "+currEtudiant.getRole()+", Pseudo: "+currEtudiant.getPseudo()+", Niveau: "+
+                                                      (currEtudiant.getNiveau()+((currEtudiant.getExp() == 1) ? 0.5 : 0))+", Points de vies: "+
+                                                      currEtudiant.getPv());
+                    panneau.add(etudiantLabel, constraints);
+                }
+                
+                frameOrdre.add(panneau);
+                frameOrdre.setVisible(true);
+                
+                liste.organisezAlphabet();
+            }
+            
+        });
+        panneau.add(changement, constraints);
         
         JLabel nom = new JLabel("Nom");
         panneau.add(nom, constraints);
