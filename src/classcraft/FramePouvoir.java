@@ -19,6 +19,8 @@ import javax.swing.*;
 public class FramePouvoir extends JFrame {
     JPanel panneau;
     JButton activer, annuler;
+    Pouvoir action= new Pouvoir();
+    int faire;
     
     public FramePouvoir(Etudiant currEtudiant, ListeDesEtudiants liste,int indexPouvoir){
         setSize(900,900);
@@ -29,6 +31,26 @@ public class FramePouvoir extends JFrame {
         constraints.gridx=0;
 	constraints.gridy=0;
 	constraints.gridwidth=2;
+        
+        if(indexPouvoir ==0){
+            faire=currEtudiant.getRoles().indexNv5;
+        }
+         if(indexPouvoir ==1){
+            faire=currEtudiant.getRoles().indexNv10;
+        }
+          if(indexPouvoir ==2){
+            faire=currEtudiant.getRoles().indexNv15;
+        }
+           if(indexPouvoir ==3){
+            faire=currEtudiant.getRoles().indexNv20;
+        }
+         if(indexPouvoir ==4){
+            faire=currEtudiant.getRoles().indexNv25;
+        }   
+         if(indexPouvoir ==5){
+            faire=currEtudiant.getRoles().indexNv30;
+        }
+        
         
         JLabel description = new JLabel("description");
         panneau.add(description, constraints);
@@ -43,6 +65,8 @@ public class FramePouvoir extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e){
                 JOptionPane.showMessageDialog(null, "Pouvoir activé");
+                
+                action.action(faire,currEtudiant,liste);
                 MainFrame.listePouvoirs[liste.getIndex(currEtudiant)][indexPouvoir].setBackground(Color.yellow);
                 dispose();
             }

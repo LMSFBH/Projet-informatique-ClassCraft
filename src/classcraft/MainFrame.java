@@ -16,7 +16,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * @author usager
  */
 class MainFrame extends JFrame{ 
-    
     public static final int NOMBRE_ETUDIANT_CLASSEMENT = 10;
     
     ListeDesEtudiants liste;
@@ -30,7 +29,6 @@ class MainFrame extends JFrame{
     String fichierPrincipale;
     boolean boutonUtilisable;
     JScrollPane miseEnPage;
-    
     JButton[] changerImage;
     static JButton[][] listePouvoirs;
     Etudiant currEtudiant;
@@ -587,7 +585,7 @@ class MainFrame extends JFrame{
                 listePouvoirs[indexEtudiant][j].setForeground(new Color(255,255,255));
                 boutonUtilisable=false;
             }
-
+            
             if(liste.getEtudiant(indexEtudiant).getNiveau()<15 & j==2){
                 listePouvoirs[indexEtudiant][j].setBackground(new Color(96,96,96));
                 listePouvoirs[indexEtudiant][j].setForeground(new Color(255,255,255));

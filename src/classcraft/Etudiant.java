@@ -19,9 +19,10 @@ public class Etudiant {
     public Etudiant(String nAdmission, String nom, String role){
         setName(nom);
         setNAdmission(nom);
-        
+       
         //Devrait on demander le role ici?
-        setRole(role);
+        // setRole(role);
+        job = new Role("test",10,1,2,3,4,5,6);
         
         setExp(0);
         setNiveau(1);
@@ -39,6 +40,7 @@ public class Etudiant {
         setNiveau(niveau);
         setPv(pv);
         setCheminImage(cheminImage);
+        job = new Role("test",10,1,2,3,4,5,6);
     }
     
     /*public Etudiant(String nom,String role,String pseudo){
@@ -134,9 +136,14 @@ public class Etudiant {
         return nom; 
     } 
     
-    public String getRole(){
+    public Role getRoles(){
+        return job; 
+    }
+    
+     public String getRole(){
         return role; 
     }
+    
     
     public String getPseudo(){
         return pseudo; 
