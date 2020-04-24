@@ -1,5 +1,5 @@
 
-package classcraft;
+package ClasseAventure;
 
 
 import java.awt.*;

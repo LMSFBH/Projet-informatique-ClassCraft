@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package classcraft;
+package ClasseAventure;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -25,7 +25,7 @@ class MainFrame extends JFrame{
     
     JProgressBar[] progressBar;
     static JLabel[] pv, nomEtudiants, teteDeMort;
-    static JTextField[] pseudoEtudiant;
+    static JLabel[] pseudoEtudiant;
     String fichierPrincipale;
     boolean boutonUtilisable;
     JScrollPane miseEnPage;
@@ -170,13 +170,13 @@ class MainFrame extends JFrame{
         JLabel pseudo = new JLabel("Pseudo");
         panneau.add(pseudo, constraints);
         
-        pseudoEtudiant = new JTextField[nombreEtudiants];
+        pseudoEtudiant = new JLabel[nombreEtudiants];
         for(int i=0; i<nombreEtudiants; i++){
             constraints.gridy++;
-            pseudoEtudiant[i] = new JTextField(liste.getEtudiant(i).getPseudo());
+            pseudoEtudiant[i] = new JLabel(liste.getEtudiant(i).getPseudo());
             //Trouvez un moyen de faire l'action (probablement simple, me disait seulement si on pourrait utiliser autre chose qu'un keylistener)
-            pseudoEtudiant[i].addActionListener(new GestAction());
-            pseudoEtudiant[i].setActionCommand("pseudo "+i);
+            /*pseudoEtudiant[i].addActionListener(new GestAction());
+            pseudoEtudiant[i].setActionCommand("pseudo "+i);*/
             panneau.add(pseudoEtudiant[i], constraints);
         }
         
@@ -443,7 +443,7 @@ class MainFrame extends JFrame{
             if(cmd.startsWith("pv inc") || cmd.startsWith("pv dec") || cmd.startsWith("exp inc") || cmd.startsWith("exp dec"))
                 indexEtudiant = Integer.parseInt(cmds[2]); //Soit c'est pv/exp inc/dec, donc l'index est apres le 2e espace
             else{
-                if(cmd.startsWith("pseudo") || cmd.startsWith("image")){
+                if(cmd.startsWith("image")){
                    indexEtudiant = Integer.parseInt(cmds[1]); 
                 }
                 else{

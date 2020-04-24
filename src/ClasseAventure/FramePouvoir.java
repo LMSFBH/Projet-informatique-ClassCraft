@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package classcraft;
+package ClasseAventure;
 
 import java.awt.Color;
 import java.awt.GridBagConstraints;
@@ -57,7 +57,7 @@ public class FramePouvoir extends JFrame {
         }
         
         
-        JLabel description = new JLabel("description");
+        JLabel description = new JLabel(action.action(faire,currEtudiant,liste,true));
         panneau.add(description, constraints);
         
         constraints.gridy++;
@@ -69,9 +69,7 @@ public class FramePouvoir extends JFrame {
         activer.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                JOptionPane.showMessageDialog(null, "Pouvoir activé");
-                
-                action.action(faire,currEtudiant,liste);
+                JOptionPane.showMessageDialog(null,action.action(faire,currEtudiant,liste,false) );
                 MainFrame.listePouvoirs[liste.getIndex(currEtudiant)][indexPouvoir].setBackground(Color.yellow);
                 dispose();
             }
