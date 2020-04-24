@@ -3,6 +3,7 @@ package classcraft;
 
 
 import java.awt.*;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import javax.imageio.ImageIO;
@@ -18,27 +19,61 @@ public class FrameEtudiant extends JFrame {
     Etudiant unEtudiant;
     ListeDesEtudiants liste;
     String fileName;
+    JButton info;
+    static JLabel nomEtPrenom, pseudo;
     
     public FrameEtudiant(Etudiant unEtudiant, ListeDesEtudiants liste, String fileName){
         this.unEtudiant = unEtudiant;
         this.liste = liste;
         this.fileName = fileName;
         
-        setSize(500,500);
+        setSize(425,275);
         panneau = new JPanel();
-        JLabel nAdmission = new JLabel("Numero d'admission: "+unEtudiant.getNAdmission());
-        JLabel nomEtPrenom = new JLabel("Nom et prenom: "+unEtudiant.getName());
-        JLabel role = new JLabel("Role: "+unEtudiant.getRole());
-        JLabel pseudo = new JLabel("Pseudo: "+unEtudiant.getPseudo());
+        JLabel nAdmission = new JLabel("Numéro d'admission: "+unEtudiant.getNAdmission());
+        nomEtPrenom = new JLabel("Nom et prénom: "+unEtudiant.getName());
+        JLabel role = new JLabel("Rôle: "+unEtudiant.getRole());
+        pseudo = new JLabel("Pseudo: "+unEtudiant.getPseudo());
         JLabel niveau = new JLabel("Niveau: "+(unEtudiant.getNiveau()+((unEtudiant.getExp() == 1) ? 0.5 : 0)));
         JLabel pv = new JLabel("PV: "+unEtudiant.getPv());
+        info = new JButton("Modifier les informations");
+        info.addActionListener(new GestAction());
         
-        panneau.add(nAdmission);
-        panneau.add(nomEtPrenom);
-        panneau.add(role);
-        panneau.add(pseudo);
-        panneau.add(niveau);
-        panneau.add(pv);
+        GridBagLayout gbl = new GridBagLayout();
+	panneau.setLayout(gbl);
+	GridBagConstraints constraints = new GridBagConstraints();
+        
+        constraints.gridx=0;
+	constraints.gridy=0;
+	constraints.gridwidth=1;
+        
+        panneau.add(nAdmission, constraints);
+        
+        constraints.gridx=1;
+        panneau.add(nomEtPrenom, constraints);
+        
+        constraints.gridwidth=2;
+        constraints.gridx=0;
+        constraints.gridy=1;
+        panneau.add(pseudo, constraints);
+        
+        constraints.gridy++;
+        panneau.add(role, constraints);
+        
+        constraints.weighty=25;
+        constraints.anchor=GridBagConstraints.SOUTH;
+        constraints.gridwidth=1;
+        constraints.gridy++;
+        panneau.add(niveau, constraints);
+        
+        constraints.gridx++;
+        panneau.add(pv, constraints);
+        
+        constraints.gridwidth=2;
+        constraints.weighty=0;
+        constraints.anchor=GridBagConstraints.CENTER;
+        constraints.gridx=0;
+        constraints.gridy++;
+        panneau.add(info, constraints);
         add(panneau);
     }
     
@@ -72,10 +107,21 @@ public class FrameEtudiant extends JFrame {
         try {
             InputStream dataInputStream = dataImage.getPackagePart().getInputStream();
             BufferedImage bImage = ImageIO.read(dataInputStream);
-            g2d.drawImage(bImage, 250, 250, null);
+            g2d.drawImage(bImage, 175, 100, 100, 100, this);
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "Erreur imprevus lors de l'obtention de l'image.");
             dispose();
         }
     }
+    
+    protected class GestAction implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent e){
+            FrameChangement changement = new FrameChangement(unEtudiant, liste, fileName);
+            changement.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            changement.setVisible(true);
+            
+        }
+    }
 }
+
