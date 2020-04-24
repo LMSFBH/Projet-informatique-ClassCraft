@@ -18,163 +18,350 @@ public class Pouvoir {
     }
     
     
-    public void action (int index,Etudiant utilisateur, ListeDesEtudiants liste ){
+    public String action (int index,Etudiant utilisateur, ListeDesEtudiants liste, boolean description ){
+        String message ="";
         switch(index){
             case 1: {
-                utilisateur.setPv(utilisateur.getPv()-10);
-                System.out.println("beep boop");
-                break;
-            }
-            case 2:{
-                utilisateur.setPv(utilisateur.getPv()+1);
-                System.out.println("beep boop 2");
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
                 MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
+                }else{
+                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
+            }
+            case 2:{
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
+                break;
+                }else{
+                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
+                
             }
             case 3: {
-                utilisateur.setPv(utilisateur.getPv()-10);
-                System.out.println("beep boop");
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
+                }else{
+                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
             }
             case 4: {
-                utilisateur.setPv(utilisateur.getPv()-10);
-                System.out.println("beep boop");
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
+                }else{
+                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
             }
             case 5: {
-                utilisateur.setPv(utilisateur.getPv()-10);
-                System.out.println("beep boop");
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
+                }else{
+                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
             }
             case 6: {
-                utilisateur.setPv(utilisateur.getPv()-10);
-                System.out.println("beep boop");
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
+                }else{
+                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
             }
             case 7: {
-                utilisateur.setPv(utilisateur.getPv()-10);
-                System.out.println("beep boop");
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
+                }else{
+                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
             }
             case 8: {
-                utilisateur.setPv(utilisateur.getPv()-10);
-                System.out.println("beep boop");
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
+                }else{
+                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
             }
             case 9: {
-                utilisateur.setPv(utilisateur.getPv()-10);
-                System.out.println("beep boop");
+               if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
+                }else{
+                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
             }
             case 10: {
-                utilisateur.setPv(utilisateur.getPv()-10);
-                System.out.println("beep boop");
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
+                }else{
+                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
             }
             case 11: {
-                utilisateur.setPv(utilisateur.getPv()-10);
-                System.out.println("beep boop");
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
+                }else{
+                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
             }
             case 12: {
-                utilisateur.setPv(utilisateur.getPv()-10);
-                System.out.println("beep boop");
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
+                }else{
+                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
             }
             case 13: {
-                utilisateur.setPv(utilisateur.getPv()-10);
-                System.out.println("beep boop");
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
+                }else{
+                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
             }
             case 14: {
-                utilisateur.setPv(utilisateur.getPv()-10);
-                System.out.println("beep boop");
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
+                }else{
+                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
             }
             case 15: {
-                utilisateur.setPv(utilisateur.getPv()-10);
-                System.out.println("beep boop");
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
+                }else{
+                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
             }
             case 16: {
-                utilisateur.setPv(utilisateur.getPv()-10);
-                System.out.println("beep boop");
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
+                }else{
+                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
             }
             case 17: {
-                utilisateur.setPv(utilisateur.getPv()-10);
-                System.out.println("beep boop");
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
+                }else{
+                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
             }
             case 18: {
-                utilisateur.setPv(utilisateur.getPv()-10);
-                System.out.println("beep boop");
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
+                }else{
+                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
             }
             case 19: {
-                utilisateur.setPv(utilisateur.getPv()-10);
-                System.out.println("beep boop");
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
+                }else{
+                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
             }
             case 20: {
-                utilisateur.setPv(utilisateur.getPv()-10);
-                System.out.println("beep boop");
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
+                }else{
+                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
             }
             case 21: {
-                utilisateur.setPv(utilisateur.getPv()-10);
-                System.out.println("beep boop");
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
+                }else{
+                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
             }
             case 22: {
-                utilisateur.setPv(utilisateur.getPv()-10);
-                System.out.println("beep boop");
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
+                }else{
+                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
             }
             case 23: {
-                utilisateur.setPv(utilisateur.getPv()-10);
-                System.out.println("beep boop");
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
+                }else{
+                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
             }
             case 24: {
-                utilisateur.setPv(utilisateur.getPv()-10);
-                System.out.println("beep boop");
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
+                }else{
+                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
             }
             case 25: {
-                utilisateur.setPv(utilisateur.getPv()-10);
-                System.out.println("beep boop");
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
+                }else{
+                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
             }
             case 26: {
-                utilisateur.setPv(utilisateur.getPv()-10);
-                System.out.println("beep boop");
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
+                }else{
+                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
             }
             case 27: {
-                utilisateur.setPv(utilisateur.getPv()-10);
-                System.out.println("beep boop");
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
+                }else{
+                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
             }
             case 28: {
-                utilisateur.setPv(utilisateur.getPv()-10);
-                System.out.println("beep boop");
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
+                }else{
+                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
             }
             case 29: {
-                utilisateur.setPv(utilisateur.getPv()-10);
-                System.out.println("beep boop");
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
+                }else{
+                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
             }
             case 30: {
-                utilisateur.setPv(utilisateur.getPv()-10);
-                System.out.println("beep boop");
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
+                }else{
+                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
             }
             case 31: {
-                utilisateur.setPv(utilisateur.getPv()-10);
-                System.out.println("beep boop");
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
+                }else{
+                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
             }
         
         
@@ -184,5 +371,6 @@ public class Pouvoir {
         
         default : System.out.println("beep boop beep");
     }
+        return message;
 }
 }
