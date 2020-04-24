@@ -204,7 +204,7 @@ public class ListeDesEtudiants{
             cellule = ligne.createCell(1);
             cellule.setCellValue(currEtudiant.getName());
             cellule = ligne.createCell(2);
-            cellule.setCellValue(currEtudiant.getRole());
+            cellule.setCellValue(currEtudiant.getRoleIndex());
             cellule = ligne.createCell(3);
             cellule.setCellValue(currEtudiant.getPseudo());
             cellule = ligne.createCell(4);
@@ -292,7 +292,7 @@ public class ListeDesEtudiants{
             try{
                 switch (ligne.getLastCellNum()) {
                     case 2:
-                        unEtudiant = new Etudiant(formatter.formatCellValue(ligne.getCell(0)), ligne.getCell(1).getStringCellValue(), ligne.getCell(2).getStringCellValue());
+                        unEtudiant = new Etudiant(formatter.formatCellValue(ligne.getCell(0)), ligne.getCell(1).getStringCellValue(), (int)ligne.getCell(2).getNumericCellValue());
                         
                         if(etudiants.contains(unEtudiant))
                             throw new Exception("2 etudiants ne peuvent pas etre pareil.");
@@ -305,7 +305,7 @@ public class ListeDesEtudiants{
                         else
                             img = ligne.getCell(4).getStringCellValue();
                         
-                        unEtudiant = new Etudiant(formatter.formatCellValue(ligne.getCell(0)), ligne.getCell(1).getStringCellValue(), ligne.getCell(2).getStringCellValue(), ligne.getCell(3).getStringCellValue(), img,
+                        unEtudiant = new Etudiant(formatter.formatCellValue(ligne.getCell(0)), ligne.getCell(1).getStringCellValue(), (int)ligne.getCell(2).getNumericCellValue(), ligne.getCell(3).getStringCellValue(), img,
                                                    (int)ligne.getCell(5).getNumericCellValue(), (int)ligne.getCell(6).getNumericCellValue(), (int)ligne.getCell(7).getNumericCellValue());
                         if(etudiants.contains(unEtudiant))
                             throw new Exception("2 etudiants ne peuvent pas etre pareil.");
@@ -318,7 +318,7 @@ public class ListeDesEtudiants{
                         else
                             img = ligne.getCell(4).getStringCellValue();
                         
-                        unEtudiant = new Etudiant(formatter.formatCellValue(ligne.getCell(0)), ligne.getCell(1).getStringCellValue(), ligne.getCell(2).getStringCellValue(), ligne.getCell(3).getStringCellValue(), img,
+                        unEtudiant = new Etudiant(formatter.formatCellValue(ligne.getCell(0)), ligne.getCell(1).getStringCellValue(), (int)ligne.getCell(2).getNumericCellValue(), ligne.getCell(3).getStringCellValue(), img,
                                                    (int)ligne.getCell(5).getNumericCellValue(), (int)ligne.getCell(6).getNumericCellValue(), (int)ligne.getCell(7).getNumericCellValue());
                         if(etudiants.contains(unEtudiant))
                             throw new Exception("2 etudiants ne peuvent pas etre pareil.");

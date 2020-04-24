@@ -32,23 +32,28 @@ public class FramePouvoir extends JFrame {
 	constraints.gridy=0;
 	constraints.gridwidth=2;
         
-        if(indexPouvoir ==0){
-            faire=currEtudiant.getRoles().indexNv5;
+        if(indexPouvoir == 0){
+            faire=currEtudiant.getRole().getIndexNv5();
         }
-         if(indexPouvoir ==1){
-            faire=currEtudiant.getRoles().indexNv10;
+        
+        if(indexPouvoir == 1){
+            faire=currEtudiant.getRole().getIndexNv10();
         }
-          if(indexPouvoir ==2){
-            faire=currEtudiant.getRoles().indexNv15;
+        
+        if(indexPouvoir == 2){
+            faire=currEtudiant.getRole().getIndexNv15();
         }
-           if(indexPouvoir ==3){
-            faire=currEtudiant.getRoles().indexNv20;
+        
+        if(indexPouvoir == 3){
+            faire=currEtudiant.getRole().getIndexNv20();
         }
-         if(indexPouvoir ==4){
-            faire=currEtudiant.getRoles().indexNv25;
-        }   
-         if(indexPouvoir ==5){
-            faire=currEtudiant.getRoles().indexNv30;
+        
+        if(indexPouvoir == 4){
+            faire=currEtudiant.getRole().getIndexNv25();
+        }
+        
+        if(indexPouvoir == 5){
+            faire=currEtudiant.getRole().getIndexNv30();
         }
         
         

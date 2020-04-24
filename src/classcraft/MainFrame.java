@@ -117,7 +117,7 @@ class MainFrame extends JFrame{
                     
                     Etudiant currEtudiant = liste.getEtudiant(i);
                     JLabel etudiantLabel = new JLabel("Nom et prenom:"+currEtudiant.getName()+", Numero d'admission: "+currEtudiant.getNAdmission()+
-                                                      ", Role: "+currEtudiant.getRole()+", Pseudo: "+currEtudiant.getPseudo()+", Niveau: "+
+                                                      ", Role: "+currEtudiant.getRole().getRole()+", Pseudo: "+currEtudiant.getPseudo()+", Niveau: "+
                                                       (currEtudiant.getNiveau()+((currEtudiant.getExp() == 1) ? 0.5 : 0))+", Points de vies: "+
                                                       currEtudiant.getPv());
                     panneau.add(etudiantLabel, constraints);
@@ -161,7 +161,7 @@ class MainFrame extends JFrame{
         JLabel[] role = new JLabel[nombreEtudiants];
         for(int i=0; i<nombreEtudiants; i++){
             constraints.gridy++;
-            role[i] = new JLabel(liste.getEtudiant(i).getRole());
+            role[i] = new JLabel(liste.getEtudiant(i).getRole().getRole());
             panneau.add(role[i],constraints);
         }
         
