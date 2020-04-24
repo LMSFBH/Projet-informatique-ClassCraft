@@ -16,9 +16,19 @@ public class Etudiant {
     
     public static final int MAX_EXP = 1;
     
-    public Etudiant(String nAdmission, String nom){
+    public Etudiant(String nAdmission, String nom, String role){
         setName(nom);
         setNAdmission(nom);
+        
+        //Devrait on demander le role ici?
+       // setRole(role);
+       job = new Role("test",10,1,2,3,4,5,6);
+        
+        setExp(0);
+        setNiveau(1);
+        //setPv(job.MAX_PV);
+        
+        setCheminImage(null);
     }
     
     public Etudiant(String nAdmission, String nom, String role, String pseudo, String cheminImage, int exp, int niveau, int pv){
@@ -28,8 +38,9 @@ public class Etudiant {
         setPseudo(pseudo);
         setExp(exp);
         setNiveau(niveau);
-        setpv(pv);
+        setPv(pv);
         setCheminImage(cheminImage);
+        job = new Role("test",10,1,2,3,4,5,6);
     }
     
     /*public Etudiant(String nom,String role,String pseudo){
@@ -75,8 +86,9 @@ public class Etudiant {
     
     //Est-ce qu'on fait ca
     public void setExp(int exp){
-        if((exp < 0) || (exp > MAX_EXP))
+        if((exp < 0) || (exp > MAX_EXP)){
             throw new IllegalArgumentException("L'exp doit etre soit 0 ou 1.");
+        }
         
         this.exp=exp;
     }
@@ -93,14 +105,14 @@ public class Etudiant {
     
     //Meme chose, on a jamais besoins de set le niveau si incExp s'en charge
     public void setNiveau(int niveau){
-        if(niveau <= 0)
+        if(niveau <= -1)
             throw new IllegalArgumentException("Le niveau ne peut pas etre negatif ou nulle.");
         
         this.niveau=niveau;
     }
     
     //On fait ca
-    public void setpv(int pv){
+    public void setPv(int pv){
         if(pv < 0)
             throw new IllegalArgumentException("Les pv ne peuvent pas etre negatif.");
         
@@ -109,7 +121,7 @@ public class Etudiant {
     
     //Ou ca
     //Plus debatable dans ce cas, vu que je ne sais pas si un heal donne tout les pvs
-    public void decpv(boolean isInit){
+    public void decPv(boolean isInit){
         //if(isInit || ((pv-1) == 0))
         //    pv = Role.PV_ROLE_BASE;
         //else
@@ -124,9 +136,14 @@ public class Etudiant {
         return nom; 
     } 
     
-    public String getRole(){
+    public Role getRoles(){
+        return job; 
+    }
+    
+     public String getRole(){
         return role; 
     }
+    
     
     public String getPseudo(){
         return pseudo; 
