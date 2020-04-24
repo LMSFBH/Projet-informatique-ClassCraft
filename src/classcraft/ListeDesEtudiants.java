@@ -235,6 +235,9 @@ public class ListeDesEtudiants{
                     
                     ImageIO.write(bImage, "png", os);
                     pictureIdx = wb.addPicture(os.toByteArray(), Workbook.PICTURE_TYPE_PNG);
+                    
+                    os.flush();
+                    os.close();
                 } catch (IOException ioe){
                     throw new IOException("Erreur d'acces a l'image "+((img == null) ? DEFAULT_IMAGE : img)+".");
                 }
@@ -250,7 +253,7 @@ public class ListeDesEtudiants{
                 anchor.setCol1(IMG_POS);
                 anchor.setRow1(i);
 
-                Picture pict = drawing.createPicture(anchor, pictureIdx);
+                Picture pict = drawing.createPicture(anchor, pictureIdx); 
                 pict.resize();
             }
         }

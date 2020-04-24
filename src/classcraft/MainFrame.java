@@ -30,11 +30,12 @@ class MainFrame extends JFrame{
     boolean boutonUtilisable;
     JScrollPane miseEnPage;
     JButton[][] listePouvoirs;
+    JButton[] changerImage;
     
     public MainFrame() throws  FileNotFoundException, IOException, Exception{
         choix = new JFileChooser(".");
         choix.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        choix.setDialogTitle("Sauvegarde");
+        choix.setDialogTitle("Selection");
 
         int resultat = JFileChooser.CANCEL_OPTION;
 
@@ -71,7 +72,9 @@ class MainFrame extends JFrame{
         
         nombreEtudiants = liste.getEtudiantsSize();
         
-        setSize(nombreEtudiants*35, nombreEtudiants*30);
+        //setSize(500, 500);
+        setExtendedState(JFrame.MAXIMIZED_BOTH); 
+        //setUndecorated(true);
         
         // GridBagLayout
         GridBagLayout gbl = new GridBagLayout();
@@ -104,7 +107,7 @@ class MainFrame extends JFrame{
                 for(int i=0;i<NOMBRE_ETUDIANT_CLASSEMENT;i++){
                     constraints.gridy = i;
                     
-                    if(i > liste.getEtudiantsSize())
+                    if(i > nombreEtudiants)
                         break;
                     
                     Etudiant currEtudiant = liste.getEtudiant(i);
@@ -124,6 +127,7 @@ class MainFrame extends JFrame{
         });
         panneau.add(changement, constraints);
         
+        constraints.gridy=1;
         JLabel nom = new JLabel("Nom");
         panneau.add(nom, constraints);
         
@@ -145,7 +149,7 @@ class MainFrame extends JFrame{
         }
         
         constraints.gridx++;
-        constraints.gridy=0;
+        constraints.gridy=1;
         JLabel classe = new JLabel("classe");
         panneau.add(classe, constraints);
         
@@ -157,7 +161,7 @@ class MainFrame extends JFrame{
         }
         
         constraints.gridx++;
-        constraints.gridy=0;
+        constraints.gridy=1;
         JLabel pseudo = new JLabel("Pseudo");
         panneau.add(pseudo, constraints);
         
@@ -192,7 +196,7 @@ class MainFrame extends JFrame{
         }
         
 	constraints.gridx=4;// Moi: j'ai mis 4 parce qu'il y a classe, liste et avatar avant pv et les bouttons
-	constraints.gridy=0;
+	constraints.gridy=1;
         JLabel textePV = new JLabel("Points de Vie");
 	panneau.add(textePV,constraints);
 	
@@ -207,7 +211,7 @@ class MainFrame extends JFrame{
 	}
         
         constraints.gridx=5;
-        constraints.gridy=0;
+        constraints.gridy=1;
         JLabel exp = new JLabel("Experience");
         panneau.add(exp,constraints);
         
@@ -241,7 +245,7 @@ class MainFrame extends JFrame{
 	}
         
         constraints.gridx=5;
-        constraints.gridy=0;
+        constraints.gridy=1;
         for(int i=0; i<nombreEtudiants;i++){
             constraints.gridy++;
             panneau.add(progressBar[i],constraints);
@@ -253,7 +257,7 @@ class MainFrame extends JFrame{
 	}
         
         constraints.gridx=6;
-        constraints.gridy=0;
+        constraints.gridy=1;
         constraints.gridwidth=6;
         constraints.weightx=1;
         
@@ -314,6 +318,21 @@ class MainFrame extends JFrame{
             constraints.gridy++;
             constraints.gridx-=ListeDesEtudiants.NBR_POUVOIRS;
             lv=0;
+        }
+        
+        constraints.gridx=7+ListeDesEtudiants.NBR_POUVOIRS;
+        constraints.gridy=1;
+        changerImage = new JButton[nombreEtudiants];
+        
+        for(int i=0;i<nombreEtudiants;i++){
+            changerImage[i] = new JButton("Image");
+            Etudiant currEtudiant = liste.getEtudiant(i);
+            
+            changerImage[i].setActionCommand("image "+i);
+            changerImage[i].addActionListener(new GestAction());
+            
+            panneau.add(changerImage[i], constraints);
+            constraints.gridy++;
         }
         
         addWindowListener(new WindowAdapter() {
@@ -399,19 +418,19 @@ class MainFrame extends JFrame{
         @Override
         public void actionPerformed(ActionEvent e) {
             String cmd = e.getActionCommand();
-            int indexEtudiant;
+            int indexEtudiant = 0;
             String[] cmds = cmd.split(" ");
             int indexPouvoir = 0;
 
             if(cmd.startsWith("pv inc") || cmd.startsWith("pv dec") || cmd.startsWith("exp inc") || cmd.startsWith("exp dec"))
                 indexEtudiant = Integer.parseInt(cmds[2]); //Soit c'est pv/exp inc/dec, donc l'index est apres le 2e espace
-            else if(cmd.startsWith("pseudo"))
+            else if(cmd.startsWith("pseudo") || cmd.startsWith("image"))
                 indexEtudiant = Integer.parseInt(cmds[1]);
-            else{
+            else if(cmd.startsWith("pouvoir")){
                 indexEtudiant = Integer.parseInt(cmds[1]); //Soit c'est pouvoir, donc l'index est apres le 1e espace
                 indexPouvoir = Integer.parseInt(cmds[2]);
             }
-
+            
             Etudiant currEtudiant = liste.getEtudiant(indexEtudiant);
 
             try{
@@ -500,6 +519,43 @@ class MainFrame extends JFrame{
                         break;
                     case "pouvoir":
 
+                        break;
+                    case "image":
+                        choix = new JFileChooser(".");
+                        choix.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                        choix.setDialogTitle("Selectionnez l'image de l'etudiant "+currEtudiant.getName());
+
+                        int resultat = JFileChooser.CANCEL_OPTION;
+
+                        while(resultat != JFileChooser.APPROVE_OPTION){
+                            resultat = choix.showOpenDialog(null);
+
+                            switch (resultat) {
+                                case JFileChooser.ERROR_OPTION:
+                                    JOptionPane.showMessageDialog(null, "Une erreur est survenu lors du choix de fichier.");
+
+                                    if(!ouiOuNon("Voulez-vous recommencez?", "FERMETURE"))
+                                        return;
+                                    break;
+                                case JFileChooser.CANCEL_OPTION:
+                                    return;
+                                default:
+                                    try{
+                                        currEtudiant.setCheminImage(choix.getSelectedFile().getCanonicalPath());
+                                    } catch(FileNotFoundException fnfe){
+                                        JOptionPane.showMessageDialog(null, fnfe.getMessage());
+                                        resultat = JFileChooser.CANCEL_OPTION;
+                                    } catch(IOException ioe){
+                                        JOptionPane.showMessageDialog(null, ioe.getMessage());
+                                        resultat = JFileChooser.CANCEL_OPTION;
+                                    } catch(Exception exc){
+                                        JOptionPane.showMessageDialog(null, exc.getMessage());
+                                        resultat = JFileChooser.CANCEL_OPTION;
+                                    }
+                                    break;
+                            }
+
+                        }
                         break;
                     default:
                         break;
