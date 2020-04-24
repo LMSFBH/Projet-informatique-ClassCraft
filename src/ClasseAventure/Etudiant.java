@@ -14,10 +14,10 @@ public class Etudiant {
     private int exp, niveau, pv, role;
     
     public static int MAX_HP = 10;
-    static final Role[] roles  = {new Role("Guerrier", MAX_HP, 1, 2, 3, 4, 5, 6),
-                                   new Role("Guerrisseur", MAX_HP, 7, 8, 9, 10, 11, 12),
-                                   new Role("Magicien", MAX_HP, 13, 14, 15, 16, 17, 18),
-                                   new Role("Voleur", MAX_HP, 19, 20, 21, 22, 23, 24)};
+    static final Role[] roles  = {new Role("Guerrier", 8, 1, 2, 3, 4, 5, 6),
+                                   new Role("Guerrisseur", 6, 7, 8, 9, 10, 11, 12),
+                                   new Role("Magicien", 5, 13, 14, 15, 16, 17, 18),
+                                   new Role("Voleur", 5, 19, 20, 21, 22, 23, 24)};
     
     public static final int MAX_EXP = 1;
     
