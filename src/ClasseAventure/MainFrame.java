@@ -18,7 +18,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 class MainFrame extends JFrame{ 
     public static final int NOMBRE_ETUDIANT_CLASSEMENT = 10;
     
-    ListeDesEtudiants liste;
+    static ListeDesEtudiants liste;
     JPanel panneau = new JPanel();
     int nombreEtudiants, nouveauPV, indexEtudiant;
     JFileChooser choix;
@@ -27,7 +27,8 @@ class MainFrame extends JFrame{
     static JLabel[] pv, nomEtudiants, teteDeMort;
     static JLabel[] pseudoEtudiant;
     String fichierPrincipale;
-    boolean boutonUtilisable;
+    static boolean[][] boutonUtilisable;
+    boolean boutonUtilisableSeul;
     JScrollPane miseEnPage;
     JButton[] changerImage;
     static JButton[][] listePouvoirs;
@@ -36,6 +37,12 @@ class MainFrame extends JFrame{
     Image tete =getToolkit().getImage("teteMort.png");
     Image crane=tete.getScaledInstance(20,20,0);
     ImageIcon cerveau = new ImageIcon(crane);
+    
+    static Color couleur1 = new Color(255,255,255); // couleur blanche
+    static Color couleur2 = new Color(100,100,100); // couleur noir
+    static Color couleur3 = new Color(0,255,0); // couleur verte
+    static Color couleur4 = new Color(255,0,0); // couleur rouge
+    static Color couleur5 = new Color(255,255,0); // couleur jaune
     
     public MainFrame() throws  FileNotFoundException, IOException, Exception{
         choix = new JFileChooser(".");
@@ -76,6 +83,7 @@ class MainFrame extends JFrame{
         }
         
         nombreEtudiants = liste.getEtudiantsSize();
+        boutonUtilisable = new boolean[nombreEtudiants][ListeDesEtudiants.NBR_POUVOIRS];
         
         //setSize(500, 500);
         setExtendedState(JFrame.MAXIMIZED_BOTH); 
@@ -146,6 +154,7 @@ class MainFrame extends JFrame{
                 @Override
                 public void mouseClicked(MouseEvent e){
                     FrameEtudiant frameClique = new FrameEtudiant(currEtudiant, liste, fichierPrincipale);
+                    frameClique.setTitle("Informations de l'étudiant");
                     frameClique.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                     frameClique.setVisible(true);
                 }
@@ -174,9 +183,6 @@ class MainFrame extends JFrame{
         for(int i=0; i<nombreEtudiants; i++){
             constraints.gridy++;
             pseudoEtudiant[i] = new JLabel(liste.getEtudiant(i).getPseudo());
-            //Trouvez un moyen de faire l'action (probablement simple, me disait seulement si on pourrait utiliser autre chose qu'un keylistener)
-            /*pseudoEtudiant[i].addActionListener(new GestAction());
-            pseudoEtudiant[i].setActionCommand("pseudo "+i);*/
             panneau.add(pseudoEtudiant[i], constraints);
         }
         
@@ -290,38 +296,38 @@ class MainFrame extends JFrame{
                 listePouvoirs[i][j] = new JButton(""+lv);
                 listePouvoirs[i][j].setMargin(new Insets(0,0,0,0));
                 listePouvoirs[i][j].setPreferredSize(new Dimension(35,20));
-                boutonUtilisable = true;
+                boutonUtilisableSeul = true;
                 if(liste.getEtudiant(i).getNiveau()<5 & j==0){
                     listePouvoirs[i][j].setBackground(new Color(96,96,96));
                     listePouvoirs[i][j].setForeground(new Color(255,255,255));
-                    boutonUtilisable=false;
+                    boutonUtilisableSeul=false;
                 }
                 if(liste.getEtudiant(i).getNiveau()<10 & j==1){
                     listePouvoirs[i][j].setBackground(new Color(96,96,96));
                     listePouvoirs[i][j].setForeground(new Color(255,255,255));
-                    boutonUtilisable=false;
+                    boutonUtilisableSeul=false;
                 }
                 if(liste.getEtudiant(i).getNiveau()<15 & j==2){
                     listePouvoirs[i][j].setBackground(new Color(96,96,96));
                     listePouvoirs[i][j].setForeground(new Color(255,255,255));
-                    boutonUtilisable=false;
+                    boutonUtilisableSeul=false;
                 }
                 if(liste.getEtudiant(i).getNiveau()<20 & j==3){
                     listePouvoirs[i][j].setBackground(new Color(96,96,96));
                     listePouvoirs[i][j].setForeground(new Color(255,255,255));
-                    boutonUtilisable=false;
+                    boutonUtilisableSeul=false;
                 }
                 if(liste.getEtudiant(i).getNiveau()<25 & j==4){
                     listePouvoirs[i][j].setBackground(new Color(96,96,96));
                     listePouvoirs[i][j].setForeground(new Color(255,255,255));
-                    boutonUtilisable=false;
+                    boutonUtilisableSeul=false;
                 }
                 if(liste.getEtudiant(i).getNiveau()<30 & j==5){
                     listePouvoirs[i][j].setBackground(new Color(96,96,96));
                     listePouvoirs[i][j].setForeground(new Color(255,255,255));
-                    boutonUtilisable=false;
+                    boutonUtilisableSeul=false;
                 }
-                if(boutonUtilisable){
+                if(boutonUtilisableSeul){
                     listePouvoirs[i][j].setBackground(Color.green);
                 }
                 if(liste.getEtudiant(i).getPv()==0){
@@ -573,44 +579,44 @@ class MainFrame extends JFrame{
     public void verificationPouvoir(){
         for (int j=0; j<ListeDesEtudiants.NBR_POUVOIRS;j++){ 
             //rajouter bouton utilise pour les pouvoirs comme etant attribut de Etudiant
-            boutonUtilisable = true;
+            boutonUtilisableSeul = true;
             if(liste.getEtudiant(indexEtudiant).getNiveau()<5 & j==0){
                 listePouvoirs[indexEtudiant][j].setBackground(new Color(96,96,96));
                 listePouvoirs[indexEtudiant][j].setForeground(new Color(255,255,255));
-                boutonUtilisable=false;
+                boutonUtilisableSeul=false;
             }
 
             if(liste.getEtudiant(indexEtudiant).getNiveau()<10 & j==1){
                 listePouvoirs[indexEtudiant][j].setBackground(new Color(96,96,96));
                 listePouvoirs[indexEtudiant][j].setForeground(new Color(255,255,255));
-                boutonUtilisable=false;
+                boutonUtilisableSeul=false;
             }
             
             if(liste.getEtudiant(indexEtudiant).getNiveau()<15 & j==2){
                 listePouvoirs[indexEtudiant][j].setBackground(new Color(96,96,96));
                 listePouvoirs[indexEtudiant][j].setForeground(new Color(255,255,255));
-                boutonUtilisable=false;
+                boutonUtilisableSeul=false;
             }
 
             if(liste.getEtudiant(indexEtudiant).getNiveau()<20 & j==3){
                 listePouvoirs[indexEtudiant][j].setBackground(new Color(96,96,96));
                 listePouvoirs[indexEtudiant][j].setForeground(new Color(255,255,255));
-                boutonUtilisable=false;
+                boutonUtilisableSeul=false;
             }
 
             if(liste.getEtudiant(indexEtudiant).getNiveau()<25 & j==4){
                 listePouvoirs[indexEtudiant][j].setBackground(new Color(96,96,96));
                 listePouvoirs[indexEtudiant][j].setForeground(new Color(255,255,255));
-                boutonUtilisable=false;
+                boutonUtilisableSeul=false;
             }
 
             if(liste.getEtudiant(indexEtudiant).getNiveau()<30 & j==5){
                 listePouvoirs[indexEtudiant][j].setBackground(new Color(96,96,96));
                 listePouvoirs[indexEtudiant][j].setForeground(new Color(255,255,255));
-                boutonUtilisable=false;
+                boutonUtilisableSeul=false;
             }
 
-            if(boutonUtilisable){
+            if(boutonUtilisableSeul){
                 listePouvoirs[indexEtudiant][j].setBackground(Color.green);
                 listePouvoirs[indexEtudiant][j].setForeground(Color.black);
             }
@@ -622,5 +628,78 @@ class MainFrame extends JFrame{
         }
     }
     
+    protected static void setCouleurPouvoirs(int indEtudiant){
+        int indPouvoir;
+        indPouvoir = 0;
+        if(liste.getEtudiant(indEtudiant).getPv()== 0){ // bouton inutilisable couleur
+            for(int j=0; j<6; j++){
+                listePouvoirs[indEtudiant][j].setBackground(couleur4); 
+                listePouvoirs[indEtudiant][j].setForeground(couleur1);
+            }
+        }else{      // couleur pour un bouton normal  
+            for(int j=0; j<6; j++){
+                listePouvoirs[indEtudiant][j].setBackground(couleur2); 
+                listePouvoirs[indEtudiant][j].setForeground(couleur1);
+            } 
+            
+            
+                
+
+            if(liste.getEtudiant(indEtudiant).getNiveau()>=5){ //couleur pour un pouvoir actif
+                listePouvoirs[indEtudiant][indPouvoir].setBackground(couleur3);
+                listePouvoirs[indEtudiant][indPouvoir].setForeground(couleur2);
+            if(boutonUtilisable[indEtudiant][indPouvoir]== false){
+                listePouvoirs[indEtudiant][indPouvoir].setBackground(couleur5);
+                listePouvoirs[indEtudiant][indPouvoir].setForeground(couleur2);
+                
+            }
+                indPouvoir++;        
+            }            
+                if(liste.getEtudiant(indEtudiant).getNiveau()>=10){
+                listePouvoirs[indEtudiant][indPouvoir].setBackground(couleur3);
+                listePouvoirs[indEtudiant][indPouvoir].setForeground(couleur2);
+                //Moi: j'ai fait des copier coller pour bouton utlisable. j'ai l'impression qu'on peut le faire une fois pour tout mais ... la prochaine fois peu etre
+                if(boutonUtilisable[indEtudiant][indPouvoir]== false){
+                    listePouvoirs[indEtudiant][indPouvoir].setBackground(couleur5);
+                    listePouvoirs[indEtudiant][indPouvoir].setForeground(couleur2);
+                }
+                indPouvoir++;
+            } if(liste.getEtudiant(indEtudiant).getNiveau()>=15){
+                listePouvoirs[indEtudiant][indPouvoir].setBackground(couleur3);
+                listePouvoirs[indEtudiant][indPouvoir].setForeground(couleur2);
+                if(boutonUtilisable[indEtudiant][indPouvoir]== false){
+                    listePouvoirs[indEtudiant][indPouvoir].setBackground(couleur5);
+                    listePouvoirs[indEtudiant][indPouvoir].setForeground(couleur2);
+                
+                }
+                indPouvoir++;
+            } if(liste.getEtudiant(indEtudiant).getNiveau()>=20){
+                listePouvoirs[indEtudiant][indPouvoir].setBackground(couleur3);
+                listePouvoirs[indEtudiant][indPouvoir].setForeground(couleur2);
+                if(boutonUtilisable[indEtudiant][indPouvoir]== false){
+                   listePouvoirs[indEtudiant][indPouvoir].setBackground(couleur5);
+                   listePouvoirs[indEtudiant][indPouvoir].setForeground(couleur2);
+                
+                }
+                indPouvoir++;
+            } if(liste.getEtudiant(indEtudiant).getNiveau()>=25){
+                listePouvoirs[indEtudiant][indPouvoir].setBackground(couleur3);
+                listePouvoirs[indEtudiant][indPouvoir].setForeground(couleur2);
+                if(boutonUtilisable[indEtudiant][indPouvoir]== false){
+                    listePouvoirs[indEtudiant][indPouvoir].setBackground(couleur5);
+                    listePouvoirs[indEtudiant][indPouvoir].setForeground(couleur2);
+                
+                }
+                indPouvoir++;
+            } if(liste.getEtudiant(indEtudiant).getNiveau()>=30){
+                listePouvoirs[indEtudiant][indPouvoir].setBackground(couleur3);
+                listePouvoirs[indEtudiant][indPouvoir].setForeground(couleur2);
+                if(boutonUtilisable[indEtudiant][indPouvoir]== false){
+                    listePouvoirs[indEtudiant][indPouvoir].setBackground(couleur5);
+                    listePouvoirs[indEtudiant][indPouvoir].setForeground(couleur2);
+                }
+            }
+        }
+    }
 }
 
