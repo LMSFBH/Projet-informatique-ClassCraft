@@ -484,40 +484,43 @@ class MainFrame extends JFrame{
                             teteDeMort[indexEtudiant].setVisible(false);
                             pv[indexEtudiant].setVisible(true);
                         }
-                        verificationPouvoir();
+                        verificationPouvoir(indexEtudiant);
                         break;
                     case "exp":
-                        if(cmds[1].equals("inc")){
-                            if(currEtudiant.getExp()+1 == 2){
-                                progressBar[indexEtudiant].setValue(0);
-                                currEtudiant.setExp(0);
-                                currEtudiant.setNiveau(currEtudiant.getNiveau()+1);
-                            }
-                            else {
-                                progressBar[indexEtudiant].setValue(1);
-                                currEtudiant.setExp(currEtudiant.getExp()+1);
-                            }
-                        }
-                        //Probleme: que fait on si le prof veut baisser le niveau de l'eleve (je me disais qu'on fairait une fenetre en edition de toute les infos d'un etudiant)
-                        else{ 
-                            if(currEtudiant.getExp()-1 == -1){
-                                currEtudiant.setNiveau(currEtudiant.getNiveau()-1);
-                                if(currEtudiant.getNiveau()==-1){
+                        if(liste.getEtudiant(indexEtudiant).getPv()>0){
+                            if(cmds[1].equals("inc")){
+                                if(currEtudiant.getExp()+1 == 2){
                                     progressBar[indexEtudiant].setValue(0);
                                     currEtudiant.setExp(0);
-                                }else{
-                                   progressBar[indexEtudiant].setValue(1);
-                                   currEtudiant.setExp(1); 
+                                    currEtudiant.setNiveau(currEtudiant.getNiveau()+1);
+                                }
+                                else {
+                                    progressBar[indexEtudiant].setValue(1);
+                                    currEtudiant.setExp(currEtudiant.getExp()+1);
                                 }
                             }
+                            //Probleme: que fait on si le prof veut baisser le niveau de l'eleve (je me disais qu'on fairait une fenetre en edition de toute les infos d'un etudiant)
                             else{
-                                progressBar[indexEtudiant].setValue(0);
-                                currEtudiant.setExp(currEtudiant.getExp()-1);
+                                if(currEtudiant.getExp()-1 == -1){
+                                    currEtudiant.setNiveau(currEtudiant.getNiveau()-1);                              
+                                    if(currEtudiant.getNiveau()==-1){
+                                        progressBar[indexEtudiant].setValue(0);
+                                        currEtudiant.setExp(0);
+                                    }else{
+                                       progressBar[indexEtudiant].setValue(1);
+                                       currEtudiant.setExp(1);
+                                    }
+                                }                           
+                                else{
+                                    progressBar[indexEtudiant].setValue(0);
+                                    currEtudiant.setExp(currEtudiant.getExp()-1);
+                                }
                             }
-                        }
-
-                        progressBar[indexEtudiant].setString("Niv "+(liste.getEtudiant(indexEtudiant).getNiveau()+((liste.getEtudiant(indexEtudiant).getExp() == 1) ? 0.5 : 0))+"                            ");
-                        verificationPouvoir();
+                        }else
+                            JOptionPane.showMessageDialog(null, "l'etudiant est mort! il ne peux plus gagner d'exp");
+                        
+                        progressBar[indexEtudiant].setString("Niv "+(liste.getEtudiant(indexEtudiant).getNiveau()+((liste.getEtudiant(indexEtudiant).getExp() == 1) ? 0.5 : 0))+"                            ");                       
+                        verificationPouvoir(indexEtudiant);
                         break;
                     case "pouvoir":
                         FramePouvoir descriptionPouvoir = new FramePouvoir(currEtudiant, liste, indexPouvoir);
@@ -576,7 +579,7 @@ class MainFrame extends JFrame{
         }
     }
     
-    public void verificationPouvoir(){
+    public void verificationPouvoir(int indexEtudiant){
         for (int j=0; j<ListeDesEtudiants.NBR_POUVOIRS;j++){ 
             //rajouter bouton utilise pour les pouvoirs comme etant attribut de Etudiant
             boutonUtilisableSeul = true;

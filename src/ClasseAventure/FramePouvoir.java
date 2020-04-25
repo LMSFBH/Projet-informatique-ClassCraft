@@ -69,7 +69,7 @@ public class FramePouvoir extends JFrame {
         constraints.gridy++;
         constraints.gridwidth=1;
         activer = new JButton("Activer");
-        if(MainFrame.listePouvoirs[liste.getIndex(currEtudiant)][indexPouvoir].getBackground()!=Color.green){
+        if(!MainFrame.listePouvoirs[liste.getIndex(currEtudiant)][indexPouvoir].getBackground().equals(Color.green)){
             activer.setEnabled(false);
         }
         
@@ -85,13 +85,14 @@ public class FramePouvoir extends JFrame {
                         
                         JOptionPane.showMessageDialog(null,action.action(faire,currEtudiant,liste,false) );
                         MainFrame.listePouvoirs[liste.getIndex(currEtudiant)][indexPouvoir].setBackground(Color.yellow);
+                        MainFrame.listePouvoirs[indexEtudiant][indexPouvoir].setBackground(MainFrame.couleur5);
                     }
                 }else if(MainFrame.listePouvoirs[indexEtudiant][indexPouvoir].getBackground().equals(MainFrame.couleur5)) {
                     JOptionPane.showMessageDialog(null,"Le pouvoir est déja actif");
                 }else{
                     JOptionPane.showMessageDialog(null,"Le niveau de l'etudiant est insuffisant pour utiliser le pouvoir");
                 }   
-                
+                //MainFrame.setCouleurPouvoirs(indexEtudiant);
                 dispose();
             }
         });
@@ -99,6 +100,14 @@ public class FramePouvoir extends JFrame {
         
         constraints.gridx++;
         annuler = new JButton("Annuler");
+        annuler.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+            
+        });
+        
         panneau.add(annuler, constraints);
         
         add(panneau);
