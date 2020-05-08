@@ -37,7 +37,7 @@ public class Etudiant {
         setCheminImage(null);
     }
     
-    public Etudiant(String nAdmission, String nom, int role, String pseudo, String cheminImage, int exp, int niveau, int pv){
+    public Etudiant(String nAdmission, String nom, int role, String pseudo, String cheminImage, int exp, int niveau, int pv, boolean[] pouvoirsUtilisable){
         setNAdmission(nAdmission);
         setName(nom);
         setRole(role);
@@ -46,6 +46,7 @@ public class Etudiant {
         setNiveau(niveau);
         setPv(pv);
         setCheminImage(cheminImage);
+        setPouvoirs(pouvoirsUtilisable);
     }
     
     /*public Etudiant(String nom,String role,String pseudo){
@@ -126,6 +127,13 @@ public class Etudiant {
     
     public void setPouvoir(int index, boolean estUtilisable){
         pouvoirsUtilisable[index] = estUtilisable;
+    }
+    
+    public void setPouvoirs(boolean[] pouvoirsUtilisable){
+        if(pouvoirsUtilisable.length != ListeDesEtudiants.NBR_POUVOIRS)
+            throw new IllegalArgumentException("Nombre de pouvoirs incorrect.");
+        
+        this.pouvoirsUtilisable = pouvoirsUtilisable;
     }
     
     //Ou ca

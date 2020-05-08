@@ -23,8 +23,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 
 public class ListeDesEtudiants{
-    public static final int MAX_CELLS = 14;
+    public static final int PARAM_ETUDIANTS = 8;
     public static final int NBR_POUVOIRS = 6;
+    public static final int MAX_CELLS = PARAM_ETUDIANTS + NBR_POUVOIRS;
     public static final int IMG_POS = 15;
     public static final String DEFAULT_IMAGE = "default.png"; 
     
@@ -216,7 +217,17 @@ public class ListeDesEtudiants{
             cellule = ligne.createCell(7);
             cellule.setCellValue(currEtudiant.getPv());
             cellule = ligne.createCell(8);
-            cellule.setCellValue(currEtudiant.getPv());
+            cellule.setCellValue(currEtudiant.getPouvoir(0));
+            cellule = ligne.createCell(9);
+            cellule.setCellValue(currEtudiant.getPouvoir(1));
+            cellule = ligne.createCell(10);
+            cellule.setCellValue(currEtudiant.getPouvoir(2));
+            cellule = ligne.createCell(11);
+            cellule.setCellValue(currEtudiant.getPouvoir(3));
+            cellule = ligne.createCell(12);
+            cellule.setCellValue(currEtudiant.getPouvoir(4));
+            cellule = ligne.createCell(13);
+            cellule.setCellValue(currEtudiant.getPouvoir(5));
             
             // Images
             if(writeImage){
@@ -303,16 +314,16 @@ public class ListeDesEtudiants{
                         break;
                     case MAX_CELLS - NBR_POUVOIRS: // 8 parametres (nbr d'admission, nom, pseudos, role, chemin de l'image, exp, pv, lvl)
                         if(ligne.getCell(4) == null)
-                            img = null;
-                        else
+                            /*                            img = null;
+                            else
                             img = ligne.getCell(4).getStringCellValue();
-                        
-                        unEtudiant = new Etudiant(formatter.formatCellValue(ligne.getCell(0)), ligne.getCell(1).getStringCellValue(), (int)ligne.getCell(2).getNumericCellValue(), ligne.getCell(3).getStringCellValue(), img,
-                                                   (int)ligne.getCell(5).getNumericCellValue(), (int)ligne.getCell(6).getNumericCellValue(), (int)ligne.getCell(7).getNumericCellValue());
-                        if(etudiants.contains(unEtudiant))
+                            
+                            unEtudiant = new Etudiant(formatter.formatCellValue(ligne.getCell(0)), ligne.getCell(1).getStringCellValue(), (int)ligne.getCell(2).getNumericCellValue(), ligne.getCell(3).getStringCellValue(), img,
+                            (int)ligne.getCell(5).getNumericCellValue(), (int)ligne.getCell(6).getNumericCellValue(), (int)ligne.getCell(7).getNumericCellValue());
+                            if(etudiants.contains(unEtudiant))
                             throw new Exception("2 etudiants ne peuvent pas etre pareil.");
-                        
-                        etudiants.add(unEtudiant);
+                            
+                            etudiants.add(unEtudiant);*/
                         break;
                     case MAX_CELLS: // 13 parametres [(nbr admission, nom, pseudos, role, chemin de l'image, exp, pv, lvl) + 5 pouvoirs]
                         if(ligne.getCell(4) == null)
@@ -320,8 +331,11 @@ public class ListeDesEtudiants{
                         else
                             img = ligne.getCell(4).getStringCellValue();
                         
+                        boolean[] pouvoirsUtilisable = {ligne.getCell(8).getBooleanCellValue(), ligne.getCell(9).getBooleanCellValue(), ligne.getCell(10).getBooleanCellValue(), ligne.getCell(11).getBooleanCellValue(),
+                                                       ligne.getCell(12).getBooleanCellValue(), ligne.getCell(13).getBooleanCellValue()};
+                        
                         unEtudiant = new Etudiant(formatter.formatCellValue(ligne.getCell(0)), ligne.getCell(1).getStringCellValue(), (int)ligne.getCell(2).getNumericCellValue(), ligne.getCell(3).getStringCellValue(), img,
-                                                   (int)ligne.getCell(5).getNumericCellValue(), (int)ligne.getCell(6).getNumericCellValue(), (int)ligne.getCell(7).getNumericCellValue());
+                                                   (int)ligne.getCell(5).getNumericCellValue(), (int)ligne.getCell(6).getNumericCellValue(), (int)ligne.getCell(7).getNumericCellValue(), pouvoirsUtilisable);
                         if(etudiants.contains(unEtudiant))
                             throw new Exception("2 etudiants ne peuvent pas etre pareil.");
                         
@@ -329,7 +343,7 @@ public class ListeDesEtudiants{
                         //Pouvoirs
                         break;
                     default:
-                        throw new Exception("Format du fichier excel "+fileName+" invalide (nombre de colonnes n'est pas egale a 2, "+MAX_CELLS+" ou "+(MAX_CELLS-NBR_POUVOIRS)+".");
+                        throw new Exception("Format du fichier excel "+fileName+" invalide (nombre de colonnes n'est pas egale a 3 ou "+MAX_CELLS/* ou "+(MAX_CELLS-NBR_POUVOIRS)+"*/);
                 }
             } catch(NullPointerException npe){
                 throw new Exception("Format du fichier excel "+fileName+" invalide (une case autre que le chemin de l'image (colonne 5) est vide).");

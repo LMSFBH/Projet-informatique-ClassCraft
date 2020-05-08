@@ -658,7 +658,7 @@ class MainFrame extends JFrame{
             if(currEtudiant.getNiveau()>=5){ //couleur pour un pouvoir actif
                 listePouvoirs[indEtudiant][indPouvoir].setBackground(couleur3);
                 listePouvoirs[indEtudiant][indPouvoir].setForeground(couleur2);
-            if(boutonUtilisable[indEtudiant][indPouvoir]== false){
+            if(currEtudiant.getPouvoir(indPouvoir) == false){
                 listePouvoirs[indEtudiant][indPouvoir].setBackground(couleur5);
                 listePouvoirs[indEtudiant][indPouvoir].setForeground(couleur2);
                 
