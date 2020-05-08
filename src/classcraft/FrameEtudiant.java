@@ -1,5 +1,5 @@
 
-package classcraft;
+package ClasseAventure;
 
 
 import java.awt.*;
@@ -119,6 +119,7 @@ public class FrameEtudiant extends JFrame {
         public void actionPerformed(ActionEvent e){
             FrameChangement changement = new FrameChangement(unEtudiant, liste, fileName);
             changement.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            changement.setTitle("Modifier les informations");
             changement.setVisible(true);
             
         }

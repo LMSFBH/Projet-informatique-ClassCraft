@@ -3,23 +3,28 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package classcraft;
+package ClasseAventure;
 
 /**
  *
  * V:1.05
  */
 public class Etudiant {
-    private String nAdmission, nom, role, pseudo, cheminImage;
-    private int exp, niveau, pv;
-    private Role job;
+    private String nAdmission, nom, pseudo, cheminImage;
+    private int exp, niveau, pv, role;
+    
+    public static int MAX_HP = 10;
+    static final Role[] roles  = {new Role("Guerrier", 8, 1, 2, 3, 4, 5, 6),
+                                   new Role("Guerrisseur", 6, 7, 8, 9, 10, 11, 12),
+                                   new Role("Magicien", 5, 13, 14, 15, 16, 17, 18),
+                                   new Role("Voleur", 5, 19, 20, 21, 22, 23, 24)};
     
     public static final int MAX_EXP = 1;
     
-    public Etudiant(String nAdmission, String nom, String role){
+    public Etudiant(String nAdmission, String nom, int job){
         setName(nom);
         setNAdmission(nom);
-        
+       
         //Devrait on demander le role ici?
         setRole(role);
         
@@ -30,7 +35,7 @@ public class Etudiant {
         setCheminImage(null);
     }
     
-    public Etudiant(String nAdmission, String nom, String role, String pseudo, String cheminImage, int exp, int niveau, int pv){
+    public Etudiant(String nAdmission, String nom, int role, String pseudo, String cheminImage, int exp, int niveau, int pv){
         setNAdmission(nAdmission);
         setName(nom);
         setRole(role);
@@ -63,11 +68,11 @@ public class Etudiant {
         this.nom=nom;
     }
     
-    public void setRole(String role){
-        if((role == null) || role.isEmpty())
-            throw new IllegalArgumentException("Le role est vide.");
+    public void setRole(int role){
+        if((role < 0) || role > roles.length)
+            throw new IllegalArgumentException("Le role est est plus petit que 0 ou plus grand que "+roles.length+".");
         
-        this.role=role;
+        this.role = role;
     }
     
     public void setPseudo(String pseudo){
@@ -134,8 +139,8 @@ public class Etudiant {
         return nom; 
     } 
     
-    public String getRole(){
-        return role; 
+    public int getRoleIndex(){
+        return role;
     }
     
     public String getPseudo(){
@@ -152,9 +157,13 @@ public class Etudiant {
     
     public int getNiveau(){
         return niveau;
-    } 
+    }
     
     public int getPv(){
         return pv;
+    }
+    
+    public Role getRole(){
+       return roles[getRoleIndex()]; 
     }
 }

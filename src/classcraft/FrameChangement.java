@@ -3,10 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package classcraft;
+package ClasseAventure;
 
+import static ClasseAventure.MainFrame.ouiOuNon;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import javax.swing.*;
 
 /**
@@ -15,7 +18,7 @@ import javax.swing.*;
  */
 public class FrameChangement extends JFrame{
     JPanel changementInfo;
-    JButton confirmer, annuler;
+    JButton confirmer, annuler, imageChangement;
     Etudiant unEtudiant;
     String fileName;
     JTextArea nomChangement, pseudoChangement;
@@ -30,6 +33,48 @@ public class FrameChangement extends JFrame{
         pseudoChangement = new JTextArea(unEtudiant.getPseudo());
         JLabel role = new JLabel("Rôle: ");
         roleChangement = new JComboBox();
+        
+        imageChangement = new JButton("Modifier l'image");
+        imageChangement.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                JFileChooser choix = new JFileChooser(".");
+                choix.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                choix.setDialogTitle("Sélectionnez l'image de l'étudiant "+unEtudiant.getName());
+
+                int resultat = JFileChooser.CANCEL_OPTION;
+
+                while(resultat != JFileChooser.APPROVE_OPTION){
+                    resultat = choix.showOpenDialog(null);
+
+                    switch (resultat) {
+                        case JFileChooser.ERROR_OPTION:
+                            JOptionPane.showMessageDialog(null, "Une erreur est survenue lors du choix de fichier.");
+
+                            if(!ouiOuNon("Voulez-vous recommencer ?", "FERMETURE"))
+                            return;
+                            break;
+                        case JFileChooser.CANCEL_OPTION:
+                            return;
+                        default:
+                            try{
+                                unEtudiant.setCheminImage(choix.getSelectedFile().getCanonicalPath());
+                            } catch(FileNotFoundException fnfe){
+                                JOptionPane.showMessageDialog(null, fnfe.getMessage());
+                                resultat = JFileChooser.CANCEL_OPTION;
+                            } catch(IOException ioe){
+                                JOptionPane.showMessageDialog(null, ioe.getMessage());
+                                resultat = JFileChooser.CANCEL_OPTION;
+                            } catch(Exception exc){
+                                JOptionPane.showMessageDialog(null, exc.getMessage());
+                                resultat = JFileChooser.CANCEL_OPTION;
+                            }
+                            break;
+                    }
+
+                }
+            }
+        });
         
         confirmer = new JButton("Enregistrer");
         confirmer.addActionListener(new ActionListener(){
@@ -77,6 +122,8 @@ public class FrameChangement extends JFrame{
         constraints.gridx++;
         changementInfo.add(roleChangement, constraints);
         constraints.gridx=0;
+        constraints.gridy++;
+        changementInfo.add(imageChangement, constraints);
         constraints.gridy++;
         changementInfo.add(confirmer, constraints);
         constraints.gridx++;

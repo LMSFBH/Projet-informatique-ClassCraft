@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package classcraft;
+package ClasseAventure;
 
 /**
  *
  * v1.0
- */
+ 
 public class Guerrieur extends Role {
     final int MAX_PV_GUERRIEUR=5;
     
@@ -23,4 +23,4 @@ public class Guerrieur extends Role {
             
         }
     }
-}
+}*/

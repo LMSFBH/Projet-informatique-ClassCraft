@@ -3,42 +3,374 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package classcraft;
+package ClasseAventure;
+
+import static ClasseAventure.MainFrame.pv;
 
 /**
  *
  * V:1.0
  */
 public class Pouvoir {
-    public int debloque;
-    boolean utiliser;
     
     public Pouvoir(){
         
     }
     
-    public Pouvoir(int niveau){
-        setDebloque(niveau);
-        setUtiliser(false);
-    }
     
-    public void setDebloque(int debloque){
-        this.debloque=debloque;
+    public String action (int index,Etudiant utilisateur, ListeDesEtudiants liste, boolean description ){
+        String message ="";
+        switch(index){
+            case 1: {
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "L'étudiant "+utilisateur.getName()+" a été guérie de 1 point de vie";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
+                break;
+                }else{
+                    message= " Guérrison test : l'étudiant "+utilisateur.getName()+" va etre guérie de 1 pv";
+                    break;
+                }
+            }
+            case 2:{
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
+                break;
+                }else{
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
+                
+            }
+            case 3: {
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
+                break;
+                }else{
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
+            }
+            case 4: {
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
+                break;
+                }else{
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
+            }
+            case 5: {
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
+                break;
+                }else{
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
+            }
+            case 6: {
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
+                break;
+                }else{
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
+            }
+            case 7: {
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
+                break;
+                }else{
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
+            }
+            case 8: {
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
+                break;
+                }else{
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
+            }
+            case 9: {
+               if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
+                break;
+                }else{
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
+            }
+            case 10: {
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
+                break;
+                }else{
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
+            }
+            case 11: {
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
+                break;
+                }else{
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
+            }
+            case 12: {
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
+                break;
+                }else{
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
+            }
+            case 13: {
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
+                break;
+                }else{
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
+            }
+            case 14: {
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
+                break;
+                }else{
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
+            }
+            case 15: {
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
+                break;
+                }else{
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
+            }
+            case 16: {
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
+                break;
+                }else{
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
+            }
+            case 17: {
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
+                break;
+                }else{
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
+            }
+            case 18: {
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
+                break;
+                }else{
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
+            }
+            case 19: {
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
+                break;
+                }else{
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
+            }
+            case 20: {
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
+                break;
+                }else{
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
+            }
+            case 21: {
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
+                break;
+                }else{
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
+            }
+            case 22: {
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
+                break;
+                }else{
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
+            }
+            case 23: {
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
+                break;
+                }else{
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
+            }
+            case 24: {
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
+                break;
+                }else{
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
+            }
+            case 25: {
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
+                break;
+                }else{
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
+            }
+            case 26: {
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
+                break;
+                }else{
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
+            }
+            case 27: {
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
+                break;
+                }else{
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
+            }
+            case 28: {
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
+                break;
+                }else{
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
+            }
+            case 29: {
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
+                break;
+                }else{
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
+            }
+            case 30: {
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
+                break;
+                }else{
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
+            }
+            case 31: {
+                if( description==false){
+                    utilisateur.setPv(utilisateur.getPv()+1);
+                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
+                break;
+                }else{
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    break;
+                }
+            }
+        
+        
+        
+        
+        
+        
+        default : System.out.println("beep boop beep");
     }
-    
-    public void setUtiliser(boolean entreUtiliser){
-        this.utiliser=utiliser;
-    }
-    
-    public int getDebloque(){
-        return debloque;
-    }
-    
-    public boolean getUtiliser(){
-        return utiliser;
-    }
-    
-    public void action (int puissance){
-        // Methode qui va etre Override pour l'effet du pouvoir
-    }
+        return message;
+}
 }

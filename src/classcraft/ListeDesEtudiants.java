@@ -1,4 +1,4 @@
-package classcraft;
+package ClasseAventure;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Files;
@@ -163,12 +163,22 @@ public class ListeDesEtudiants{
     
     //Obtient une image du fichier fileName
     public XSSFPictureData getImage(Etudiant etudiant, String fileName) throws IllegalArgumentException, FileNotFoundException, IOException, Exception{
-        ArrayList<XSSFPictureData> ret = getAllImages(fileName);
+        int index = etudiants.indexOf(etudiant);
         
-        if(etudiants.indexOf(etudiant) == -1)
+        if(index == -1)
             throw new Exception("L'etudiant "+etudiant.getName()+" de numero de DA "+etudiant.getNAdmission()+" n'est pas dans la liste.");
         
-        return ret.get(etudiants.indexOf(etudiant));
+        return getImage(index, fileName);
+    }
+    
+    //Obtient une image du fichier fileName
+    public XSSFPictureData getImage(int index, String fileName) throws IllegalArgumentException, FileNotFoundException, IOException, Exception{
+        ArrayList<XSSFPictureData> ret = getAllImages(fileName);
+        
+        if((index < 0) || (index > etudiants.size()))
+            throw new Exception("L'etudiant d'index "+index+" n'est pas dans la liste.");
+        
+        return ret.get(index);
     }
     
     //Ecrit tout les etudiants et les images liee de cet objet dans un fichier excel de nom fileName
@@ -194,7 +204,7 @@ public class ListeDesEtudiants{
             cellule = ligne.createCell(1);
             cellule.setCellValue(currEtudiant.getName());
             cellule = ligne.createCell(2);
-            cellule.setCellValue(currEtudiant.getRole());
+            cellule.setCellValue(currEtudiant.getRoleIndex());
             cellule = ligne.createCell(3);
             cellule.setCellValue(currEtudiant.getPseudo());
             cellule = ligne.createCell(4);
@@ -229,6 +239,9 @@ public class ListeDesEtudiants{
                     
                     ImageIO.write(bImage, "png", os);
                     pictureIdx = wb.addPicture(os.toByteArray(), Workbook.PICTURE_TYPE_PNG);
+                    
+                    os.flush();
+                    os.close();
                 } catch (IOException ioe){
                     throw new IOException("Erreur d'acces a l'image "+((img == null) ? DEFAULT_IMAGE : img)+".");
                 }
@@ -244,7 +257,7 @@ public class ListeDesEtudiants{
                 anchor.setCol1(IMG_POS);
                 anchor.setRow1(i);
 
-                Picture pict = drawing.createPicture(anchor, pictureIdx);
+                Picture pict = drawing.createPicture(anchor, pictureIdx); 
                 pict.resize();
             }
         }
@@ -279,7 +292,7 @@ public class ListeDesEtudiants{
             try{
                 switch (ligne.getLastCellNum()) {
                     case 2:
-                        unEtudiant = new Etudiant(formatter.formatCellValue(ligne.getCell(0)), ligne.getCell(1).getStringCellValue(), ligne.getCell(2).getStringCellValue());
+                        unEtudiant = new Etudiant(formatter.formatCellValue(ligne.getCell(0)), ligne.getCell(1).getStringCellValue(), (int)ligne.getCell(2).getNumericCellValue());
                         
                         if(etudiants.contains(unEtudiant))
                             throw new Exception("2 etudiants ne peuvent pas etre pareil.");
@@ -292,7 +305,7 @@ public class ListeDesEtudiants{
                         else
                             img = ligne.getCell(4).getStringCellValue();
                         
-                        unEtudiant = new Etudiant(formatter.formatCellValue(ligne.getCell(0)), ligne.getCell(1).getStringCellValue(), ligne.getCell(2).getStringCellValue(), ligne.getCell(3).getStringCellValue(), img,
+                        unEtudiant = new Etudiant(formatter.formatCellValue(ligne.getCell(0)), ligne.getCell(1).getStringCellValue(), (int)ligne.getCell(2).getNumericCellValue(), ligne.getCell(3).getStringCellValue(), img,
                                                    (int)ligne.getCell(5).getNumericCellValue(), (int)ligne.getCell(6).getNumericCellValue(), (int)ligne.getCell(7).getNumericCellValue());
                         if(etudiants.contains(unEtudiant))
                             throw new Exception("2 etudiants ne peuvent pas etre pareil.");
@@ -305,7 +318,7 @@ public class ListeDesEtudiants{
                         else
                             img = ligne.getCell(4).getStringCellValue();
                         
-                        unEtudiant = new Etudiant(formatter.formatCellValue(ligne.getCell(0)), ligne.getCell(1).getStringCellValue(), ligne.getCell(2).getStringCellValue(), ligne.getCell(3).getStringCellValue(), img,
+                        unEtudiant = new Etudiant(formatter.formatCellValue(ligne.getCell(0)), ligne.getCell(1).getStringCellValue(), (int)ligne.getCell(2).getNumericCellValue(), ligne.getCell(3).getStringCellValue(), img,
                                                    (int)ligne.getCell(5).getNumericCellValue(), (int)ligne.getCell(6).getNumericCellValue(), (int)ligne.getCell(7).getNumericCellValue());
                         if(etudiants.contains(unEtudiant))
                             throw new Exception("2 etudiants ne peuvent pas etre pareil.");
