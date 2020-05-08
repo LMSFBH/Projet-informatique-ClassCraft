@@ -215,6 +215,8 @@ public class ListeDesEtudiants{
             cellule.setCellValue(currEtudiant.getNiveau());
             cellule = ligne.createCell(7);
             cellule.setCellValue(currEtudiant.getPv());
+            cellule = ligne.createCell(8);
+            cellule.setCellValue(currEtudiant.getPv());
             
             // Images
             if(writeImage){
@@ -233,7 +235,7 @@ public class ListeDesEtudiants{
                     
                     //Convertis l'image
                     if((img == null) || img.isEmpty())
-                        bImage = ImageIO.read(new File(DEFAULT_IMAGE));
+                        bImage = ImageIO.read(new File(currEtudiant.getRole().getRole()+".png"));
                     else
                         bImage = ImageIO.read(imgFile);
                     
@@ -243,7 +245,7 @@ public class ListeDesEtudiants{
                     os.flush();
                     os.close();
                 } catch (IOException ioe){
-                    throw new IOException("Erreur d'acces a l'image "+((img == null) ? DEFAULT_IMAGE : img)+".");
+                    throw new IOException("Erreur d'acces a l'image "+((img == null) ? currEtudiant.getRole().getRole()+".png" : img)+".");
                 }
 
                 CreationHelper helper = wb.getCreationHelper();

@@ -13,6 +13,8 @@ public class Etudiant {
     private String nAdmission, nom, pseudo, cheminImage;
     private int exp, niveau, pv, role;
     
+    private boolean pouvoirsUtilisable[] = {true, true, true, true, true, true};
+    
     public static int MAX_HP = 10;
     static final Role[] roles  = {new Role("Guerrier", 8, 1, 2, 3, 4, 5, 6),
                                    new Role("Guerrisseur", 6, 7, 8, 9, 10, 11, 12),
@@ -21,7 +23,7 @@ public class Etudiant {
     
     public static final int MAX_EXP = 1;
     
-    public Etudiant(String nAdmission, String nom, int job){
+    public Etudiant(String nAdmission, String nom, int role){
         setName(nom);
         setNAdmission(nom);
        
@@ -122,6 +124,10 @@ public class Etudiant {
         this.pv=pv;
     }
     
+    public void setPouvoir(int index, boolean estUtilisable){
+        pouvoirsUtilisable[index] = estUtilisable;
+    }
+    
     //Ou ca
     //Plus debatable dans ce cas, vu que je ne sais pas si un heal donne tout les pvs
     public void decPv(boolean isInit){
@@ -165,5 +171,13 @@ public class Etudiant {
     
     public Role getRole(){
        return roles[getRoleIndex()]; 
+    }
+    
+    public boolean[] getPouvoirs(){
+        return pouvoirsUtilisable;
+    }
+    
+    public boolean getPouvoir(int index){
+        return pouvoirsUtilisable[index];
     }
 }

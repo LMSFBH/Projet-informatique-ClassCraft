@@ -293,37 +293,39 @@ class MainFrame extends JFrame{
         boutonUtilisable = new boolean[nombreEtudiants][ListeDesEtudiants.NBR_POUVOIRS];
         for (int i=0; i<listePouvoirs.length;i++){ 
             for (int j=0; j<ListeDesEtudiants.NBR_POUVOIRS;j++){ 
+                Etudiant currEtudiant = liste.getEtudiant(i);
+                
                 lv+=5;
                 listePouvoirs[i][j] = new JButton(""+lv);
                 listePouvoirs[i][j].setMargin(new Insets(0,0,0,0));
                 listePouvoirs[i][j].setPreferredSize(new Dimension(35,20));
                 boutonUtilisableSeul = true;
-                if(liste.getEtudiant(i).getNiveau()<5 & j==0){
+                if(currEtudiant.getNiveau()<5 & j==0){
                     listePouvoirs[i][j].setBackground(new Color(96,96,96));
                     listePouvoirs[i][j].setForeground(new Color(255,255,255));
                     boutonUtilisableSeul=false;
                 }
-                if(liste.getEtudiant(i).getNiveau()<10 & j==1){
+                if(currEtudiant.getNiveau()<10 & j==1){
                     listePouvoirs[i][j].setBackground(new Color(96,96,96));
                     listePouvoirs[i][j].setForeground(new Color(255,255,255));
                     boutonUtilisableSeul=false;
                 }
-                if(liste.getEtudiant(i).getNiveau()<15 & j==2){
+                if(currEtudiant.getNiveau()<15 & j==2){
                     listePouvoirs[i][j].setBackground(new Color(96,96,96));
                     listePouvoirs[i][j].setForeground(new Color(255,255,255));
                     boutonUtilisableSeul=false;
                 }
-                if(liste.getEtudiant(i).getNiveau()<20 & j==3){
+                if(currEtudiant.getNiveau()<20 & j==3){
                     listePouvoirs[i][j].setBackground(new Color(96,96,96));
                     listePouvoirs[i][j].setForeground(new Color(255,255,255));
                     boutonUtilisableSeul=false;
                 }
-                if(liste.getEtudiant(i).getNiveau()<25 & j==4){
+                if(currEtudiant.getNiveau()<25 & j==4){
                     listePouvoirs[i][j].setBackground(new Color(96,96,96));
                     listePouvoirs[i][j].setForeground(new Color(255,255,255));
                     boutonUtilisableSeul=false;
                 }
-                if(liste.getEtudiant(i).getNiveau()<30 & j==5){
+                if(currEtudiant.getNiveau()<30 & j==5){
                     listePouvoirs[i][j].setBackground(new Color(96,96,96));
                     listePouvoirs[i][j].setForeground(new Color(255,255,255));
                     boutonUtilisableSeul=false;
@@ -331,13 +333,12 @@ class MainFrame extends JFrame{
                 if(boutonUtilisableSeul){
                     listePouvoirs[i][j].setBackground(Color.green);
                 }
-                if(liste.getEtudiant(i).getPv()==0){
+                if(currEtudiant.getPv()==0){
                     listePouvoirs[i][j].setBackground(Color.red);
                 }
                 listePouvoirs[i][j].setActionCommand("pouvoir "+i+" "+j);
                 listePouvoirs[i][j].addActionListener(new GestAction());
                 
-                boutonUtilisable[i][j] = true;
                 panneau.add(listePouvoirs[i][j],constraints);
                 constraints.gridx++;
             }
@@ -638,7 +639,9 @@ class MainFrame extends JFrame{
     protected static void setCouleurPouvoirs(int indEtudiant){
         int indPouvoir;
         indPouvoir = 0;
-        if(liste.getEtudiant(indEtudiant).getPv()== 0){ // bouton inutilisable couleur
+        Etudiant currEtudiant = liste.getEtudiant(indEtudiant);
+        
+        if(currEtudiant.getPv()== 0){ // bouton inutilisable couleur
             for(int j=0; j<6; j++){
                 listePouvoirs[indEtudiant][j].setBackground(couleur4); 
                 listePouvoirs[indEtudiant][j].setForeground(couleur1);
@@ -652,7 +655,7 @@ class MainFrame extends JFrame{
             
                 
 
-            if(liste.getEtudiant(indEtudiant).getNiveau()>=5){ //couleur pour un pouvoir actif
+            if(currEtudiant.getNiveau()>=5){ //couleur pour un pouvoir actif
                 listePouvoirs[indEtudiant][indPouvoir].setBackground(couleur3);
                 listePouvoirs[indEtudiant][indPouvoir].setForeground(couleur2);
             if(boutonUtilisable[indEtudiant][indPouvoir]== false){
@@ -662,46 +665,46 @@ class MainFrame extends JFrame{
             }
                 indPouvoir++;        
             }            
-                if(liste.getEtudiant(indEtudiant).getNiveau()>=10){
+            if(currEtudiant.getNiveau()>=10){
                 listePouvoirs[indEtudiant][indPouvoir].setBackground(couleur3);
                 listePouvoirs[indEtudiant][indPouvoir].setForeground(couleur2);
                 //Moi: j'ai fait des copier coller pour bouton utlisable. j'ai l'impression qu'on peut le faire une fois pour tout mais ... la prochaine fois peu etre
-                if(boutonUtilisable[indEtudiant][indPouvoir]== false){
+                if(currEtudiant.getPouvoir(indPouvoir) == false){
                     listePouvoirs[indEtudiant][indPouvoir].setBackground(couleur5);
                     listePouvoirs[indEtudiant][indPouvoir].setForeground(couleur2);
                 }
                 indPouvoir++;
-            } if(liste.getEtudiant(indEtudiant).getNiveau()>=15){
+            } if(currEtudiant.getNiveau()>=15){
                 listePouvoirs[indEtudiant][indPouvoir].setBackground(couleur3);
                 listePouvoirs[indEtudiant][indPouvoir].setForeground(couleur2);
-                if(boutonUtilisable[indEtudiant][indPouvoir]== false){
+                if(currEtudiant.getPouvoir(indPouvoir) == false){
                     listePouvoirs[indEtudiant][indPouvoir].setBackground(couleur5);
                     listePouvoirs[indEtudiant][indPouvoir].setForeground(couleur2);
                 
                 }
                 indPouvoir++;
-            } if(liste.getEtudiant(indEtudiant).getNiveau()>=20){
+            } if(currEtudiant.getNiveau()>=20){
                 listePouvoirs[indEtudiant][indPouvoir].setBackground(couleur3);
                 listePouvoirs[indEtudiant][indPouvoir].setForeground(couleur2);
-                if(boutonUtilisable[indEtudiant][indPouvoir]== false){
+                if(currEtudiant.getPouvoir(indPouvoir) == false){
                    listePouvoirs[indEtudiant][indPouvoir].setBackground(couleur5);
                    listePouvoirs[indEtudiant][indPouvoir].setForeground(couleur2);
                 
                 }
                 indPouvoir++;
-            } if(liste.getEtudiant(indEtudiant).getNiveau()>=25){
+            } if(currEtudiant.getNiveau()>=25){
                 listePouvoirs[indEtudiant][indPouvoir].setBackground(couleur3);
                 listePouvoirs[indEtudiant][indPouvoir].setForeground(couleur2);
-                if(boutonUtilisable[indEtudiant][indPouvoir]== false){
+                if(currEtudiant.getPouvoir(indPouvoir) == false){
                     listePouvoirs[indEtudiant][indPouvoir].setBackground(couleur5);
                     listePouvoirs[indEtudiant][indPouvoir].setForeground(couleur2);
                 
                 }
                 indPouvoir++;
-            } if(liste.getEtudiant(indEtudiant).getNiveau()>=30){
+            } if(currEtudiant.getNiveau()>=30){
                 listePouvoirs[indEtudiant][indPouvoir].setBackground(couleur3);
                 listePouvoirs[indEtudiant][indPouvoir].setForeground(couleur2);
-                if(boutonUtilisable[indEtudiant][indPouvoir]== false){
+                if(currEtudiant.getPouvoir(indPouvoir) == false){
                     listePouvoirs[indEtudiant][indPouvoir].setBackground(couleur5);
                     listePouvoirs[indEtudiant][indPouvoir].setForeground(couleur2);
                 }

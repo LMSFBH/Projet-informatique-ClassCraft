@@ -6,7 +6,6 @@
 package ClasseAventure;
 
 
-import static ClasseAventure.MainFrame.boutonUtilisable;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -79,8 +78,9 @@ public class FramePouvoir extends JFrame {
         activer.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
+                Etudiant currEtudiant = MainFrame.liste.getEtudiant(indexEtudiant);
                 
-                if(MainFrame.liste.getEtudiant(indexEtudiant).getPv()== 0){   // Moi: on fait ça? il ne peux pas accceder a la fenetre pouvoir si l'eleve est mort
+                if(currEtudiant.getPv()== 0){   // Moi: on fait ça? il ne peux pas accceder a la fenetre pouvoir si l'eleve est mort
                     JOptionPane.showMessageDialog(null,"Pouvoir innacessible! L'éleve est mort");
                 }else if(MainFrame.listePouvoirs[indexEtudiant][indexPouvoir].getBackground().equals(MainFrame.couleur3)) {
                     if(MainFrame.ouiOuNon("Voulez vous vraiment utiliser le pouvoir?", "Activer Pouvoir")){
@@ -88,7 +88,7 @@ public class FramePouvoir extends JFrame {
                         JOptionPane.showMessageDialog(null,action.action(faire,currEtudiant,liste,false) );
                         MainFrame.listePouvoirs[liste.getIndex(currEtudiant)][indexPouvoir].setBackground(Color.yellow);
                         MainFrame.listePouvoirs[indexEtudiant][indexPouvoir].setBackground(MainFrame.couleur5);
-                        MainFrame.boutonUtilisable[liste.getIndex(currEtudiant)][indexPouvoir]=false;
+                        currEtudiant.setPouvoir(liste.getIndex(currEtudiant), false);
                     }
                 }else if(MainFrame.listePouvoirs[indexEtudiant][indexPouvoir].getBackground().equals(MainFrame.couleur5)) {
                     JOptionPane.showMessageDialog(null,"Le pouvoir est déja actif");
