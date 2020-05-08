@@ -16,17 +16,16 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * @author usager
  */
 class MainFrame extends JFrame{ 
-    public static final int NOMBRE_ETUDIANT_CLASSEMENT = 10;
+    public final int NOMBRE_ETUDIANT_CLASSEMENT = 10;
     
     ListeDesEtudiants liste;
     JPanel panneau = new JPanel();
-    int nombreEtudiants, nouveauPV, indexEtudiant;
+    int nombreEtudiants, indexEtudiant;
     JFileChooser choix;
     FrameEtudiant frameClique;
     
     JProgressBar[] progressBar;
-    static JLabel[] pv, nomEtudiants, teteDeMort;
-    static JLabel[] pseudoEtudiant;
+    static JLabel[] pv, nomEtudiants, teteDeMort, role, pseudoEtudiant;
     String fichierPrincipale;
     static boolean[][] boutonUtilisable;
     boolean boutonUtilisableSeul;
@@ -49,11 +48,11 @@ class MainFrame extends JFrame{
         JOptionPane.showMessageDialog(null,"Veuillez sélectionner votre classe d'étudiant (ici Classeur1)");
         LookAndFeel lf = UIManager.getLookAndFeel();
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        choix = new JFileChooser();
+        choix = new JFileChooser(new File(System.getProperty("user.home"), "desktop"));
         FileNameExtensionFilter filter = new FileNameExtensionFilter("excel", "xlsx");
         choix.setFileFilter(filter);
         choix.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        choix.setDialogTitle("Sélection");
+        choix.setDialogTitle("Sélection de votre classe");
         
         UIManager.setLookAndFeel(lf);
 
@@ -95,6 +94,7 @@ class MainFrame extends JFrame{
         
         //setSize(500, 500);
         setExtendedState(JFrame.MAXIMIZED_BOTH); 
+        setTitle("ClasseAventure");
         //setUndecorated(true);
         
         // GridBagLayout
@@ -116,6 +116,9 @@ class MainFrame extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 JFrame frameOrdre = new JFrame();
                 JPanel panneau = new JPanel();
+                
+                frameOrdre.setSize(900,500);
+                frameOrdre.setTitle("Ordre chronologique par niveau");
                 
                 GridBagLayout gbl = new GridBagLayout();
                 panneau.setLayout(gbl);
@@ -141,7 +144,7 @@ class MainFrame extends JFrame{
                 
                 frameOrdre.add(panneau);
                 frameOrdre.setVisible(true);
-                
+                frameOrdre.setLocationRelativeTo(null);
                 liste.organisezAlphabet();
             }
             
@@ -165,6 +168,7 @@ class MainFrame extends JFrame{
                     frameClique.setTitle("Informations de l'étudiant");
                     frameClique.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                     frameClique.setVisible(true);
+                    frameClique.setLocationRelativeTo(null);
                 }
             });
             panneau.add(nomEtudiants[i], constraints);
@@ -175,7 +179,7 @@ class MainFrame extends JFrame{
         JLabel classe = new JLabel("Classe");
         panneau.add(classe, constraints);
         
-        JLabel[] role = new JLabel[nombreEtudiants];
+        role = new JLabel[nombreEtudiants];
         for(int i=0; i<nombreEtudiants; i++){
             constraints.gridy++;
             role[i] = new JLabel(liste.getEtudiant(i).getRole().getRole());
@@ -212,11 +216,11 @@ class MainFrame extends JFrame{
             Bmoins[i].setActionCommand("pv dec "+i);
             Bmoins[i].addActionListener(new GestAction());
             
-            pv[i] = new JLabel(""+liste.getEtudiant(i).getPv());
+            pv[i] = new JLabel(liste.getEtudiant(i).getPv()+"/"+liste.getEtudiant(i).getRole().getMaxPv());
             teteDeMort[i] = new JLabel(cerveau);
         }
         
-	constraints.gridx=4;// Moi: j'ai mis 4 parce qu'il y a classe, liste et avatar avant pv et les bouttons
+	constraints.gridx=4;
 	constraints.gridy=1;
         JLabel textePV = new JLabel("Points de Vie");
 	panneau.add(textePV,constraints);
@@ -225,7 +229,7 @@ class MainFrame extends JFrame{
             constraints.gridy++;
             panneau.add(pv[i],constraints);
             panneau.add(teteDeMort[i],constraints);
-            if(Integer.parseInt(pv[i].getText())==0){
+            if(liste.getEtudiant(i).getPv()==0){
                 teteDeMort[i].setVisible(true);
                 pv[i].setVisible(false);
             }else{
@@ -354,21 +358,6 @@ class MainFrame extends JFrame{
             lv=0;
         }
         
-        /*constraints.gridx=7+ListeDesEtudiants.NBR_POUVOIRS;
-        constraints.gridy=2;
-        changerImage = new JButton[nombreEtudiants];
-        
-        for(int i=0;i<nombreEtudiants;i++){
-            changerImage[i] = new JButton("Image");
-            Etudiant currEtudiant = liste.getEtudiant(i);
-            
-            changerImage[i].setActionCommand("image "+i);
-            changerImage[i].addActionListener(new GestAction());
-            
-            panneau.add(changerImage[i], constraints);
-            constraints.gridy++;
-        }*/
-        
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent ev) {
@@ -397,16 +386,12 @@ class MainFrame extends JFrame{
                                 case JFileChooser.CANCEL_OPTION:
                                     return;
                                 case JFileChooser.APPROVE_OPTION:
-                                    //L'ecriture des images prends beaucoups de temps, trouver un moyen de ne pas les ecrire chaques fois
-                                    //if(liste.isModif()){
                                     fichierImg = utiliserFichierDemarrage ? fichierPrincipale : choix.getSelectedFile().getCanonicalPath();
                                     if(!fichierImg.endsWith(".xlsx"))
                                         fichierImg += ".xlsx";
 
                                     liste.writeToutEtudiantsEtImages(fichierImg, true);
                                     System.exit(0);
-                                    //else
-                                    //  liste.writeToutEtudiantsEtImages(JOptionPane.showInputDialog("Veuillez selectionnez l'emplacement du fichier excel de sauvegarde."), false);
                             }
 
                         }catch(FileNotFoundException fnfe){
@@ -459,21 +444,23 @@ class MainFrame extends JFrame{
             try{
                 switch (cmds[0]) {
                     case "pv":
-                        //Faire des verifications quant au max des PVs
                         if(cmds[1].equals("inc")){
-                            nouveauPV = Integer.parseInt(pv[indexEtudiant].getText())+1;
-                            currEtudiant.setPv(currEtudiant.getPv()+1);
+                            if(currEtudiant.getPv()>=currEtudiant.getRole().getMaxPv()){
+                                if(ouiOuNon("L'élève a atteint ou dépassé le maximum de ses points de vie. Voulez-vous vraiment augmenter ses points de vie ?", "Augmenter les points de vie")){
+                                    currEtudiant.setPv(currEtudiant.getPv()+1);
+                                }
+                            }else{
+                                currEtudiant.setPv(currEtudiant.getPv()+1);
+                            }
                         }
                         else{
-                            nouveauPV = Integer.parseInt(pv[indexEtudiant].getText())-1;
                             currEtudiant.setPv(currEtudiant.getPv()-1);
-                            if(nouveauPV<0){
-                                nouveauPV =0;
+                            if(currEtudiant.getPv()<0){
                                 currEtudiant.setPv(0);
                             }
                         }
-                        pv[indexEtudiant].setText(""+nouveauPV);
-                        if(Integer.parseInt(pv[indexEtudiant].getText())==0){                                                
+                        pv[indexEtudiant].setText(currEtudiant.getPv()+"/"+currEtudiant.getRole().getMaxPv());
+                        if(currEtudiant.getPv()==0){                                                
                             teteDeMort[indexEtudiant].setVisible(true);
                             pv[indexEtudiant].setVisible(false);
                         }else{
@@ -495,7 +482,6 @@ class MainFrame extends JFrame{
                                     currEtudiant.setExp(currEtudiant.getExp()+1);
                                 }
                             }
-                            //Probleme: que fait on si le prof veut baisser le niveau de l'eleve (je me disais qu'on fairait une fenetre en edition de toute les infos d'un etudiant)
                             else{
                                 if(currEtudiant.getExp()-1 == -1){
                                     currEtudiant.setNiveau(currEtudiant.getNiveau()-1);                              
@@ -523,43 +509,6 @@ class MainFrame extends JFrame{
                         descriptionPouvoir.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                         descriptionPouvoir.setVisible(true);
                         break;
-                    /*case "image":
-                        choix = new JFileChooser(".");
-                        choix.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                        choix.setDialogTitle("Sélectionnez l'image de l'étudiant "+currEtudiant.getName());
-
-                        int resultat = JFileChooser.CANCEL_OPTION;
-
-                        while(resultat != JFileChooser.APPROVE_OPTION){
-                            resultat = choix.showOpenDialog(null);
-
-                            switch (resultat) {
-                                case JFileChooser.ERROR_OPTION:
-                                    JOptionPane.showMessageDialog(null, "Une erreur est survenue lors du choix de fichier.");
-
-                                    if(!ouiOuNon("Voulez-vous recommencer ?", "FERMETURE"))
-                                        return;
-                                    break;
-                                case JFileChooser.CANCEL_OPTION:
-                                    return;
-                                default:
-                                    try{
-                                        currEtudiant.setCheminImage(choix.getSelectedFile().getCanonicalPath());
-                                    } catch(FileNotFoundException fnfe){
-                                        JOptionPane.showMessageDialog(null, fnfe.getMessage());
-                                        resultat = JFileChooser.CANCEL_OPTION;
-                                    } catch(IOException ioe){
-                                        JOptionPane.showMessageDialog(null, ioe.getMessage());
-                                        resultat = JFileChooser.CANCEL_OPTION;
-                                    } catch(Exception exc){
-                                        JOptionPane.showMessageDialog(null, exc.getMessage());
-                                        resultat = JFileChooser.CANCEL_OPTION;
-                                    }
-                                    break;
-                            }
-
-                        }
-                        break;*/
                     default:
                         break;
                 }

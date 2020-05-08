@@ -22,7 +22,7 @@ public class FrameChangement extends JFrame{
     Etudiant unEtudiant;
     String fileName;
     JTextArea nomChangement, pseudoChangement;
-    JComboBox roleChangement;
+    JComboBox<String> roleChangement;
     
     public FrameChangement(Etudiant unEtudiant, ListeDesEtudiants liste, String fileName){
         changementInfo = new JPanel();
@@ -32,7 +32,11 @@ public class FrameChangement extends JFrame{
         JLabel pseudo = new JLabel("Pseudo: ");
         pseudoChangement = new JTextArea(unEtudiant.getPseudo());
         JLabel role = new JLabel("Rôle: ");
-        roleChangement = new JComboBox();
+        roleChangement = new JComboBox<String>();
+        for(int i=0; i<unEtudiant.roles.length; i++){
+            roleChangement.addItem(unEtudiant.roles[i].getRole());
+        }
+        roleChangement.setSelectedIndex(unEtudiant.getRoleIndex());
         
         imageChangement = new JButton("Modifier l'image");
         imageChangement.addActionListener(new ActionListener(){
@@ -87,7 +91,15 @@ public class FrameChangement extends JFrame{
                 unEtudiant.setPseudo(pseudoChangement.getText());
                 FrameEtudiant.pseudo.setText("Pseudo: "+unEtudiant.getPseudo());
                 MainFrame.pseudoEtudiant[liste.getIndex(unEtudiant)].setText(unEtudiant.getPseudo());
-                //rajouter le changement du role quand la classe sera faite//rajouter le changement du role quand la classe sera faite
+                
+                for(int i=0; i<unEtudiant.roles.length; i++){
+                    if(roleChangement.getSelectedItem().equals(unEtudiant.roles[i].getRole())){
+                        unEtudiant.setRole(i);
+                        FrameEtudiant.role.setText("Rôle: "+unEtudiant.getRole().getRole());
+                        MainFrame.role[liste.getIndex(unEtudiant)].setText(unEtudiant.getRole().getRole());
+                    }
+                }
+                
                 JOptionPane.showMessageDialog(null, "Modification effectuée");
                 dispose();
             }
@@ -121,9 +133,11 @@ public class FrameChangement extends JFrame{
         changementInfo.add(role, constraints);
         constraints.gridx++;
         changementInfo.add(roleChangement, constraints);
+        constraints.gridwidth=2;
         constraints.gridx=0;
         constraints.gridy++;
         changementInfo.add(imageChangement, constraints);
+        constraints.gridwidth=1;
         constraints.gridy++;
         changementInfo.add(confirmer, constraints);
         constraints.gridx++;

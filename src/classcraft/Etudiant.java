@@ -13,24 +13,21 @@ public class Etudiant {
     private String nAdmission, nom, pseudo, cheminImage;
     private int exp, niveau, pv, role;
     
-    public static int MAX_HP = 10;
-    static final Role[] roles  = {new Role("Guerrier", 8, 1, 2, 3, 4, 5, 6),
+    public final int MAX_HP = 10;
+    final Role[] roles  = {new Role("Guerrier", 8, 1, 2, 3, 4, 5, 6),
                                    new Role("Guerrisseur", 6, 7, 8, 9, 10, 11, 12),
                                    new Role("Magicien", 5, 13, 14, 15, 16, 17, 18),
                                    new Role("Voleur", 5, 19, 20, 21, 22, 23, 24)};
     
-    public static final int MAX_EXP = 1;
+    public final int MAX_EXP = 1;
     
-    public Etudiant(String nAdmission, String nom, int job){
+    public Etudiant(String nAdmission, String nom, int role){
         setName(nom);
         setNAdmission(nom);
-       
-        //Devrait on demander le role ici?
         setRole(role);
-        
         setExp(0);
         setNiveau(1);
-        //setPv(job.MAX_PV);
+        setPv(getRole().getMaxPv());
         
         setCheminImage(null);
     }
@@ -70,7 +67,7 @@ public class Etudiant {
     
     public void setRole(int role){
         if((role < 0) || role > roles.length)
-            throw new IllegalArgumentException("Le role est est plus petit que 0 ou plus grand que "+roles.length+".");
+            throw new IllegalArgumentException("Le role doit être plus petit que 0 ou plus grand que "+roles.length+".");
         
         this.role = role;
     }

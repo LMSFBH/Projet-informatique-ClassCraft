@@ -61,5 +61,9 @@ public class Role {
     public void setRole(String NouveauJob){
         this.role=role;
     }
+    
+    public int getMaxPv(){
+        return MaxPv;
+    }
   
 }
