@@ -91,13 +91,22 @@ public class FrameEtudiant extends JFrame {
         if(classe.equals("Guerrier")){
             Image guerrier =getToolkit().getImage("guerrier.jpg");
             g2d.drawImage(guerrier, 175, 100, 100, 100, this);
-        }else{
-            if(classe.equals("Magicien")){
-                Image guerrier =getToolkit().getImage("magicien.png");
-                g2d.drawImage(guerrier, 175, 100, 100, 100, this);
-            }
         }
         
+        if(classe.equals("Magicien")){
+            Image guerrier =getToolkit().getImage("magicien.png");
+            g2d.drawImage(guerrier, 175, 100, 100, 100, this);
+        }
+        
+        if(classe.equals("Guerrisseur")){
+            Image guerrier =getToolkit().getImage("guerrisseur.png");
+            g2d.drawImage(guerrier, 175, 100, 100, 100, this);
+        }
+        
+        if(classe.equals("Voleur")){
+            Image guerrier =getToolkit().getImage("voleur.png");
+            g2d.drawImage(guerrier, 175, 100, 100, 100, this);
+        }
         
         /*
         XSSFPictureData dataImage = null;

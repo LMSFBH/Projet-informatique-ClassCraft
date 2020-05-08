@@ -13,7 +13,6 @@ public class Etudiant {
     private String nAdmission, nom, pseudo, cheminImage;
     private int exp, niveau, pv, role;
     
-    public final int MAX_HP = 10;
     final Role[] roles  = {new Role("Guerrier", 8, 1, 2, 3, 4, 5, 6),
                                    new Role("Guerrisseur", 6, 7, 8, 9, 10, 11, 12),
                                    new Role("Magicien", 5, 13, 14, 15, 16, 17, 18),
