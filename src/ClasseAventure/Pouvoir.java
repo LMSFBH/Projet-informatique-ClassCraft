@@ -28,7 +28,7 @@ public class Pouvoir {
                 MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
                 }else{
-                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
                     break;
                 }
             }
@@ -39,7 +39,7 @@ public class Pouvoir {
                 MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
                 }else{
-                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
                     break;
                 }
                 
@@ -51,7 +51,7 @@ public class Pouvoir {
                 MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
                 }else{
-                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
                     break;
                 }
             }
@@ -62,7 +62,7 @@ public class Pouvoir {
                 MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
                 }else{
-                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
                     break;
                 }
             }
@@ -73,7 +73,7 @@ public class Pouvoir {
                 MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
                 }else{
-                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
                     break;
                 }
             }
@@ -84,7 +84,7 @@ public class Pouvoir {
                 MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
                 }else{
-                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
                     break;
                 }
             }
@@ -95,7 +95,7 @@ public class Pouvoir {
                 MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
                 }else{
-                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
                     break;
                 }
             }
@@ -106,7 +106,7 @@ public class Pouvoir {
                 MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
                 }else{
-                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
                     break;
                 }
             }
@@ -117,7 +117,7 @@ public class Pouvoir {
                 MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
                 }else{
-                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
                     break;
                 }
             }
@@ -128,7 +128,7 @@ public class Pouvoir {
                 MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
                 }else{
-                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
                     break;
                 }
             }
@@ -139,7 +139,7 @@ public class Pouvoir {
                 MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
                 }else{
-                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
                     break;
                 }
             }
@@ -150,7 +150,7 @@ public class Pouvoir {
                 MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
                 }else{
-                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
                     break;
                 }
             }
@@ -161,7 +161,7 @@ public class Pouvoir {
                 MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
                 }else{
-                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
                     break;
                 }
             }
@@ -172,7 +172,7 @@ public class Pouvoir {
                 MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
                 }else{
-                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
                     break;
                 }
             }
@@ -183,7 +183,7 @@ public class Pouvoir {
                 MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
                 }else{
-                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
                     break;
                 }
             }
@@ -194,7 +194,7 @@ public class Pouvoir {
                 MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
                 }else{
-                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
                     break;
                 }
             }
@@ -205,7 +205,7 @@ public class Pouvoir {
                 MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
                 }else{
-                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
                     break;
                 }
             }
@@ -216,7 +216,7 @@ public class Pouvoir {
                 MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
                 }else{
-                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
                     break;
                 }
             }
@@ -227,7 +227,7 @@ public class Pouvoir {
                 MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
                 }else{
-                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
                     break;
                 }
             }
@@ -238,7 +238,7 @@ public class Pouvoir {
                 MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
                 }else{
-                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
                     break;
                 }
             }
@@ -249,7 +249,7 @@ public class Pouvoir {
                 MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
                 }else{
-                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
                     break;
                 }
             }
@@ -260,7 +260,7 @@ public class Pouvoir {
                 MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
                 }else{
-                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
                     break;
                 }
             }
@@ -271,7 +271,7 @@ public class Pouvoir {
                 MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
                 }else{
-                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
                     break;
                 }
             }
@@ -282,7 +282,7 @@ public class Pouvoir {
                 MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
                 }else{
-                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
                     break;
                 }
             }
@@ -293,7 +293,7 @@ public class Pouvoir {
                 MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
                 }else{
-                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
                     break;
                 }
             }
@@ -304,7 +304,7 @@ public class Pouvoir {
                 MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
                 }else{
-                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
                     break;
                 }
             }
@@ -315,7 +315,7 @@ public class Pouvoir {
                 MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
                 }else{
-                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
                     break;
                 }
             }
@@ -326,7 +326,7 @@ public class Pouvoir {
                 MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
                 }else{
-                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
                     break;
                 }
             }
@@ -337,7 +337,7 @@ public class Pouvoir {
                 MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
                 }else{
-                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
                     break;
                 }
             }
@@ -348,7 +348,7 @@ public class Pouvoir {
                 MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
                 }else{
-                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
                     break;
                 }
             }
@@ -359,17 +359,12 @@ public class Pouvoir {
                 MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
                 }else{
-                    message= " Geurrieson test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
                     break;
                 }
             }
-        
-        
-        
-        
-        
-        
-        default : System.out.println("beep boop beep");
+            default:
+                System.out.println("beep boop beep");
     }
         return message;
 }

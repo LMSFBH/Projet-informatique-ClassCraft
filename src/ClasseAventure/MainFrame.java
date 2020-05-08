@@ -290,6 +290,7 @@ class MainFrame extends JFrame{
         constraints.gridy++;
         
         listePouvoirs = new JButton[nombreEtudiants][ListeDesEtudiants.NBR_POUVOIRS];
+        boutonUtilisable = new boolean[nombreEtudiants][ListeDesEtudiants.NBR_POUVOIRS];
         for (int i=0; i<listePouvoirs.length;i++){ 
             for (int j=0; j<ListeDesEtudiants.NBR_POUVOIRS;j++){ 
                 lv+=5;
@@ -335,6 +336,8 @@ class MainFrame extends JFrame{
                 }
                 listePouvoirs[i][j].setActionCommand("pouvoir "+i+" "+j);
                 listePouvoirs[i][j].addActionListener(new GestAction());
+                
+                boutonUtilisable[i][j] = true;
                 panneau.add(listePouvoirs[i][j],constraints);
                 constraints.gridx++;
             }
@@ -345,7 +348,7 @@ class MainFrame extends JFrame{
         }
         
         constraints.gridx=7+ListeDesEtudiants.NBR_POUVOIRS;
-        constraints.gridy=1;
+        constraints.gridy=2;
         changerImage = new JButton[nombreEtudiants];
         
         for(int i=0;i<nombreEtudiants;i++){
@@ -567,7 +570,8 @@ class MainFrame extends JFrame{
                     default:
                         break;
                 }
-            
+                
+            setCouleurPouvoirs(indexEtudiant);
             } catch(IllegalArgumentException iae){
                 JOptionPane.showMessageDialog(null, iae.getMessage());
             }

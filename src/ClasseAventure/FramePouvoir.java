@@ -5,6 +5,8 @@
  */
 package ClasseAventure;
 
+
+import static ClasseAventure.MainFrame.boutonUtilisable;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -86,6 +88,7 @@ public class FramePouvoir extends JFrame {
                         JOptionPane.showMessageDialog(null,action.action(faire,currEtudiant,liste,false) );
                         MainFrame.listePouvoirs[liste.getIndex(currEtudiant)][indexPouvoir].setBackground(Color.yellow);
                         MainFrame.listePouvoirs[indexEtudiant][indexPouvoir].setBackground(MainFrame.couleur5);
+                        MainFrame.boutonUtilisable[liste.getIndex(currEtudiant)][indexPouvoir]=false;
                     }
                 }else if(MainFrame.listePouvoirs[indexEtudiant][indexPouvoir].getBackground().equals(MainFrame.couleur5)) {
                     JOptionPane.showMessageDialog(null,"Le pouvoir est déja actif");
