@@ -63,7 +63,6 @@ public class FrameChangement extends JFrame{
                         default:
                             try{
                                 unEtudiant.setCheminImage(choix.getSelectedFile().getCanonicalPath());
-                                ImageIO.write(choix.getSelectedFile().getCanonicalPath(), "png", "sauvegarde.png");
                             } catch(FileNotFoundException fnfe){
                                 JOptionPane.showMessageDialog(null, fnfe.getMessage());
                                 resultat = JFileChooser.CANCEL_OPTION;

@@ -487,7 +487,6 @@ class MainFrame extends JFrame{
                             teteDeMort[indexEtudiant].setVisible(false);
                             pv[indexEtudiant].setVisible(true);
                         }
-                        verificationPouvoir(indexEtudiant);
                         break;
                     case "exp":
                         if(liste.getEtudiant(indexEtudiant).getPv()>0){
@@ -522,12 +521,23 @@ class MainFrame extends JFrame{
                             JOptionPane.showMessageDialog(null, "L'étudiant est mort ! Il ne peux plus gagner d'expérience");
                         
                         progressBar[indexEtudiant].setString("Niv "+(liste.getEtudiant(indexEtudiant).getNiveau()+((liste.getEtudiant(indexEtudiant).getExp() == 1) ? 0.5 : 0))+"                            ");                       
-                        verificationPouvoir(indexEtudiant);
                         break;
                     case "pouvoir":
-                        FramePouvoir descriptionPouvoir = new FramePouvoir(currEtudiant, liste, indexPouvoir);
-                        descriptionPouvoir.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                        descriptionPouvoir.setVisible(true);
+                        if(liste.getEtudiant(indexEtudiant).getPv()== 0){   
+                            JOptionPane.showMessageDialog(null,"Pouvoir innacessible! L'éleve est mort");
+                        }else if(MainFrame.listePouvoirs[indexEtudiant][indexPouvoir].getBackground().equals(MainFrame.couleur3)) {
+
+                                MainFrame.listePouvoirs[indexEtudiant][indexPouvoir].setBackground(MainFrame.couleur5);
+                                MainFrame.boutonUtilisable[liste.getIndex(currEtudiant)][indexPouvoir]=false;
+
+                        }else if(MainFrame.listePouvoirs[indexEtudiant][indexPouvoir].getBackground().equals(MainFrame.couleur5)) {
+
+                                MainFrame.listePouvoirs[indexEtudiant][indexPouvoir].setBackground(MainFrame.couleur3);
+                                MainFrame.boutonUtilisable[liste.getIndex(currEtudiant)][indexPouvoir]=true;
+
+                        }else{
+                            JOptionPane.showMessageDialog(null,"Le niveau de l'etudiant est insuffisant pour utiliser le pouvoir");
+                        }   
                         break;
                     default:
                         break;
@@ -543,59 +553,7 @@ class MainFrame extends JFrame{
             repaint();
         }
     }
-    
-    public void verificationPouvoir(int indexEtudiant){
-        for (int j=0; j<ListeDesEtudiants.NBR_POUVOIRS;j++){ 
-            //rajouter bouton utilise pour les pouvoirs comme etant attribut de Etudiant
-            boutonUtilisableSeul = true;
-            if(liste.getEtudiant(indexEtudiant).getNiveau()<5 & j==0){
-                listePouvoirs[indexEtudiant][j].setBackground(new Color(96,96,96));
-                listePouvoirs[indexEtudiant][j].setForeground(new Color(255,255,255));
-                boutonUtilisableSeul=false;
-            }
-
-            if(liste.getEtudiant(indexEtudiant).getNiveau()<10 & j==1){
-                listePouvoirs[indexEtudiant][j].setBackground(new Color(96,96,96));
-                listePouvoirs[indexEtudiant][j].setForeground(new Color(255,255,255));
-                boutonUtilisableSeul=false;
-            }
-            
-            if(liste.getEtudiant(indexEtudiant).getNiveau()<15 & j==2){
-                listePouvoirs[indexEtudiant][j].setBackground(new Color(96,96,96));
-                listePouvoirs[indexEtudiant][j].setForeground(new Color(255,255,255));
-                boutonUtilisableSeul=false;
-            }
-
-            if(liste.getEtudiant(indexEtudiant).getNiveau()<20 & j==3){
-                listePouvoirs[indexEtudiant][j].setBackground(new Color(96,96,96));
-                listePouvoirs[indexEtudiant][j].setForeground(new Color(255,255,255));
-                boutonUtilisableSeul=false;
-            }
-
-            if(liste.getEtudiant(indexEtudiant).getNiveau()<25 & j==4){
-                listePouvoirs[indexEtudiant][j].setBackground(new Color(96,96,96));
-                listePouvoirs[indexEtudiant][j].setForeground(new Color(255,255,255));
-                boutonUtilisableSeul=false;
-            }
-
-            if(liste.getEtudiant(indexEtudiant).getNiveau()<30 & j==5){
-                listePouvoirs[indexEtudiant][j].setBackground(new Color(96,96,96));
-                listePouvoirs[indexEtudiant][j].setForeground(new Color(255,255,255));
-                boutonUtilisableSeul=false;
-            }
-
-            if(boutonUtilisableSeul){
-                listePouvoirs[indexEtudiant][j].setBackground(Color.green);
-                listePouvoirs[indexEtudiant][j].setForeground(Color.black);
-            }
-                                
-            if(liste.getEtudiant(indexEtudiant).getPv()==0){
-                listePouvoirs[indexEtudiant][j].setBackground(Color.red);
-                listePouvoirs[indexEtudiant][j].setForeground(Color.white);
-            }
-        }
-    }
-    
+        
     protected static void setCouleurPouvoirs(int indEtudiant, ListeDesEtudiants liste){
         int indPouvoir;
         indPouvoir = 0;
