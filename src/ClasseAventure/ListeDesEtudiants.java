@@ -217,17 +217,17 @@ public class ListeDesEtudiants{
             cellule = ligne.createCell(7);
             cellule.setCellValue(currEtudiant.getPv());
             cellule = ligne.createCell(8);
-            cellule.setCellValue(currEtudiant.getPouvoir(0));
+            cellule.setCellValue(""+currEtudiant.getPouvoir(0));
             cellule = ligne.createCell(9);
-            cellule.setCellValue(currEtudiant.getPouvoir(1));
+            cellule.setCellValue(""+currEtudiant.getPouvoir(1));
             cellule = ligne.createCell(10);
-            cellule.setCellValue(currEtudiant.getPouvoir(2));
+            cellule.setCellValue(""+currEtudiant.getPouvoir(2));
             cellule = ligne.createCell(11);
-            cellule.setCellValue(currEtudiant.getPouvoir(3));
+            cellule.setCellValue(""+currEtudiant.getPouvoir(3));
             cellule = ligne.createCell(12);
-            cellule.setCellValue(currEtudiant.getPouvoir(4));
+            cellule.setCellValue(""+currEtudiant.getPouvoir(4));
             cellule = ligne.createCell(13);
-            cellule.setCellValue(currEtudiant.getPouvoir(5));
+            cellule.setCellValue(""+currEtudiant.getPouvoir(5));
             
             // Images
             if(writeImage){
@@ -331,8 +331,10 @@ public class ListeDesEtudiants{
                         else
                             img = ligne.getCell(4).getStringCellValue();
                         
-                        boolean[] pouvoirsUtilisable = {ligne.getCell(8).getBooleanCellValue(), ligne.getCell(9).getBooleanCellValue(), ligne.getCell(10).getBooleanCellValue(), ligne.getCell(11).getBooleanCellValue(),
-                                                       ligne.getCell(12).getBooleanCellValue(), ligne.getCell(13).getBooleanCellValue()};
+                        String[] pouvoirsUtilisableSS = {ligne.getCell(8).getStringCellValue(), ligne.getCell(9).getStringCellValue(), ligne.getCell(10).getStringCellValue(), ligne.getCell(11).getStringCellValue(),
+                                                       ligne.getCell(12).getStringCellValue(), ligne.getCell(13).getStringCellValue()};
+                        boolean[] pouvoirsUtilisable = {pouvoirsUtilisableSS[0].equalsIgnoreCase("true"), pouvoirsUtilisableSS[1].equalsIgnoreCase("true"), pouvoirsUtilisableSS[2].equalsIgnoreCase("true"), pouvoirsUtilisableSS[3].equalsIgnoreCase("true"),
+                                                       pouvoirsUtilisableSS[4].equalsIgnoreCase("true"), pouvoirsUtilisableSS[5].equalsIgnoreCase("true")};
                         
                         unEtudiant = new Etudiant(formatter.formatCellValue(ligne.getCell(0)), ligne.getCell(1).getStringCellValue(), (int)ligne.getCell(2).getNumericCellValue(), ligne.getCell(3).getStringCellValue(), img,
                                                    (int)ligne.getCell(5).getNumericCellValue(), (int)ligne.getCell(6).getNumericCellValue(), (int)ligne.getCell(7).getNumericCellValue(), pouvoirsUtilisable);
