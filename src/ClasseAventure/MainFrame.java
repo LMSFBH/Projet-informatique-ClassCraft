@@ -343,6 +343,7 @@ class MainFrame extends JFrame{
                 constraints.gridx++;
             }
             
+            setCouleurPouvoirs(i);
             constraints.gridy++;
             constraints.gridx-=ListeDesEtudiants.NBR_POUVOIRS;
             lv=0;
@@ -488,7 +489,7 @@ class MainFrame extends JFrame{
                             teteDeMort[indexEtudiant].setVisible(false);
                             pv[indexEtudiant].setVisible(true);
                         }
-                        verificationPouvoir(indexEtudiant);
+                        setCouleurPouvoirs(indexEtudiant);
                         break;
                     case "exp":
                         if(liste.getEtudiant(indexEtudiant).getPv()>0){
@@ -524,7 +525,7 @@ class MainFrame extends JFrame{
                             JOptionPane.showMessageDialog(null, "l'etudiant est mort! il ne peux plus gagner d'exp");
                         
                         progressBar[indexEtudiant].setString("Niv "+(liste.getEtudiant(indexEtudiant).getNiveau()+((liste.getEtudiant(indexEtudiant).getExp() == 1) ? 0.5 : 0))+"                            ");                       
-                        verificationPouvoir(indexEtudiant);
+                        setCouleurPouvoirs(indexEtudiant);
                         break;
                     case "pouvoir":
                         FramePouvoir descriptionPouvoir = new FramePouvoir(currEtudiant, liste, indexPouvoir);
@@ -581,58 +582,6 @@ class MainFrame extends JFrame{
 
             revalidate();
             repaint();
-        }
-    }
-    
-    public void verificationPouvoir(int indexEtudiant){
-        for (int j=0; j<ListeDesEtudiants.NBR_POUVOIRS;j++){ 
-            //rajouter bouton utilise pour les pouvoirs comme etant attribut de Etudiant
-            boutonUtilisableSeul = true;
-            if(liste.getEtudiant(indexEtudiant).getNiveau()<5 & j==0){
-                listePouvoirs[indexEtudiant][j].setBackground(new Color(96,96,96));
-                listePouvoirs[indexEtudiant][j].setForeground(new Color(255,255,255));
-                boutonUtilisableSeul=false;
-            }
-
-            if(liste.getEtudiant(indexEtudiant).getNiveau()<10 & j==1){
-                listePouvoirs[indexEtudiant][j].setBackground(new Color(96,96,96));
-                listePouvoirs[indexEtudiant][j].setForeground(new Color(255,255,255));
-                boutonUtilisableSeul=false;
-            }
-            
-            if(liste.getEtudiant(indexEtudiant).getNiveau()<15 & j==2){
-                listePouvoirs[indexEtudiant][j].setBackground(new Color(96,96,96));
-                listePouvoirs[indexEtudiant][j].setForeground(new Color(255,255,255));
-                boutonUtilisableSeul=false;
-            }
-
-            if(liste.getEtudiant(indexEtudiant).getNiveau()<20 & j==3){
-                listePouvoirs[indexEtudiant][j].setBackground(new Color(96,96,96));
-                listePouvoirs[indexEtudiant][j].setForeground(new Color(255,255,255));
-                boutonUtilisableSeul=false;
-            }
-
-            if(liste.getEtudiant(indexEtudiant).getNiveau()<25 & j==4){
-                listePouvoirs[indexEtudiant][j].setBackground(new Color(96,96,96));
-                listePouvoirs[indexEtudiant][j].setForeground(new Color(255,255,255));
-                boutonUtilisableSeul=false;
-            }
-
-            if(liste.getEtudiant(indexEtudiant).getNiveau()<30 & j==5){
-                listePouvoirs[indexEtudiant][j].setBackground(new Color(96,96,96));
-                listePouvoirs[indexEtudiant][j].setForeground(new Color(255,255,255));
-                boutonUtilisableSeul=false;
-            }
-
-            if(boutonUtilisableSeul){
-                listePouvoirs[indexEtudiant][j].setBackground(Color.green);
-                listePouvoirs[indexEtudiant][j].setForeground(Color.black);
-            }
-                                
-            if(liste.getEtudiant(indexEtudiant).getPv()==0){
-                listePouvoirs[indexEtudiant][j].setBackground(Color.red);
-                listePouvoirs[indexEtudiant][j].setForeground(Color.white);
-            }
         }
     }
     

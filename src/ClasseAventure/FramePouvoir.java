@@ -88,7 +88,9 @@ public class FramePouvoir extends JFrame {
                         JOptionPane.showMessageDialog(null,action.action(faire,currEtudiant,liste,false) );
                         MainFrame.listePouvoirs[liste.getIndex(currEtudiant)][indexPouvoir].setBackground(Color.yellow);
                         MainFrame.listePouvoirs[indexEtudiant][indexPouvoir].setBackground(MainFrame.couleur5);
-                        currEtudiant.setPouvoir(liste.getIndex(currEtudiant), false);
+                        
+                        currEtudiant.setPouvoir(indexPouvoir, false);
+                        MainFrame.liste.setEtudiant(indexEtudiant, currEtudiant);
                     }
                 }else if(MainFrame.listePouvoirs[indexEtudiant][indexPouvoir].getBackground().equals(MainFrame.couleur5)) {
                     JOptionPane.showMessageDialog(null,"Le pouvoir est déja actif");
