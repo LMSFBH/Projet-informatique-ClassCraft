@@ -317,10 +317,17 @@ public class ListeDesEtudiants{
                             /*                            img = null;
                             else
                             img = ligne.getCell(4).getStringCellValue();
+<<<<<<< HEAD:src/ClasseAventure/ListeDesEtudiants.java
                             
                             unEtudiant = new Etudiant(formatter.formatCellValue(ligne.getCell(0)), ligne.getCell(1).getStringCellValue(), (int)ligne.getCell(2).getNumericCellValue(), ligne.getCell(3).getStringCellValue(), img,
                             (int)ligne.getCell(5).getNumericCellValue(), (int)ligne.getCell(6).getNumericCellValue(), (int)ligne.getCell(7).getNumericCellValue());
                             if(etudiants.contains(unEtudiant))
+=======
+                        
+                        unEtudiant = new Etudiant(formatter.formatCellValue(ligne.getCell(0)), ligne.getCell(1).getStringCellValue(), (int)ligne.getCell(2).getNumericCellValue(), ligne.getCell(3).getStringCellValue(), img,
+                                                   (int)ligne.getCell(5).getNumericCellValue(), (int)ligne.getCell(6).getNumericCellValue(), (int)ligne.getCell(7).getNumericCellValue());
+                        if(etudiants.contains(unEtudiant))
+>>>>>>> pierre:src/classcraft/ListeDesEtudiants.java
                             throw new Exception("2 etudiants ne peuvent pas etre pareil.");
                             
                             etudiants.add(unEtudiant);*/
@@ -338,6 +345,7 @@ public class ListeDesEtudiants{
                         
                         unEtudiant = new Etudiant(formatter.formatCellValue(ligne.getCell(0)), ligne.getCell(1).getStringCellValue(), (int)ligne.getCell(2).getNumericCellValue(), ligne.getCell(3).getStringCellValue(), img,
                                                    (int)ligne.getCell(5).getNumericCellValue(), (int)ligne.getCell(6).getNumericCellValue(), (int)ligne.getCell(7).getNumericCellValue(), pouvoirsUtilisable);
+                        
                         if(etudiants.contains(unEtudiant))
                             throw new Exception("2 etudiants ne peuvent pas etre pareil.");
                         

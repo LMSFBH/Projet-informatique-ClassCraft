@@ -20,7 +20,7 @@ public class FrameEtudiant extends JFrame {
     ListeDesEtudiants liste;
     String fileName;
     JButton info;
-    static JLabel nomEtPrenom, pseudo;
+    static JLabel nomEtPrenom, pseudo, role;
     
     public FrameEtudiant(Etudiant unEtudiant, ListeDesEtudiants liste, String fileName){
         this.unEtudiant = unEtudiant;
@@ -31,7 +31,7 @@ public class FrameEtudiant extends JFrame {
         panneau = new JPanel();
         JLabel nAdmission = new JLabel("Numéro d'admission: "+unEtudiant.getNAdmission());
         nomEtPrenom = new JLabel("Nom et prénom: "+unEtudiant.getName());
-        JLabel role = new JLabel("Rôle: "+unEtudiant.getRole());
+        role = new JLabel("Rôle: "+unEtudiant.getRole().getRole());
         pseudo = new JLabel("Pseudo: "+unEtudiant.getPseudo());
         JLabel niveau = new JLabel("Niveau: "+(unEtudiant.getNiveau()+((unEtudiant.getExp() == 1) ? 0.5 : 0)));
         JLabel pv = new JLabel("PV: "+unEtudiant.getPv());
@@ -42,6 +42,7 @@ public class FrameEtudiant extends JFrame {
 	panneau.setLayout(gbl);
 	GridBagConstraints constraints = new GridBagConstraints();
         
+        constraints.weightx=5;
         constraints.gridx=0;
 	constraints.gridy=0;
 	constraints.gridwidth=1;
@@ -51,6 +52,7 @@ public class FrameEtudiant extends JFrame {
         constraints.gridx=1;
         panneau.add(nomEtPrenom, constraints);
         
+        constraints.weightx=0;
         constraints.gridwidth=2;
         constraints.gridx=0;
         constraints.gridy=1;
@@ -84,34 +86,17 @@ public class FrameEtudiant extends JFrame {
         panneau = new JPanel();
         GridLayout layout = new GridLayout();
         Graphics2D g2d = (Graphics2D)g;
+        String classe = unEtudiant.getRole().getRole();
         
-        XSSFPictureData dataImage = null;
-        try {
-            dataImage = liste.getImage(unEtudiant, fileName);
-        } catch(FileNotFoundException fnfe){
-            JOptionPane.showMessageDialog(null, fnfe.getMessage());
-            dispose();
-        } catch(IOException ioe){
-            JOptionPane.showMessageDialog(null, ioe.getMessage());
-            dispose();
-        } catch(Exception e){
-            JOptionPane.showMessageDialog(null, e.getMessage());
-            dispose();
-        }
+        Image image;
         
-        if(dataImage == null){
-            JOptionPane.showMessageDialog(null, "Les images ne sont pas dans le fichier "+fileName);
-            dispose();
-        }
+        if(ListeDesEtudiants.doesFileExist(unEtudiant.getNAdmission()+".jpg"))
+            image = getToolkit().getImage(unEtudiant.getNAdmission()+".jpg");
+        else
+            image = getToolkit().getImage(unEtudiant.getRole().getRole()+".jpg");
         
-        try {
-            InputStream dataInputStream = dataImage.getPackagePart().getInputStream();
-            BufferedImage bImage = ImageIO.read(dataInputStream);
-            g2d.drawImage(bImage, 175, 100, 100, 100, this);
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, "Erreur imprevus lors de l'obtention de l'image.");
-            dispose();
-        }
+        g2d.drawImage(image, 175, 100, 100, 100, this);
+        
     }
     
     protected class GestAction implements ActionListener{
@@ -121,7 +106,7 @@ public class FrameEtudiant extends JFrame {
             changement.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             changement.setTitle("Modifier les informations");
             changement.setVisible(true);
-            
+            changement.setLocationRelativeTo(null);
         }
     }
 }

@@ -58,12 +58,12 @@ public class Role {
         return role;
     }
    
-    public int getMaxPv(){
-        return MaxPv;
-    }
-    
     public void setRole(String NouveauJob){
         this.role=role;
+    }
+    
+    public int getMaxPv(){
+        return MaxPv;
     }
   
 }

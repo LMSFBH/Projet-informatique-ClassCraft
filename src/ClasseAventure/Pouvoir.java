@@ -24,11 +24,11 @@ public class Pouvoir {
             case 1: {
                 if( description==false){
                     utilisateur.setPv(utilisateur.getPv()+1);
-                message= "l'étudiant "+utilisateur.getName()+" a été guerie de 1 pv";
+                message= "L'étudiant "+utilisateur.getName()+" a été guérie de 1 point de vie";
                 MainFrame.pv[liste.getIndex(utilisateur)].setText(""+utilisateur.getPv());
                 break;
                 }else{
-                    message= " Guerrison test : l'étudiant "+utilisateur.getName()+" va etre été guerie de 1 pv";
+                    message= " Guérrison test : l'étudiant "+utilisateur.getName()+" va etre guérie de 1 pv";
                     break;
                 }
             }
@@ -363,8 +363,13 @@ public class Pouvoir {
                     break;
                 }
             }
-            default:
-                System.out.println("beep boop beep");
+        
+        
+        
+        
+        
+        
+        default : System.out.println("beep boop beep");
     }
         return message;
 }
