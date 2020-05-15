@@ -43,6 +43,7 @@ class MainFrame extends JFrame{
     static Color couleur3 = new Color(0,255,0); // couleur verte
     static Color couleur4 = new Color(255,0,0); // couleur rouge
     static Color couleur5 = new Color(255,255,0); // couleur jaune
+    Color couleur6 = new Color(0,0,255); // couleur Bleu
     
     public MainFrame() throws  FileNotFoundException, IOException, Exception{
         JOptionPane.showMessageDialog(null,"Veuillez sélectionner votre classe d'étudiant (ici Classeur1)");
@@ -153,6 +154,8 @@ class MainFrame extends JFrame{
         
         constraints.gridy=1;
         JLabel nom = new JLabel("Nom");
+        nom.setToolTipText("liste de nom des étudiants\nCliquez sur un nom pour modifier ses informations");
+        nom.setForeground(couleur6);
         panneau.add(nom, constraints);
         
         nomEtudiants = new JLabel[nombreEtudiants];
@@ -177,18 +180,29 @@ class MainFrame extends JFrame{
         constraints.gridx++;
         constraints.gridy=1;
         JLabel classe = new JLabel("Classe");
+        classe.setToolTipText("Classe des étudiants\nCliquez sur une classe pour changer son nom");
+        classe.setForeground(couleur6);
         panneau.add(classe, constraints);
         
         role = new JLabel[nombreEtudiants];
-        for(int i=0; i<nombreEtudiants; i++){
+        for(int i=0; i<role.length; i++){
             constraints.gridy++;
+            FrameNomRole rl = new FrameNomRole( liste,  i);
+            rl.setVisible(false);          
             role[i] = new JLabel(liste.getEtudiant(i).getRole().getRole());
+            role[i].addMouseListener(new MouseAdapter(){
+                @Override
+                public void mouseClicked(MouseEvent e){
+                    rl.setVisible(true);                 
+                    }});             
             panneau.add(role[i],constraints);
         }
         
         constraints.gridx++;
         constraints.gridy=1;
         JLabel pseudo = new JLabel("Pseudo");
+        pseudo.setToolTipText("Pseudonyme des étudiants\nCliquez le nom d'un étudiant pour changer son Pseudo");
+        pseudo.setForeground(couleur6);
         panneau.add(pseudo, constraints);
         
         pseudoEtudiant = new JLabel[nombreEtudiants];
@@ -223,6 +237,8 @@ class MainFrame extends JFrame{
 	constraints.gridx=4;
 	constraints.gridy=1;
         JLabel textePV = new JLabel("Points de Vie");
+        textePV.setToolTipText("liste des point de vie des étudiants");
+        textePV.setForeground(couleur6);
 	panneau.add(textePV,constraints);
 	
 	for(int i=0; i<nombreEtudiants;i++){
@@ -246,6 +262,8 @@ class MainFrame extends JFrame{
         constraints.gridx=5;
         constraints.gridy=1;
         JLabel exp = new JLabel("Expérience");
+        exp.setToolTipText("Points d'experience des etudiants");
+        exp.setForeground(couleur6);
         panneau.add(exp,constraints);
         
         int ExpMax=2;
@@ -295,6 +313,8 @@ class MainFrame extends JFrame{
         constraints.weightx=1;
         
         JLabel pouvoir = new JLabel("Pouvoirs");
+        pouvoir.setToolTipText("Pouvoir des étudiants\n Il faut monter de niveau pour en débloquer");
+        pouvoir.setForeground(couleur6);
         panneau.add(pouvoir,constraints);
         
         constraints.gridwidth=1;
