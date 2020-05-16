@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ClasseAventure;
+package ClasseEtDragons;
 
 /**
  *
@@ -23,10 +23,11 @@ public class Etudiant {
     
     public final int MAX_EXP = 1;
     
-    public Etudiant(String nAdmission, String nom, int role){
+    public Etudiant(String nAdmission, String nom, int role, String pseudo){
         setName(nom);
         setNAdmission(nom);
         setRole(role);
+        setPseudo(pseudo);
         setExp(0);
         setNiveau(1);
         setPv(getRole().getMaxPv());
@@ -109,7 +110,7 @@ public class Etudiant {
     //Meme chose, on a jamais besoins de set le niveau si incExp s'en charge
     public void setNiveau(int niveau){
         if(niveau <= -1)
-            throw new IllegalArgumentException("Le niveau ne peut pas etre negatif ou nulle.");
+            throw new IllegalArgumentException("Le niveau ne peut pas etre negatif.");
         
         this.niveau=niveau;
     }

@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ClasseAventure;
+package ClasseEtDragons;
 
-import static ClasseAventure.MainFrame.pv;
+import static ClasseEtDragons.MainFrame.pv;
 
 /**
  *

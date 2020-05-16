@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ClasseAventure;
+package ClasseEtDragons;
 
-import static ClasseAventure.MainFrame.boutonUtilisable;
+import static ClasseEtDragons.MainFrame.boutonUtilisable;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;

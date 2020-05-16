@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ClasseAventure;
+package ClasseEtDragons;
 
-import static ClasseAventure.MainFrame.ouiOuNon;
+import static ClasseEtDragons.MainFrame.ouiOuNon;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -63,7 +63,7 @@ public class FrameChangement extends JFrame{
                         default:
                             try{
                                 unEtudiant.setCheminImage(choix.getSelectedFile().getCanonicalPath());
-                                ImageIO.write(ImageIO.read(new File(choix.getSelectedFile().getCanonicalPath())), "png", new File("image/"+unEtudiant.getNAdmission()+".png"));
+                                ImageIO.write(ImageIO.read(new File(unEtudiant.getCheminImage())), "png", new File("image/"+unEtudiant.getNAdmission()+".png"));
                             } catch(FileNotFoundException fnfe){
                                 JOptionPane.showMessageDialog(null, fnfe.getMessage());
                                 resultat = JFileChooser.CANCEL_OPTION;
@@ -76,7 +76,6 @@ public class FrameChangement extends JFrame{
                             }
                             break;
                     }
-
                 }
             }
         });

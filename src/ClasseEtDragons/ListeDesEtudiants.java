@@ -1,17 +1,9 @@
-package ClasseAventure;
-import java.awt.image.BufferedImage;
+package ClasseEtDragons;
+
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Stream;
-import javax.imageio.ImageIO;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.usermodel.Row.MissingCellPolicy;
-import org.apache.poi.xssf.streaming.SXSSFSheet;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.apache.poi.xssf.usermodel.XSSFPictureData;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /*
@@ -27,7 +19,6 @@ public class ListeDesEtudiants{
     public static final int NBR_POUVOIRS = 6;
     public static final int MAX_CELLS = PARAM_ETUDIANTS + NBR_POUVOIRS;
     public static final int IMG_POS = 15;
-    public static final String DEFAULT_IMAGE = "default.png"; 
     
     private ArrayList<Etudiant> etudiants = new ArrayList<>();
     
@@ -50,50 +41,6 @@ public class ListeDesEtudiants{
     
     public int getIndex(Etudiant unEtudiant){
         return etudiants.indexOf(unEtudiant);
-    }
-    
-    //Adapte de https://stackoverflow.com/a/52875928
-    public static void convertCsvToXlsx(String xlsLocation, String csvLocation) throws FileNotFoundException, IOException, Exception {
-        if((csvLocation == null) || (csvLocation.isEmpty()))
-            throw new IllegalArgumentException("Un fichier d'entree est vide.");
-        
-        SXSSFWorkbook workbook = new SXSSFWorkbook();
-        SXSSFSheet sheet = workbook.createSheet();
-        AtomicReference<Integer> row = new AtomicReference<>(0);
-        
-        if(!doesFileExist(csvLocation))
-            throw new FileNotFoundException("Fichier csv "+csvLocation+" introuvable pour la conversion.");
-        
-        try{
-            (new File(xlsLocation)).createNewFile();
-        } catch(IOException ioe){
-            throw new IOException("Erreur d'I/O lors de la creation du fichier excel "+xlsLocation+" lors de la conversions.");
-        } catch(Exception e){
-            throw new Exception("Erreur lors de la creation du fichier excel "+xlsLocation+" lors de la conversions.");
-        }
-        
-        try{
-        Files.readAllLines(Paths.get(csvLocation)).forEach(line -> {
-            Row currentRow = sheet.createRow(row.getAndSet(row.get() + 1));
-            String[] nextLine = line.split(",");
-            
-            Stream.iterate(0, i -> i + 1).limit(nextLine.length).forEach(i -> {
-                currentRow.createCell(i).setCellValue(nextLine[i]);
-            });
-        });
-        
-        } catch(IOException ioe){
-            throw new IOException("Erreur d'I/O lors de la conversion.");
-        } catch(Exception e){
-            throw new Exception("Erreur lors de la conversion.");
-        }
-        
-        try (FileOutputStream fos = new FileOutputStream(new File(xlsLocation))) {
-            workbook.write(fos);
-        } catch (IOException ioe) {
-            throw new IOException("Erreur d'I/O lors de l'ecriture apres la conversion de "+csvLocation+".");
-            //Logger.getLogger(ListeDesEtudiants.class.getName()).log(Level.SEVERE, null, ioe);
-        }
     }
     
     public void setEtudiant(int index, Etudiant unEtudiant){
@@ -140,51 +87,9 @@ public class ListeDesEtudiants{
         });
     }
     
-    public static ArrayList<XSSFPictureData> getAllImages(String fileName) throws IllegalArgumentException, FileNotFoundException, IOException, Exception{
-        if((fileName == null) || (fileName.isEmpty()))
-            throw new IllegalArgumentException("Un fichier d'entree est vide.");
-        
-        XSSFWorkbook wb = null;
-        
-        try{
-            wb = new XSSFWorkbook(new FileInputStream(fileName));
-        } catch(FileNotFoundException fnfe){
-            throw new FileNotFoundException("La liste d'etudiant "+fileName+" est introuvable lors de la lecture d'image.");
-        } catch(IOException ioe){
-            throw new IOException("Erreur d'I/O lors de la lecture de la liste d'etudiant "+fileName+" lors de la lecture d'image.");
-        } catch(Exception e){
-            throw new Exception("Erreur lors de la lecture de la liste d'etudiant "+fileName+" lors de la lecture d'image.");
-        }
-        
-        ArrayList<XSSFPictureData> ret = (ArrayList<XSSFPictureData>) wb.getAllPictures();
-        closeWorkBook(fileName, wb, false);
-        
-        return ret;
-    }
-    
-    //Obtient une image du fichier fileName
-    public XSSFPictureData getImage(Etudiant etudiant, String fileName) throws IllegalArgumentException, FileNotFoundException, IOException, Exception{
-        int index = etudiants.indexOf(etudiant);
-        
-        if(index == -1)
-            throw new Exception("L'etudiant "+etudiant.getName()+" de numero de DA "+etudiant.getNAdmission()+" n'est pas dans la liste.");
-        
-        return getImage(index, fileName);
-    }
-    
-    //Obtient une image du fichier fileName
-    public XSSFPictureData getImage(int index, String fileName) throws IllegalArgumentException, FileNotFoundException, IOException, Exception{
-        ArrayList<XSSFPictureData> ret = getAllImages(fileName);
-        
-        if((index < 0) || (index > etudiants.size()))
-            throw new Exception("L'etudiant d'index "+index+" n'est pas dans la liste.");
-        
-        return ret.get(index);
-    }
-    
     //Ecrit tout les etudiants et les images liee de cet objet dans un fichier excel de nom fileName
     //ecrit ou pas les images selon writeImage, a faire que si un etudiant a ete ajouter/retirer ou la premiere ecriture du fichier
-    public void writeToutEtudiantsEtImages(String fileName, boolean writeImage) throws IllegalArgumentException, FileNotFoundException, IOException, EOFException, Exception{
+    public void writeToutEtudiantsEtImages(String fileName) throws IllegalArgumentException, FileNotFoundException, IOException, EOFException, Exception{
         if((fileName == null) || (fileName.isEmpty()))
             throw new IllegalArgumentException("Un fichier d'entree est vide.");
         
@@ -228,51 +133,6 @@ public class ListeDesEtudiants{
             cellule.setCellValue(""+currEtudiant.getPouvoir(4));
             cellule = ligne.createCell(13);
             cellule.setCellValue(""+currEtudiant.getPouvoir(5));
-            
-            // Images
-            if(writeImage){
-                File imgFile = null;
-                if(!((img == null) || img.isEmpty())){
-                    imgFile = new File(img);
-                    
-                    if(!imgFile.exists())
-                        throw new FileNotFoundException("Le fichier image "+img+" n'existe pas, veuillez selectionnez une image valide.");
-                }
-
-                int pictureIdx;
-                try{
-                    ByteArrayOutputStream os = new ByteArrayOutputStream();
-                    BufferedImage bImage = null;
-                    
-                    //Convertis l'image
-                    if((img == null) || img.isEmpty())
-                        bImage = ImageIO.read(new File(currEtudiant.getRole().getRole()+".png"));
-                    else
-                        bImage = ImageIO.read(imgFile);
-                    
-                    ImageIO.write(bImage, "png", os);
-                    pictureIdx = wb.addPicture(os.toByteArray(), Workbook.PICTURE_TYPE_PNG);
-                    
-                    os.flush();
-                    os.close();
-                } catch (IOException ioe){
-                    throw new IOException("Erreur d'acces a l'image "+((img == null) ? currEtudiant.getRole().getRole()+".png" : img)+".");
-                }
-
-                CreationHelper helper = wb.getCreationHelper();
-
-                // Toute les formes excels sont dessiner a partir du Partriarch
-                Drawing drawing = sheet.createDrawingPatriarch();
-                ClientAnchor anchor = helper.createClientAnchor();
-
-                //repositionnez l'image, pour pict.resize()
-                anchor.setAnchorType(ClientAnchor.AnchorType.MOVE_AND_RESIZE);
-                anchor.setCol1(IMG_POS);
-                anchor.setRow1(i);
-
-                Picture pict = drawing.createPicture(anchor, pictureIdx); 
-                pict.resize();
-            }
         }
         
         closeWorkBook(fileName, wb, true);
@@ -304,33 +164,13 @@ public class ListeDesEtudiants{
         for (int i=0;((ligne = sheet.getRow(i)) != null);i++){
             try{
                 switch (ligne.getLastCellNum()) {
-                    case 2:
-                        unEtudiant = new Etudiant(formatter.formatCellValue(ligne.getCell(0)), ligne.getCell(1).getStringCellValue(), (int)ligne.getCell(2).getNumericCellValue());
+                    case 4:
+                        unEtudiant = new Etudiant(formatter.formatCellValue(ligne.getCell(0)), ligne.getCell(1).getStringCellValue(), (int)ligne.getCell(2).getNumericCellValue(), ligne.getCell(3).getStringCellValue());
                         
                         if(etudiants.contains(unEtudiant))
                             throw new Exception("2 etudiants ne peuvent pas etre pareil.");
                         
                         etudiants.add(unEtudiant);
-                        break;
-                    case MAX_CELLS - NBR_POUVOIRS: // 8 parametres (nbr d'admission, nom, pseudos, role, chemin de l'image, exp, pv, lvl)
-                        if(ligne.getCell(4) == null)
-                            /*                            img = null;
-                            else
-                            img = ligne.getCell(4).getStringCellValue();
-<<<<<<< HEAD:src/ClasseAventure/ListeDesEtudiants.java
-                            
-                            unEtudiant = new Etudiant(formatter.formatCellValue(ligne.getCell(0)), ligne.getCell(1).getStringCellValue(), (int)ligne.getCell(2).getNumericCellValue(), ligne.getCell(3).getStringCellValue(), img,
-                            (int)ligne.getCell(5).getNumericCellValue(), (int)ligne.getCell(6).getNumericCellValue(), (int)ligne.getCell(7).getNumericCellValue());
-                            if(etudiants.contains(unEtudiant))
-=======
-                        
-                        unEtudiant = new Etudiant(formatter.formatCellValue(ligne.getCell(0)), ligne.getCell(1).getStringCellValue(), (int)ligne.getCell(2).getNumericCellValue(), ligne.getCell(3).getStringCellValue(), img,
-                                                   (int)ligne.getCell(5).getNumericCellValue(), (int)ligne.getCell(6).getNumericCellValue(), (int)ligne.getCell(7).getNumericCellValue());
-                        if(etudiants.contains(unEtudiant))
->>>>>>> pierre:src/classcraft/ListeDesEtudiants.java
-                            throw new Exception("2 etudiants ne peuvent pas etre pareil.");
-                            
-                            etudiants.add(unEtudiant);*/
                         break;
                     case MAX_CELLS: // 13 parametres [(nbr admission, nom, pseudos, role, chemin de l'image, exp, pv, lvl) + 5 pouvoirs]
                         if(ligne.getCell(4) == null)
@@ -353,7 +193,7 @@ public class ListeDesEtudiants{
                         //Pouvoirs
                         break;
                     default:
-                        throw new Exception("Format du fichier excel "+fileName+" invalide (nombre de colonnes n'est pas egale a 3 ou "+MAX_CELLS/* ou "+(MAX_CELLS-NBR_POUVOIRS)+"*/);
+                        throw new Exception("Format du fichier excel "+fileName+" invalide (nombre de colonnes n'est pas egale a 4 ou "+MAX_CELLS/* ou "+(MAX_CELLS-NBR_POUVOIRS)+"*/);
                 }
             } catch(NullPointerException npe){
                 throw new Exception("Format du fichier excel "+fileName+" invalide (une case autre que le chemin de l'image (colonne 5) est vide).");

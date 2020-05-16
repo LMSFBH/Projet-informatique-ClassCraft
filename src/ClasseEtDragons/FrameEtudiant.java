@@ -1,5 +1,5 @@
 
-package ClasseAventure;
+package ClasseEtDragons;
 
 
 import java.awt.*;
@@ -88,12 +88,12 @@ public class FrameEtudiant extends JFrame {
         Graphics2D g2d = (Graphics2D)g;
         String classe = unEtudiant.getRole().getRole();
         
-        Image image;
+        Image image = null;
         
-        if(ListeDesEtudiants.doesFileExist(unEtudiant.getNAdmission()+".jpg"))
-            image = getToolkit().getImage(unEtudiant.getNAdmission()+".jpg");
+        if(ListeDesEtudiants.doesFileExist("image/"+unEtudiant.getNAdmission()+".jpg"))
+            image = getToolkit().getImage("image/"+unEtudiant.getNAdmission()+".jpg");
         else
-            image = getToolkit().getImage(unEtudiant.getRole().getRole()+".jpg");
+            image = getToolkit().getImage("image/"+unEtudiant.getRole().getRole()+".jpg");
         
         g2d.drawImage(image, 175, 100, 100, 100, this);
         

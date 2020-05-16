@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ClasseAventure;
+package ClasseEtDragons;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -148,8 +148,8 @@ class MainFrame extends JFrame{
                 frameOrdre.setLocationRelativeTo(null);
                 
                 liste.organisezAlphabet();
+                repaint();
             }
-            
         });
         panneau.add(changement, constraints);
         
@@ -402,7 +402,7 @@ class MainFrame extends JFrame{
             @Override
             public void windowClosing(WindowEvent ev) {
                 if(ouiOuNon("Êtes-vous sûr de vouloir fermer l'application?", "FERMETURE")){
-                    String fichierImg;
+                    String fichierXlsx;
                     int resultat = JFileChooser.CANCEL_OPTION;
                     boolean utiliserFichierDemarrage;
                     
@@ -426,11 +426,11 @@ class MainFrame extends JFrame{
                                 case JFileChooser.CANCEL_OPTION:
                                     return;
                                 case JFileChooser.APPROVE_OPTION:
-                                    fichierImg = utiliserFichierDemarrage ? fichierPrincipale : choix.getSelectedFile().getCanonicalPath();
-                                    if(!fichierImg.endsWith(".xlsx"))
-                                        fichierImg += ".xlsx";
+                                    fichierXlsx = utiliserFichierDemarrage ? fichierPrincipale : choix.getSelectedFile().getCanonicalPath();
+                                    if(!fichierXlsx.endsWith(".xlsx"))
+                                        fichierXlsx += ".xlsx";
 
-                                    liste.writeToutEtudiantsEtImages(fichierImg, true);
+                                    liste.writeToutEtudiantsEtImages(fichierXlsx);
                                     System.exit(0);
                             }
 
