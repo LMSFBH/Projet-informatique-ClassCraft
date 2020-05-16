@@ -18,13 +18,11 @@ import javax.swing.*;
  * @author Pierre
  */
 public class FramePouvoir extends JFrame {
-    JLabel descriptionPouvoir = new JLabel();
     JPanel skill = new JPanel();
     JScrollPane rouleau = new JScrollPane(skill);
     
     JPanel panneau;
     JButton activer, annuler;
-    Pouvoir action= new Pouvoir();
     int faire;
     
     public FramePouvoir(Etudiant currEtudiant, ListeDesEtudiants liste,int indexPouvoir){
@@ -39,34 +37,6 @@ public class FramePouvoir extends JFrame {
 	constraints.gridy=0;
 	constraints.gridwidth=2;
         
-        if(indexPouvoir == 0){
-            faire=currEtudiant.getRole().getIndexNv5();
-        }
-        
-        if(indexPouvoir == 1){
-            faire=currEtudiant.getRole().getIndexNv10();
-        }
-        
-        if(indexPouvoir == 2){
-            faire=currEtudiant.getRole().getIndexNv15();
-        }
-        
-        if(indexPouvoir == 3){
-            faire=currEtudiant.getRole().getIndexNv20();
-        }
-        
-        if(indexPouvoir == 4){
-            faire=currEtudiant.getRole().getIndexNv25();
-        }
-        
-        if(indexPouvoir == 5){
-            faire=currEtudiant.getRole().getIndexNv30();
-        }
-        
-        
-        JLabel description = new JLabel(action.action(faire,currEtudiant,liste,true));
-        panneau.add(description, constraints);
-        
         constraints.gridy++;
         constraints.gridwidth=1;
         activer = new JButton("Activer");
@@ -79,21 +49,21 @@ public class FramePouvoir extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e){
                 
-                if(liste.getEtudiant(indexEtudiant).getPv()== 0){   // Moi: on fait ça? il ne peux pas accceder a la fenetre pouvoir si l'eleve est mort
+                if(liste.getEtudiant(indexEtudiant).getPv()== 0)
                     JOptionPane.showMessageDialog(null,"Pouvoir innacessible! L'éleve est mort");
-                }else if(MainFrame.listePouvoirs[indexEtudiant][indexPouvoir].getBackground().equals(MainFrame.couleur3)) {
+                else if(MainFrame.listePouvoirs[indexEtudiant][indexPouvoir].getBackground().equals(MainFrame.couleur3)) {
                     if(MainFrame.ouiOuNon("Voulez vous vraiment utiliser le pouvoir?", "Activer Pouvoir")){
                         
-                        JOptionPane.showMessageDialog(null,action.action(faire,currEtudiant,liste,false) );
+                        JOptionPane.showMessageDialog(null,"Le pouvoir a été activer.");
                         MainFrame.listePouvoirs[liste.getIndex(currEtudiant)][indexPouvoir].setBackground(Color.yellow);
                         MainFrame.listePouvoirs[indexEtudiant][indexPouvoir].setBackground(MainFrame.couleur5);
                         MainFrame.boutonUtilisable[liste.getIndex(currEtudiant)][indexPouvoir]=false;
                     }
-                }else if(MainFrame.listePouvoirs[indexEtudiant][indexPouvoir].getBackground().equals(MainFrame.couleur5)) {
+                }
+                else if(MainFrame.listePouvoirs[indexEtudiant][indexPouvoir].getBackground().equals(MainFrame.couleur5))
                     JOptionPane.showMessageDialog(null,"Le pouvoir est déja actif");
-                }else{
-                    JOptionPane.showMessageDialog(null,"Le niveau de l'etudiant est insuffisant pour utiliser le pouvoir");
-                }   
+                else
+                    JOptionPane.showMessageDialog(null,"Le niveau de l'etudiant est insuffisant pour utiliser le pouvoir");  
                 //MainFrame.setCouleurPouvoirs(indexEtudiant);
                 dispose();
             }

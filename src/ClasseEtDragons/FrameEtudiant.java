@@ -4,15 +4,10 @@ package ClasseEtDragons;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.*;
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import org.apache.poi.xssf.usermodel.XSSFPictureData;
 
 /**
- *
- * @author user
+ * Frame affichant les informations de l'étudiant
  */
 public class FrameEtudiant extends JFrame {
     JPanel panneau;
@@ -31,7 +26,7 @@ public class FrameEtudiant extends JFrame {
         panneau = new JPanel();
         JLabel nAdmission = new JLabel("Numéro d'admission: "+unEtudiant.getNAdmission());
         nomEtPrenom = new JLabel("Nom et prénom: "+unEtudiant.getName());
-        role = new JLabel("Rôle: "+unEtudiant.getRole().getRole());
+        role = new JLabel("Rôle: "+unEtudiant.getRole().getNomRole());
         pseudo = new JLabel("Pseudo: "+unEtudiant.getPseudo());
         JLabel niveau = new JLabel("Niveau: "+(unEtudiant.getNiveau()+((unEtudiant.getExp() == 1) ? 0.5 : 0)));
         JLabel pv = new JLabel("PV: "+unEtudiant.getPv());
@@ -84,22 +79,20 @@ public class FrameEtudiant extends JFrame {
         super.paintComponents(g);
         
         panneau = new JPanel();
-        GridLayout layout = new GridLayout();
         Graphics2D g2d = (Graphics2D)g;
-        String classe = unEtudiant.getRole().getRole();
         
         Image image = null;
         
         if(ListeDesEtudiants.doesFileExist("image/"+unEtudiant.getNAdmission()+".jpg"))
             image = getToolkit().getImage("image/"+unEtudiant.getNAdmission()+".jpg");
         else
-            image = getToolkit().getImage("image/"+unEtudiant.getRole().getRole()+".jpg");
+            image = getToolkit().getImage("image/"+unEtudiant.getRole().getNomRole()+".jpg");
         
         g2d.drawImage(image, 175, 100, 100, 100, this);
         
     }
     
-    protected class GestAction implements ActionListener{
+    private class GestAction implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e){
             FrameChangement changement = new FrameChangement(unEtudiant, liste, fileName);

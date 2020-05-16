@@ -31,10 +31,10 @@ public class FrameNomRole extends JFrame{
         setSize(403,250);
         setVisible(false);
 
-        classeActuelle = new JLabel("Nom de la classe actuelle:     "+ liste.getEtudiant(indexEtudiant).getRole().getRole());
+        classeActuelle = new JLabel("Nom de la classe actuelle:     "+ liste.getEtudiant(indexEtudiant).getRole().getNomRole());
         nouvelleClasse = new JLabel("Nouveau nom de la classe: ");
         nomClasse = new JTextField(10);
-        nomClasse.setText(""+ liste.getEtudiant(indexEtudiant).getRole().getRole());
+        nomClasse.setText(""+ liste.getEtudiant(indexEtudiant).getRole().getNomRole());
 
         GridBagLayout gbl = new GridBagLayout();
         panneauClique.setLayout(gbl);
@@ -56,7 +56,7 @@ public class FrameNomRole extends JFrame{
                 //classeActuelle.setText(MainFrame.liste.getEtudiant(indexEtudiant).getRole().getRole());
                 int verif = 0;
                 for(int i=0; i<Etudiant.roles.length; i++){
-                    if(Etudiant.roles[i].getRole().equalsIgnoreCase(nomClasse.getText()) ){
+                    if(Etudiant.roles[i].getNomRole().equalsIgnoreCase(nomClasse.getText()) ){
                          JOptionPane.showMessageDialog(null,"La classe "+nomClasse.getText()+" existe deja.\nVeuiller changer la classe de l'eleve au lieu du nom de la classe.");
                          i=Etudiant.roles.length;
                          verif=1;
@@ -65,13 +65,13 @@ public class FrameNomRole extends JFrame{
                 if( verif ==0){
                     classeActuelle.setText(MainFrame.role[indexEtudiant].getText());
                     for(int i=0; i<Etudiant.roles.length; i++){
-                        if(Etudiant.roles[i].getRole().equalsIgnoreCase(liste.getEtudiant(indexEtudiant).getRole().getRole())){
+                        if(Etudiant.roles[i].getNomRole().equalsIgnoreCase(liste.getEtudiant(indexEtudiant).getRole().getNomRole())){
                             //changer role dans tableau role
                             
                         }
                     }
                     for(int k=0; k<MainFrame.role.length; k++){  
-                        Etudiant.roles[liste.getEtudiant(indexEtudiant).getRoleIndex()].setRole(nomClasse.getText());       
+                        Etudiant.roles[liste.getEtudiant(indexEtudiant).getRoleIndex()].setNomRole(nomClasse.getText());       
                         if(MainFrame.role[k].getText().equalsIgnoreCase(classeActuelle.getText()) ){
                              MainFrame.role[k].setText(nomClasse.getText());
                         }    
@@ -83,5 +83,5 @@ public class FrameNomRole extends JFrame{
 
         panneauClique.add(confirmer,constraints);
         add(panneauClique);
-        }     
+    }
 }

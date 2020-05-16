@@ -34,7 +34,7 @@ public class FrameChangement extends JFrame{
         JLabel role = new JLabel("Rôle: ");
         roleChangement = new JComboBox<String>();
         for(int i=0; i<unEtudiant.roles.length; i++){
-            roleChangement.addItem(unEtudiant.roles[i].getRole());
+            roleChangement.addItem(unEtudiant.roles[i].getNomRole());
         }
         roleChangement.setSelectedIndex(unEtudiant.getRoleIndex());
         
@@ -93,10 +93,10 @@ public class FrameChangement extends JFrame{
                 MainFrame.pseudoEtudiant[liste.getIndex(unEtudiant)].setText(unEtudiant.getPseudo());
                 
                 for(int i=0; i<unEtudiant.roles.length; i++){
-                    if(roleChangement.getSelectedItem().equals(unEtudiant.roles[i].getRole())){
+                    if(roleChangement.getSelectedItem().equals(unEtudiant.roles[i].getNomRole())){
                         unEtudiant.setRole(i);
-                        FrameEtudiant.role.setText("Rôle: "+unEtudiant.getRole().getRole());
-                        MainFrame.role[liste.getIndex(unEtudiant)].setText(unEtudiant.getRole().getRole());
+                        FrameEtudiant.role.setText("Rôle: "+unEtudiant.getRole().getNomRole());
+                        MainFrame.role[liste.getIndex(unEtudiant)].setText(unEtudiant.getRole().getNomRole());
                     }
                 }
                 

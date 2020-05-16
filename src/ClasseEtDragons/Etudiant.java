@@ -12,17 +12,25 @@ package ClasseEtDragons;
 public class Etudiant {
     private String nAdmission, nom, pseudo, cheminImage;
     private int exp, niveau, pv, role;
-    
     private boolean pouvoirsUtilisable[] = {true, true, true, true, true, true};
     
-    public static int MAX_HP = 10;
-    static Role[] roles  = {new Role("Guerrier", 8, 1, 2, 3, 4, 5, 6),
-                                   new Role("Guerrisseur", 6, 7, 8, 9, 10, 11, 12),
-                                   new Role("Magicien", 5, 13, 14, 15, 16, 17, 18),
-                                   new Role("Voleur", 5, 19, 20, 21, 22, 23, 24)};
-    
+    /**
+     * Liste des rôles que l'étudiant peut prendre
+     */
+    static Role[] roles  =  {new Role("Guerrier", 8),
+                             new Role("Guerrisseur", 6),
+                             new Role("Magicien", 5),
+                             new Role("Voleur", 5)};
     public final int MAX_EXP = 1;
     
+    /**
+     * Constructeur à 4 paramètres pour Etudiant
+     * 
+     * @param nAdmission Le numéro d'admission de cet Etudiant
+     * @param nom        Le nom de cet Etudiant
+     * @param role       Le role de cet Etudiant
+     * @param pseudo     Le pseudo de cet Etudiant
+     */
     public Etudiant(String nAdmission, String nom, int role, String pseudo){
         setName(nom);
         setNAdmission(nom);
@@ -35,6 +43,19 @@ public class Etudiant {
         setCheminImage(null);
     }
     
+    /**
+     * Constructeur à 4 paramètres pour Etudiant
+     * 
+     * @param nAdmission         Le numéro d'admission de cet Etudiant
+     * @param nom                Le nom et le nom de famille de cet Etudiant
+     * @param role               Le role de cet Etudiant
+     * @param pseudo             Le pseudo de cet Etudiant
+     * @param cheminImage        Chemin de l'image qu'a choisis cet Etudiant
+     * @param exp                L'expérience de cet Etudiant
+     * @param niveau             Le niveau de cet Etudiant
+     * @param pv                 Les points de vie de cet Etudiant
+     * @param pouvoirsUtilisable La liste des pouvoirs utilisable par cet Etudiant
+     */
     public Etudiant(String nAdmission, String nom, int role, String pseudo, String cheminImage, int exp, int niveau, int pv, boolean[] pouvoirsUtilisable){
         setNAdmission(nAdmission);
         setName(nom);
@@ -47,14 +68,7 @@ public class Etudiant {
         setPouvoirs(pouvoirsUtilisable);
     }
     
-    /*public Etudiant(String nom,String role,String pseudo){
-    setName(nom);
-    setRole(role);
-    setPseudo(pseudo);
-    setExp(0);
-    setNiveau(1);
-    }*/
-    
+    //Accesseurs/Setteurs pour Etudiant
     public void setNAdmission(String nAdmission){
         if((nAdmission == null) || nAdmission.isEmpty())
             throw new IllegalArgumentException("Le nom est vide.");
@@ -71,7 +85,7 @@ public class Etudiant {
     
     public void setRole(int role){
         if((role < 0) || role > roles.length)
-            throw new IllegalArgumentException("Le role doit être plus petit que 0 ou plus grand que "+roles.length+".");
+            throw new IllegalArgumentException("Le role doit être entre 0 et "+roles.length+".");
         
         this.role = role;
     }
@@ -84,11 +98,10 @@ public class Etudiant {
     }
     
     public void setCheminImage(String cheminImage){
-        // Ne pas verifiez si c'est vide ou nom, car l'image n'est pas obligatoire (pour l'instant?)
+        // Ne pas verifiez si cheminImage est vide ou nom, car l'image n'est pas obligatoire
         this.cheminImage=cheminImage;
     }
     
-    //Est-ce qu'on fait ca
     public void setExp(int exp){
         if((exp < 0) || (exp > MAX_EXP)){
             throw new IllegalArgumentException("L'exp doit etre soit 0 ou 1.");
@@ -97,17 +110,6 @@ public class Etudiant {
         this.exp=exp;
     }
     
-    //ou ca
-    public void incExp(){
-        exp++;
-        
-        if(exp > MAX_EXP){
-            niveau++;
-            exp = 0;
-        }
-    }
-    
-    //Meme chose, on a jamais besoins de set le niveau si incExp s'en charge
     public void setNiveau(int niveau){
         if(niveau <= -1)
             throw new IllegalArgumentException("Le niveau ne peut pas etre negatif.");
@@ -115,7 +117,6 @@ public class Etudiant {
         this.niveau=niveau;
     }
     
-    //On fait ca
     public void setPv(int pv){
         if(pv < 0)
             throw new IllegalArgumentException("Les pv ne peuvent pas etre negatif.");
@@ -132,15 +133,6 @@ public class Etudiant {
             throw new IllegalArgumentException("Nombre de pouvoirs incorrect.");
         
         this.pouvoirsUtilisable = pouvoirsUtilisable;
-    }
-    
-    //Ou ca
-    //Plus debatable dans ce cas, vu que je ne sais pas si un heal donne tout les pvs
-    public void decPv(boolean isInit){
-        //if(isInit || ((pv-1) == 0))
-        //    pv = Role.PV_ROLE_BASE;
-        //else
-            pv--;
     }
     
     public String getNAdmission(){

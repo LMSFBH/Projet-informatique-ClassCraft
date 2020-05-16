@@ -137,7 +137,7 @@ class MainFrame extends JFrame{
                     
                     Etudiant currEtudiant = liste.getEtudiant(i);
                     JLabel etudiantLabel = new JLabel("Nom et prénom:"+currEtudiant.getName()+", Numéro d'admission: "+currEtudiant.getNAdmission()+
-                                                      ", Rôle: "+currEtudiant.getRole().getRole()+", Pseudo: "+currEtudiant.getPseudo()+", Niveau: "+
+                                                      ", Rôle: "+currEtudiant.getRole().getNomRole()+", Pseudo: "+currEtudiant.getPseudo()+", Niveau: "+
                                                       (currEtudiant.getNiveau()+((currEtudiant.getExp() == 1) ? 0.5 : 0))+", Points de vies: "+
                                                       currEtudiant.getPv());
                     panneau.add(etudiantLabel, constraints);
@@ -190,7 +190,7 @@ class MainFrame extends JFrame{
             constraints.gridy++;
             FrameNomRole rl = new FrameNomRole( liste,  i);
             rl.setVisible(false);          
-            role[i] = new JLabel(liste.getEtudiant(i).getRole().getRole());
+            role[i] = new JLabel(liste.getEtudiant(i).getRole().getNomRole());
             role[i].addMouseListener(new MouseAdapter(){
                 @Override
                 public void mouseClicked(MouseEvent e){
