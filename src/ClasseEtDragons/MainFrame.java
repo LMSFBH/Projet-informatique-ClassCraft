@@ -469,16 +469,13 @@ class MainFrame extends JFrame{
 
             if(cmd.startsWith("pv inc") || cmd.startsWith("pv dec") || cmd.startsWith("exp inc") || cmd.startsWith("exp dec"))
                 indexEtudiant = Integer.parseInt(cmds[2]); //Soit c'est pv/exp inc/dec, donc l'index est apres le 2e espace
+            else if(cmd.startsWith("image"))
+                   indexEtudiant = Integer.parseInt(cmds[1]);
             else{
-                if(cmd.startsWith("image")){
-                   indexEtudiant = Integer.parseInt(cmds[1]); 
-                }
-                else{
-                    indexEtudiant = Integer.parseInt(cmds[1]); //Soit c'est pouvoir, donc l'index est apres le 1e espace
-                    indexPouvoir = Integer.parseInt(cmds[2]);
-                }
+                indexEtudiant = Integer.parseInt(cmds[1]); //Soit c'est pouvoir, donc l'index est apres le 1e espace
+                indexPouvoir = Integer.parseInt(cmds[2]);
             }
-
+            
             Etudiant currEtudiant = liste.getEtudiant(indexEtudiant);
 
             try{
@@ -626,7 +623,7 @@ class MainFrame extends JFrame{
                 listePouvoirs[indEtudiant][indPouvoir].setBackground(couleur5);
                 listePouvoirs[indEtudiant][indPouvoir].setForeground(couleur2);
             }
-                indPouvoir++;        
+                indPouvoir++;
             }            
             if(currEtudiant.getNiveau()>=10){
                 listePouvoirs[indEtudiant][indPouvoir].setBackground(couleur3);
