@@ -11,3 +11,7 @@ authors.txt
 *.xlsx
 !Classeur1.xlsx
 !default.png
+!Guerrier.png
+!Guerrisseur.png
+!Magicien.png
+!Voleur.png

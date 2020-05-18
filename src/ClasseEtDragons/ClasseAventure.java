@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package classcraft;
+package ClasseEtDragons;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -13,7 +13,7 @@ import java.io.IOException;
  *
  * @author 
  */
-public class ClassCraft{
+public class ClasseAventure{
 
     /**
      * @param args the command line arguments

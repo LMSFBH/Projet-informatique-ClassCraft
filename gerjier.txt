@@ -1,0 +1,5 @@
+mettre un meilleur fond
+fond different par frame
+
+Bouton pour ajouter/enlever
+le bug classement
