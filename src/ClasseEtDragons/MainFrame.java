@@ -99,7 +99,6 @@ class MainFrame extends JFrame{
         }
         
         nombreEtudiants = liste.getEtudiantsSize();
-        boutonUtilisable = new boolean[nombreEtudiants][ListeDesEtudiants.NBR_POUVOIRS];
         
         //setSize(500, 500);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -505,8 +504,6 @@ class MainFrame extends JFrame{
 
             if(cmd.startsWith("pv inc") || cmd.startsWith("pv dec") || cmd.startsWith("exp inc") || cmd.startsWith("exp dec"))
                 indexEtudiant = Integer.parseInt(cmds[2]); //Soit c'est pv/exp inc/dec, donc l'index est apres le 2e espace
-            else if(cmd.startsWith("image"))
-                   indexEtudiant = Integer.parseInt(cmds[1]);
             else{
                     indexEtudiant = Integer.parseInt(cmds[1]); //Soit c'est pouvoir, donc l'index est apres le 1e espace
                     indexPouvoir = Integer.parseInt(cmds[2]);
@@ -577,17 +574,15 @@ class MainFrame extends JFrame{
                         
                         break;
                     case "pouvoir":
-                        if(currEtudiant.getPv()== 0){
-                            JOptionPane.showMessageDialog(null,"Pouvoir innacessible! L'eleve est mort");
-                        }else if(listePouvoirs[indexEtudiant][indexPouvoir].getBackground() == couleur3 ) {
-                            boutonUtilisable[indexEtudiant][indexPouvoir] = false;
-                            currEtudiant.setPouvoir(indexPouvoir, false);
-                        }else if(  MainFrame.listePouvoirs[indexEtudiant][indexPouvoir].getBackground() == couleur5 ) {
-                            boutonUtilisable[indexEtudiant][indexPouvoir] = true;
-                            currEtudiant.setPouvoir(indexPouvoir, true);
-                        }else{
-                            JOptionPane.showMessageDialog(null,"Le niveau de l'etudiant est insuffisant pour utiliser le pouvoir");
-                             }  
+                        if(currEtudiant.getPv()== 0)
+                            JOptionPane.showMessageDialog(null,"Pouvoir innacessible! L'élève est mort");
+                        else if(listePouvoirs[indexEtudiant][indexPouvoir].getBackground().equals(couleur3) ) {
+                            if(ouiOuNon("Voulez vous vraiment utiliser le pouvoir?", "Activer Pouvoir"))
+                                currEtudiant.setPouvoir(indexPouvoir, false);
+                        }else if(listePouvoirs[indexEtudiant][indexPouvoir].getBackground().equals(couleur5)) 
+                            JOptionPane.showMessageDialog(null,"Le pouvoir est déja actif");
+                        else
+                            JOptionPane.showMessageDialog(null,"Le niveau de l'etudiant est insuffisant pour utiliser le pouvoir"); 
                         break;
                     default:
                         break;
@@ -605,8 +600,7 @@ class MainFrame extends JFrame{
     }
     
     protected static void setCouleurPouvoirs(int indEtudiant){
-        int indPouvoir;
-        indPouvoir = 0;
+        int indPouvoir = 0;
         Etudiant currEtudiant = liste.getEtudiant(indEtudiant);
         
         if(currEtudiant.getPv()== 0){ // bouton inutilisable couleur
@@ -620,7 +614,7 @@ class MainFrame extends JFrame{
                 listePouvoirs[indEtudiant][j].setForeground(couleur1);
             }   
 
-            if(liste.getEtudiant(indEtudiant).getNiveau()>=5){ //couleur pour un pouvoir actif
+            if(currEtudiant.getNiveau()>=5){ //couleur pour un pouvoir actif
                 listePouvoirs[indEtudiant][indPouvoir].setBackground(couleur3);
                 listePouvoirs[indEtudiant][indPouvoir].setForeground(couleur2);
             if(currEtudiant.getPouvoir(indPouvoir) == false){
@@ -630,7 +624,7 @@ class MainFrame extends JFrame{
             }
                 indPouvoir++;        
             }            
-                if(liste.getEtudiant(indEtudiant).getNiveau()>=10){
+                if(currEtudiant.getNiveau()>=10){
                 listePouvoirs[indEtudiant][indPouvoir].setBackground(couleur3);
                 listePouvoirs[indEtudiant][indPouvoir].setForeground(couleur2);
                 //Moi: j'ai fait des copier coller pour bouton utlisable. j'ai l'impression qu'on peut le faire une fois pour tout mais ... la prochaine fois peu etre
@@ -640,7 +634,7 @@ class MainFrame extends JFrame{
                     listePouvoirs[indEtudiant][indPouvoir].setForeground(couleur2);
                 }
                 indPouvoir++;
-            } if(liste.getEtudiant(indEtudiant).getNiveau()>=15){
+            } if(currEtudiant.getNiveau()>=15){
                 listePouvoirs[indEtudiant][indPouvoir].setBackground(couleur3);
                 listePouvoirs[indEtudiant][indPouvoir].setForeground(couleur2);
                 
@@ -650,7 +644,7 @@ class MainFrame extends JFrame{
                 
                 }
                 indPouvoir++;
-            } if(liste.getEtudiant(indEtudiant).getNiveau()>=20){
+            } if(currEtudiant.getNiveau()>=20){
                 listePouvoirs[indEtudiant][indPouvoir].setBackground(couleur3);
                 listePouvoirs[indEtudiant][indPouvoir].setForeground(couleur2);
                 
@@ -660,7 +654,7 @@ class MainFrame extends JFrame{
                 
                 }
                 indPouvoir++;
-            } if(liste.getEtudiant(indEtudiant).getNiveau()>=25){
+            } if(currEtudiant.getNiveau()>=25){
                 listePouvoirs[indEtudiant][indPouvoir].setBackground(couleur3);
                 listePouvoirs[indEtudiant][indPouvoir].setForeground(couleur2);
                 
@@ -670,7 +664,7 @@ class MainFrame extends JFrame{
                 
                 }
                 indPouvoir++;
-            } if(liste.getEtudiant(indEtudiant).getNiveau()>=30){
+            } if(currEtudiant.getNiveau()>=30){
                 listePouvoirs[indEtudiant][indPouvoir].setBackground(couleur3);
                 listePouvoirs[indEtudiant][indPouvoir].setForeground(couleur2);
                 

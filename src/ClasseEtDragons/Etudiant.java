@@ -17,10 +17,10 @@ public class Etudiant {
     /**
      * Liste des rôles que l'étudiant peut prendre
      */
-    static Role[] roles  =  {new Role("Guerrier", 8),
-                             new Role("Guerrisseur", 6),
-                             new Role("Magicien", 5),
-                             new Role("Voleur", 5)};
+    static Role[] roles = {new Role("Guerrier", 8),
+                           new Role("Guerrisseur", 6),
+                           new Role("Magicien", 5),
+                           new Role("Voleur", 5)};
     public final int MAX_EXP = 1;
     
     /**
