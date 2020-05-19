@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package ClasseAventure;
+package ClasseEtDragons;
 
 
 import javax.swing.*;
@@ -14,20 +14,15 @@ import javax.swing.*;
  * @author erwin
  */
 public class Aide extends JFrame {
-    
-    
-    
-    
     JPanel panneauAide= new JPanel();
-   
-    
     JTextArea aide ;
     JScrollPane bareDefilante;
     String texte;
     
     public Aide(){
-         int x= 500;
-         int y=500;
+        int x = 500;
+        int y = 500;
+        
         setTitle("Aide");
         setSize(x,y);
         texte =" La première colonne correspond au prénom et nom d'un étudiant. En cliquant sur leur nom, vous pouvez voir les informations de cet étudiant et même changer ces informations au besoin.\n" +
@@ -51,32 +46,33 @@ public class Aide extends JFrame {
                 "Cette application a été programmé par des étudiants de SIM au collège Rosemont pour leur projet d'intégration: Nour Asmani, Arthur Frennette, Brecht Erwin Kegoum Tchantchet et Pierre Moyne-bressand\n" +
                 "\n" +
                 "Si vous ne trouvez pas l'information que vous cherchiez ici, veuillez aller chercher dans le document texte \"Utilisation\" si votre information s'y trouve.voici l'aides              asdfasdfasdfsadfsafd";
+        
         aide = new JTextArea(texte);
         aide.setSize(x,y);
         aide.setEditable(false);
+        
         panneauAide.add(aide);
         bareDefilante = new JScrollPane(panneauAide);
         add(bareDefilante);
-        
-        
-        
-        
     }
     
      public Aide(String aPropos){
-         int x= 400;
-         int y=400;
-         setTitle(aPropos);
-         setSize(x,y);
-         texte = "Ceci est une application pour professeur qui lui permet de gérer sa classe d'étudiant à travers un petit jeu vidéo.\n" +
+        int x = 400;
+        int y = 400;
+        setTitle(aPropos);
+        setSize(x,y);
+        
+        texte = "Ceci est une application pour professeur qui lui permet de gérer sa classe d'étudiant à travers un petit jeu vidéo.\n" +
                 "\n" +
                 "Les images des étudiants sont tous répertoriées dans un dossier \"Image\" et les tableaux Excel devront être rangés dans le dossier \"Classe\".\n" +
                 "\n" +
                 "Nous vous avons mis dans le dossier \"Classe\" un exemple de tableau Excel que vous devez suivre pour créer votre propre classe à partir du tableaux Excel pour éviter des erreurs. \n" +
                 "Vous n'aurez plus besoin de toucher ce tableau Excel après cela.";
+        
         aide = new JTextArea(texte);
         aide.setSize(x,y);
         aide.setEditable(false);
+        
         panneauAide.add(aide);
         bareDefilante = new JScrollPane(panneauAide);
         add(bareDefilante);
