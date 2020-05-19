@@ -66,6 +66,11 @@ public class FrameNomRole extends JFrame{
                 
                 if( verif ==0){
                     classeActuelle.setText(MainFrame.role[indexEtudiant].getText());
+                    for(int i=0; i<Etudiant.roles.length; i++){
+                        if(Etudiant.roles[i].getNomRole().equalsIgnoreCase(liste.getEtudiant(indexEtudiant).getRole().getNomRole())){
+                            //changer role dans tableau role
+                        }
+                    }
                     
                     for(int k=0; k<MainFrame.role.length; k++){  
                         Etudiant.roles[liste.getEtudiant(indexEtudiant).getRoleIndex()].setNomRole(nomClasse.getText());       
