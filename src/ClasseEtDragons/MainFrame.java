@@ -51,7 +51,7 @@ class MainFrame extends JFrame{
     Color couleur7 = new Color(100,100,0); // couleur jaune pale
     
     public MainFrame() throws  FileNotFoundException, IOException, Exception{
-        Image icone = Toolkit.getDefaultToolkit().getImage("dragon.jpg");
+        Image icone = Toolkit.getDefaultToolkit().getImage("image/dragon.jpg");
         setIconImage(icone);
         
         JOptionPane.showMessageDialog(null,"Veuillez sélectionner votre classe d'étudiant (ici Classeur1)");

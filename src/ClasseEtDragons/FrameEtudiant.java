@@ -83,10 +83,10 @@ public class FrameEtudiant extends JFrame {
         
         Image image = null;
         
-        if(ListeDesEtudiants.doesFileExist("image/"+unEtudiant.getNAdmission()+".jpg"))
-            image = getToolkit().getImage("image/"+unEtudiant.getNAdmission()+".jpg");
+        if(ListeDesEtudiants.doesFileExist("image/"+unEtudiant.getNAdmission()+".png"))
+            image = getToolkit().getImage("image/"+unEtudiant.getNAdmission()+".png");
         else
-            image = getToolkit().getImage("image/"+unEtudiant.getRole().getNomRole()+".jpg");
+            image = getToolkit().getImage("image/"+unEtudiant.getRole().getNomRole()+".png");
         
         g2d.drawImage(image, 175, 100, 100, 100, this);
         
