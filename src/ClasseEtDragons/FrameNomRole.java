@@ -55,6 +55,7 @@ public class FrameNomRole extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 //classeActuelle.setText(MainFrame.liste.getEtudiant(indexEtudiant).getRole().getRole());
                 int verif = 0;
+                
                 for(int i=0; i<Etudiant.roles.length; i++){
                     if(Etudiant.roles[i].getNomRole().equalsIgnoreCase(nomClasse.getText()) ){
                          JOptionPane.showMessageDialog(null,"La classe "+nomClasse.getText()+" existe deja.\nVeuiller changer la classe de l'eleve au lieu du nom de la classe.");
@@ -62,14 +63,10 @@ public class FrameNomRole extends JFrame{
                          verif=1;
                     } 
                 }
+                
                 if( verif ==0){
                     classeActuelle.setText(MainFrame.role[indexEtudiant].getText());
-                    for(int i=0; i<Etudiant.roles.length; i++){
-                        if(Etudiant.roles[i].getNomRole().equalsIgnoreCase(liste.getEtudiant(indexEtudiant).getRole().getNomRole())){
-                            //changer role dans tableau role
-                            
-                        }
-                    }
+                    
                     for(int k=0; k<MainFrame.role.length; k++){  
                         Etudiant.roles[liste.getEtudiant(indexEtudiant).getRoleIndex()].setNomRole(nomClasse.getText());       
                         if(MainFrame.role[k].getText().equalsIgnoreCase(classeActuelle.getText()) ){
