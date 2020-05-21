@@ -15,7 +15,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  *
  * @author usager
  */
-class MainFrame extends JFrame{ 
+class MainFrame extends JFrame implements Runnable{ 
     public final int NOMBRE_ETUDIANT_CLASSEMENT = 10;
    
      JButton aide = new JButton("Aide");
@@ -492,6 +492,23 @@ class MainFrame extends JFrame{
         String[] options = {"Oui", "Non"};
         return (JOptionPane.showOptionDialog(null, msg, titre, JOptionPane.YES_NO_OPTION,
                 JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 0);
+    }
+
+    @Override
+    public void run(){
+        if(Thread.interrupted() || !isVisible()){
+            try {
+                liste.writeToutEtudiantsEtImages(fichierPrincipale);
+            }catch(FileNotFoundException fnfe){
+                JOptionPane.showMessageDialog(null, fnfe.getMessage());
+            } catch(IOException ioe){
+                JOptionPane.showMessageDialog(null, ioe.getMessage());
+            } catch(Exception e){
+                JOptionPane.showMessageDialog(null, e.getMessage());
+            }
+            
+            dispose();
+        }
     }
     
     private class GestAction implements ActionListener{

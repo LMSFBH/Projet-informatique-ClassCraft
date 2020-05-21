@@ -100,7 +100,7 @@ public class ListeDesEtudiants{
         Cell cellule = null;
         
         for (int i=0;i < etudiants.size();i++){
-            ligne = sheet.createRow(i);
+            ligne = sheet.createRow(i+1);
             Etudiant currEtudiant = etudiants.get(i);
             String img = currEtudiant.getCheminImage();
             
@@ -161,7 +161,7 @@ public class ListeDesEtudiants{
         String img;
         Etudiant unEtudiant;
         DataFormatter formatter = new DataFormatter();
-        for (int i=0;((ligne = sheet.getRow(i)) != null);i++){
+        for (int i=1;((ligne = sheet.getRow(i)) != null);i++){
             try{
                 switch (ligne.getLastCellNum()) {
                     case 4:
