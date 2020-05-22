@@ -5,6 +5,7 @@
  */
 package ClasseEtDragons;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -53,6 +54,7 @@ public class Etudiant {
         
         setCheminImage(null);
         
+        //BufferedReader entree= new BufferedReader(new FileReader("result.txt "));
         
     }
     
