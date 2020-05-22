@@ -13,7 +13,7 @@ import java.io.IOException;
  *
  * @author 
  */
-public class ClasseAventure{
+public class ClasseEtDragons{
 
     /**
      * @param args the command line arguments

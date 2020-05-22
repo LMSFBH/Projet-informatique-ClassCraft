@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -23,16 +24,18 @@ public class FrameChangement extends JFrame{
     JButton confirmer, annuler, imageChangement;
     Etudiant unEtudiant;
     String fileName;
-    JTextArea nomChangement, pseudoChangement;
+    JTextField nomChangement, pseudoChangement;
     JComboBox<String> roleChangement;
     
     public FrameChangement(Etudiant unEtudiant, ListeDesEtudiants liste, String fileName){
         changementInfo = new JPanel();
         setSize(500,500);
         JLabel nom = new JLabel("Nom: ");
-        nomChangement = new JTextArea(unEtudiant.getName());
+        nomChangement = new JTextField(10);
+        nomChangement.setText(unEtudiant.getName());
         JLabel pseudo = new JLabel("Pseudo: ");
-        pseudoChangement = new JTextArea(unEtudiant.getPseudo());
+        pseudoChangement = new JTextField(10);
+        pseudoChangement.setText(unEtudiant.getPseudo());
         JLabel role = new JLabel("Rôle: ");
         roleChangement = new JComboBox<String>();
         for(int i=0; i<unEtudiant.roles.length; i++){
@@ -44,7 +47,19 @@ public class FrameChangement extends JFrame{
         imageChangement.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                JFileChooser choix = new JFileChooser(".");
+                
+                JFileChooser choix = new JFileChooser("Choix d'une image");
+                LookAndFeel lf = UIManager.getLookAndFeel();
+                try {
+                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                    choix = new JFileChooser(new File(System.getProperty("user.home"), "desktop"));
+                    FileNameExtensionFilter filter = new FileNameExtensionFilter("images", ImageIO.getReaderFileSuffixes());
+                    choix.setFileFilter(filter);
+                    UIManager.setLookAndFeel(lf);
+                } catch (Exception exc){
+                    JOptionPane.showMessageDialog(null, "Erreur de look and feel.");
+                }
+                
                 choix.setFileSelectionMode(JFileChooser.FILES_ONLY);
                 choix.setDialogTitle("Sélectionnez l'image de l'étudiant "+unEtudiant.getName());
 

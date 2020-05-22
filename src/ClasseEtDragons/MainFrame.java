@@ -19,40 +19,41 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 class MainFrame extends JFrame{ 
     public final int NOMBRE_ETUDIANT_CLASSEMENT = 10;
-    
+   
     JButton aide = new JButton("Aide");
-    Aide lAide = new Aide();
-    JButton aPropos  = new JButton("?");
-    Aide lAPropos = new Aide("À propos du Programme");
+    Aide lAide;
     
     ListeDesEtudiants liste;
     JPanel panneau = new JPanel();
     int nombreEtudiants, indexEtudiant;
-    JFileChooser choix;
+    static JFileChooser choix;
     FrameEtudiant frameClique;
     
     JProgressBar[] progressBar;
     static JLabel[] pv, nomEtudiants, teteDeMort, role, pseudoEtudiant;
+    
     static String fichierPrincipale;
-    static boolean[][] boutonUtilisable;
     boolean boutonUtilisableSeul;
     JScrollPane miseEnPage;
     JButton[] changerImage;
-    static JButton[][] listePouvoirs;
+    JButton[][] listePouvoirs;
     
-    Image tete =getToolkit().getImage("teteMort.png");
+    Image tete =getToolkit().getImage("image/teteMort.png");
     Image crane=tete.getScaledInstance(20,20,0);
     ImageIcon cerveau = new ImageIcon(crane);
     
-    static Color couleur1 = new Color(255,255,255); // couleur blanche
-    static Color couleur2 = new Color(100,100,100); // couleur grise
-    static Color couleur3 = new Color(0,255,0); // couleur verte
-    static Color couleur4 = new Color(255,0,0); // couleur rouge
-    static Color couleur5 = new Color(255,255,0); // couleur jaune
+    Color couleur1 = new Color(255,255,255); // couleur blanche
+    Color couleur2 = new Color(100,100,100); // couleur grise
+    Color couleur3 = new Color(0,255,0); // couleur verte
+    Color couleur4 = new Color(255,0,0); // couleur rouge
+    Color couleur5 = new Color(255,255,0); // couleur jaune
     Color couleur6 = new Color(0,0,255); // couleur Bleu
     Color couleur7 = new Color(100,100,0); // couleur jaune pale
     
     public MainFrame(String fichierXlsx){
+        lAide = new Aide();
+        lAide.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        
         Image icone = Toolkit.getDefaultToolkit().getImage("image/dragon.jpg");
         setIconImage(icone);
         
@@ -129,7 +130,7 @@ class MainFrame extends JFrame{
         
         //setSize(500, 500);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-        setTitle("ClasseAventure");
+        setTitle("ClasseEtDragons");
         setBackground(couleur6);
         //setUndecorated(true);
         
@@ -180,7 +181,7 @@ class MainFrame extends JFrame{
                     JLabel etudiantDA = new JLabel(" Numéro d'admission: "+currEtudiant.getNAdmission());
                     JLabel etudiantRole = new JLabel("Rôle: "+currEtudiant.getRole().getNomRole());
                     JLabel etudiantPseudo= new JLabel("Pseudo: "+currEtudiant.getPseudo());
-                    JLabel etudiantNiveau = new JLabel("Niveau: "+currEtudiant.getName());
+                    JLabel etudiantNiveau = new JLabel("Niveau: "+currEtudiant.getNiveau());
                     JLabel etudiantPv = new JLabel("Points de vies: "+currEtudiant.getPv());
 
                     panneau.add(etudiantNom, constraints);
@@ -210,6 +211,9 @@ class MainFrame extends JFrame{
         
         constraints.gridy=1;
         JLabel nom = new JLabel("Nom");
+        
+        nom.setToolTipText("Nom des etudiants\nCliquez sur un nom pour changer les informations de l'étudiant");
+        nom.setForeground(couleur6);
         panneau.add(nom, constraints);
 
         nomEtudiants = new JLabel[nombreEtudiants];
@@ -378,7 +382,6 @@ class MainFrame extends JFrame{
         constraints.gridy++;
         
         listePouvoirs = new JButton[nombreEtudiants][ListeDesEtudiants.NBR_POUVOIRS];
-        boutonUtilisable = new boolean[nombreEtudiants][ListeDesEtudiants.NBR_POUVOIRS];
         for (int i=0; i<listePouvoirs.length;i++){ 
             for (int j=0; j<ListeDesEtudiants.NBR_POUVOIRS;j++){ 
                 Etudiant currEtudiant = liste.getEtudiant(i);
@@ -489,7 +492,7 @@ class MainFrame extends JFrame{
         });
         
         constraints.gridy = 0;
-        constraints.gridx += 4;
+        constraints.gridx += 5;
         constraints.weightx = 0.1;
         constraints.weighty = 0.001;
         
@@ -498,19 +501,10 @@ class MainFrame extends JFrame{
         aide.addActionListener(new ActionListener(){
         @Override
         public void actionPerformed(ActionEvent e) {
-           
             lAide.setVisible(true);
         }});
         
         panneau.add(aide,constraints);
-        constraints.gridx++;
-        aPropos.addActionListener(new ActionListener(){
-        @Override
-        public void actionPerformed(ActionEvent e) {          
-            lAPropos.setVisible(true);
-        }});
-        panneau.add(aPropos,constraints);
-        
         miseEnPage = new JScrollPane(panneau);
         add(miseEnPage);
     }
@@ -595,21 +589,20 @@ class MainFrame extends JFrame{
                                 }
                             }
                         }else
-                            JOptionPane.showMessageDialog(null, "L'étudiant est mort ! Il ne peux plus gagner d'expérience");
+                            JOptionPane.showMessageDialog(null, "L'étudiant est mort ! Il ne peut plus gagner d'expérience");
                         
                         progressBar[indexEtudiant].setString("Niv "+(liste.getEtudiant(indexEtudiant).getNiveau()+((liste.getEtudiant(indexEtudiant).getExp() == 1) ? 0.5 : 0))+"                            ");                       
                         
                         break;
                     case "pouvoir":
                         if(currEtudiant.getPv()== 0)
-                            JOptionPane.showMessageDialog(null,"Pouvoir innacessible! L'élève est mort");
+                            JOptionPane.showMessageDialog(null,"Pouvoir inacessible ! L'élève est mort");
                         else if(listePouvoirs[indexEtudiant][indexPouvoir].getBackground().equals(couleur3) ) {
-                            if(ouiOuNon("Voulez vous vraiment utiliser le pouvoir?", "Activer Pouvoir"))
-                                currEtudiant.setPouvoir(indexPouvoir, false);
-                        }else if(listePouvoirs[indexEtudiant][indexPouvoir].getBackground().equals(couleur5)) 
-                            JOptionPane.showMessageDialog(null,"Le pouvoir est déja actif");
-                        else
-                            JOptionPane.showMessageDialog(null,"Le niveau de l'etudiant est insuffisant pour utiliser le pouvoir"); 
+                            currEtudiant.setPouvoir(indexPouvoir, false);
+                        }else if(listePouvoirs[indexEtudiant][indexPouvoir].getBackground().equals(couleur5)) {
+                            currEtudiant.setPouvoir(indexPouvoir, true);
+                        }else
+                            JOptionPane.showMessageDialog(null,"Le niveau de l'étudiant est insuffisant pour utiliser le pouvoir");
                         break;
                     default:
                         break;
@@ -626,9 +619,9 @@ class MainFrame extends JFrame{
         }
     }
     
-    protected void setCouleurPouvoirs(int indEtudiant){
+    void setCouleurPouvoirs(int indEtudiant){
         int indPouvoir = 0;
-        Etudiant currEtudiant = this.liste.getEtudiant(indEtudiant);
+        Etudiant currEtudiant = liste.getEtudiant(indEtudiant);
         
         if(currEtudiant.getPv()== 0){ // bouton inutilisable couleur
             for(int j=0; j<6; j++){

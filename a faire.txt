@@ -1,5 +1,15 @@
+<<<<<<< HEAD
 Bouton pour ajouter/enlever
 le bug de FrameNomRole (le tableau roles[] de Etudiant n'est pas sauvegarder)
 Le fait que le role soit en int dans le fichier excel ne fait pas de sens (car le role est une des 4 colonnes a mettre obligatoirement)
 la variable cheminImage de étudiant peut probablement être supprimer, les images étant dans leurs dossiers
 skip la ligne 1 (et ne pas la reecrire)
+=======
+mettre un meilleur fond
+fond different par frame
+
+lire a partir de la ligne 1
+Bouton pour ajouter/enlever
+le bug classement
+le bug de FrameNomRole (le tableau roles[] de Etudiant n'est pas sauvegarder)
+>>>>>>> pierre

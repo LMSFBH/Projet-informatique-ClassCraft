@@ -5,6 +5,15 @@
  */
 package ClasseEtDragons;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 /**
  *
  * V:1.05
@@ -21,6 +30,8 @@ public class Etudiant {
                            new Role("Guerrisseur", 6),
                            new Role("Magicien", 5),
                            new Role("Voleur", 5)};
+
+    
     public final int MAX_EXP = 1;
     
     /**
@@ -31,7 +42,7 @@ public class Etudiant {
      * @param role       Le role de cet Etudiant
      * @param pseudo     Le pseudo de cet Etudiant
      */
-    public Etudiant(String nAdmission, String nom, int role, String pseudo){
+    public Etudiant(String nAdmission, String nom, int role, String pseudo) throws FileNotFoundException, IOException, Exception{
         setName(nom);
         setNAdmission(nom);
         setRole(role);
@@ -41,6 +52,9 @@ public class Etudiant {
         setPv(getRole().getMaxPv());
         
         setCheminImage(null);
+        
+        //BufferedReader entree= new BufferedReader(new FileReader("result.txt "));
+        
     }
     
     /**
