@@ -7,10 +7,14 @@ package ClasseEtDragons;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -25,11 +29,16 @@ public class FrameNomRole extends JFrame{
     JLabel nouvelleClasse ;
     JTextField nomClasse ;
     File ancienneImage, nouvelleImage;
+    BufferedReader entree;
+    BufferedWriter sortie;
+    String ancienNom;
     
-    public FrameNomRole(ListeDesEtudiants liste, int indexEtudiant){
+    public FrameNomRole(ListeDesEtudiants liste, int indexEtudiant)throws FileNotFoundException {
 
         setTitle("Changer le nom de la classe");    
         setSize(403,250);
+        Image icone = Toolkit.getDefaultToolkit().getImage("image/dragon.jpg");
+        setIconImage(icone);
         setVisible(false);
 
         classeActuelle = new JLabel("Nom de la classe actuelle:     "+ liste.getEtudiant(indexEtudiant).getRole().getNomRole());
@@ -54,9 +63,9 @@ public class FrameNomRole extends JFrame{
         confirmer.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                //classeActuelle.setText(MainFrame.liste.getEtudiant(indexEtudiant).getRole().getRole());
                 int verif = 0;
-                ancienneImage = new File("image/"+liste.getEtudiant(indexEtudiant).getRole().getNomRole()+".png");
+                ancienNom = liste.getEtudiant(indexEtudiant).getRole().getNomRole();
+                ancienneImage = new File("image/"+ancienNom+".png");
                 for(int i=0; i<Etudiant.roles.length; i++){
                     if(Etudiant.roles[i].getNomRole().equalsIgnoreCase(nomClasse.getText()) ){
                          JOptionPane.showMessageDialog(null,"La classe "+nomClasse.getText()+" existe deja.\nVeuiller changer la classe de l'eleve au lieu du nom de la classe.");
@@ -68,7 +77,7 @@ public class FrameNomRole extends JFrame{
                 if( verif ==0){
                     classeActuelle.setText(MainFrame.role[indexEtudiant].getText());
                     for(int i=0; i<Etudiant.roles.length; i++){
-                        if(Etudiant.roles[i].getNomRole().equalsIgnoreCase(liste.getEtudiant(indexEtudiant).getRole().getNomRole())){
+                        if(Etudiant.roles[i].getNomRole().equalsIgnoreCase(ancienNom)){
                             //changer role dans tableau role
                         }
                     }
@@ -84,7 +93,38 @@ public class FrameNomRole extends JFrame{
                     nouvelleImage = new File ("image/"+nomClasse.getText()+".png");
                     ancienneImage.renameTo(nouvelleImage);
                     
+                    try{
+                        entree= new BufferedReader(new FileReader("documents textes/roles.txt"));
+                        sortie = new BufferedWriter(new FileWriter("documents textes/test.txt"));
+                        String ligne, nomRole=null;
+                        int nombreLigne = 0, vie=0, i=0;
+                        while((ligne=entree .readLine() ) != null){
+                            if(ligne.equals(ancienNom)){
+                                sortie.write(nomClasse.getText()); 
+                                sortie.newLine();
+                            }else{
+                                sortie.write(ligne); 
+                                sortie.newLine();
+                            }
+                        }
+                    } catch (FileNotFoundException erreur)    { // Exception déclenchée si le fichier n'existe pas 
+                        JOptionPane.showMessageDialog(null,"Le fichier n'existe pas");
+                    } catch (IOException ex) {
+                        JOptionPane.showMessageDialog(null,"Il y a un problème lors de l'écriture");
+                    }
+
+                    finally {
+                        try {
+                            entree.close();
+                            sortie.close();
+                        } catch (IOException ex) {
+                            JOptionPane.showMessageDialog(null,"Il y a un problème lors de la fermeture du fichier");
+                        }
+                    }
                     
+                    new File("documents textes/roles.txt").delete();
+                    new File("documents textes/test.txt").renameTo(new File("documents textes/roles.txt"));
+
                 }
             }
         });

@@ -1,21 +1,21 @@
-La première colonne correspond au prénom et nom d'un étudiant. En cliquant sur leur nom, vous pouvez voir les informations de cet étudiant et même changer ces informations au besoin.
+La première colonne correspond au prénom et nom d'un étudiant. En cliquant sur leur nom, vous pouvez voir les informations de cet étudiant et même changer ses informations au besoin.
 
 La deuxième colonne correspond au pseudo donné à l'étudiant.
 
-La troisième colonne correspond au rôle donné à l'étudiant. Ce rôle détermine les pouvoirs que l'étudiant aura, ainsi que son maximmum de point de vie.
+La troisième colonne correspond au rôle donné à l'étudiant. Ce rôle détermine les pouvoirs que l'étudiant aura, ainsi que son maximmum de point de vie. En cliquant sur un rôle, vous pouvez modifier le nom de ce rôle.
 
 La quatrième colonne correspond aux points de vie de l'étudiant. Son maximum de point de vie est déterminé par sa classe, son rôle. Il est possible d'augmenter ou diminuer ses points de vie de 1 grâçe aux boutons adjacents.
 
 La cinquième colonne correspond à l'expérience de l'étudiant. Il est possible de donner ou d'enlever un demi-niveau, 0.5 expérience, grâçe aux boutons adjacents. Le niveau de l'étudiant permet de déterminer quel pouvoir est disponible et utilisable.
 
-La sixième colonne correspond aux pouvoirs de l'étudiant. C'est à vous de décider l'action du pouvoir de chaque classe en influancant les points de vie ou expériences des autres étudiants. Il y a 4 couleurs différentes:
--Le noir: l'élève n'a pas le niveau requis pour activer son pouvoir
+La sixième colonne correspond aux pouvoirs de l'étudiant. C'est à vous de décider l'action du pouvoir de chaque classe en influençant les points de vie ou expériences des autres étudiants. Il y a 4 couleurs différentes:
+-Le gris: l'élève n'a pas le niveau requis pour activer son pouvoir
 -Le vert: l'élève a le niveau requis pour activer son pouvoir
--Le jaune: l'élève a déjà activer son pouvoir
--Le rouge: l'élève n'a plus de point de vie et ne peut donc pas utilisé de pouvoirs
+-Le jaune: l'élève a déjà activé son pouvoir
+-Le rouge: l'élève n'a plus de point de vie et ne peut donc pas utiliser de pouvoirs
 
-____________________________________________________________________________________________________________________________________________________________________
+_________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
 
-Cette application a été programmé par des étudiants de SIM au collège Rosemont pour leur projet d'intégration: Nour Asmani, Arthur Frennette, Brecht Erwin Kegoum Tchantchet et Pierre Moyne-bressand
+Cette application a été programmée par des étudiants de SIM au collège Rosemont pour leur projet d'intégration: Nour Asmani, Arthur Frennette, Brecht Erwin Kegoum Tchantchet et Pierre Moyne-bressand
 
 Si vous ne trouvez pas l'information que vous cherchiez ici, veuillez aller chercher dans le document texte "Utilisation" si votre information s'y trouve.

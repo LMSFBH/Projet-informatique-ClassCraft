@@ -123,9 +123,10 @@ class MainFrame extends JFrame{
                 JFrame frameOrdre = new JFrame();
                 JPanel panneau = new JPanel();
                 
+                
                 frameOrdre.setSize(900,500);
                 frameOrdre.setTitle("Ordre chronologique par niveau");
-                
+                frameOrdre.setIconImage(icone);
                 GridBagLayout gbl = new GridBagLayout();
                 panneau.setLayout(gbl);
                 GridBagConstraints constraints = new GridBagConstraints();

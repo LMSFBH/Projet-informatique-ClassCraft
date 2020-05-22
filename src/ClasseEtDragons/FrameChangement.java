@@ -30,6 +30,8 @@ public class FrameChangement extends JFrame{
     public FrameChangement(Etudiant unEtudiant, ListeDesEtudiants liste, String fileName){
         changementInfo = new JPanel();
         setSize(500,500);
+        Image icone = Toolkit.getDefaultToolkit().getImage("image/dragon.jpg");
+        setIconImage(icone);
         JLabel nom = new JLabel("Nom: ");
         nomChangement = new JTextField(10);
         nomChangement.setText(unEtudiant.getName());

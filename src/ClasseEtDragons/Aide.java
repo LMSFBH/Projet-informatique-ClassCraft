@@ -6,6 +6,8 @@
 
 package ClasseEtDragons;
 
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.io.*;
 import javax.swing.*;
 
@@ -23,6 +25,8 @@ public class Aide extends JFrame {
         
         setTitle("Aide");
         setSize(1400,500);
+        Image icone = Toolkit.getDefaultToolkit().getImage("image/dragon.jpg");
+        setIconImage(icone);
         aide.setEditable(false);
         try{
         BufferedReader entree = new BufferedReader(new FileReader("documents textes/aide.txt"));
