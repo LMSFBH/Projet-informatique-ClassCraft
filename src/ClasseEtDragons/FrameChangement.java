@@ -9,6 +9,8 @@ import static ClasseEtDragons.MainFrame.ouiOuNon;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
@@ -101,7 +103,21 @@ public class FrameChangement extends JFrame{
                 }
                 
                 JOptionPane.showMessageDialog(null, "Modification effectuée");
-                dispose();
+                
+                
+                try {
+                    liste.writeToutEtudiantsEtImages(fileName);
+                } catch (IOException ex) {
+                    Logger.getLogger(FrameChangement.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (Exception ex) {
+                    Logger.getLogger(FrameChangement.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+                try{
+                    MainFrame.restart();
+                } catch(Exception exc){
+                    JOptionPane.showMessageDialog(null, "kek");
+                }
             }
         });
         

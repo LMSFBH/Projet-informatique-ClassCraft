@@ -6,8 +6,10 @@
 package ClasseEtDragons;
 
 import java.awt.*;
+import java.util.List;
 import java.awt.event.*;
 import java.io.*;
+import java.lang.management.ManagementFactory;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -15,15 +17,15 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  *
  * @author usager
  */
-class MainFrame extends JFrame implements Runnable{ 
+class MainFrame extends JFrame{ 
     public final int NOMBRE_ETUDIANT_CLASSEMENT = 10;
-   
-     JButton aide = new JButton("Aide");
-     Aide lAide = new Aide();
-     JButton aPropos  = new JButton("?");
-     Aide lAPropos = new Aide("À propos du Programme");
     
-    static ListeDesEtudiants liste;
+    JButton aide = new JButton("Aide");
+    Aide lAide = new Aide();
+    JButton aPropos  = new JButton("?");
+    Aide lAPropos = new Aide("À propos du Programme");
+    
+    ListeDesEtudiants liste;
     JPanel panneau = new JPanel();
     int nombreEtudiants, indexEtudiant;
     JFileChooser choix;
@@ -31,7 +33,7 @@ class MainFrame extends JFrame implements Runnable{
     
     JProgressBar[] progressBar;
     static JLabel[] pv, nomEtudiants, teteDeMort, role, pseudoEtudiant;
-    String fichierPrincipale;
+    static String fichierPrincipale;
     static boolean[][] boutonUtilisable;
     boolean boutonUtilisableSeul;
     JScrollPane miseEnPage;
@@ -50,54 +52,79 @@ class MainFrame extends JFrame implements Runnable{
     Color couleur6 = new Color(0,0,255); // couleur Bleu
     Color couleur7 = new Color(100,100,0); // couleur jaune pale
     
-    public MainFrame() throws  FileNotFoundException, IOException, Exception{
+    public MainFrame(String fichierXlsx){
         Image icone = Toolkit.getDefaultToolkit().getImage("image/dragon.jpg");
         setIconImage(icone);
         
-        JOptionPane.showMessageDialog(null,"Veuillez sélectionner votre classe d'étudiant (ici Classeur1)");
         LookAndFeel lf = UIManager.getLookAndFeel();
-        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Erreur lors du paramétrage du look and feel.");
+        }
         choix = new JFileChooser(new File(System.getProperty("user.home"), "desktop"));
         FileNameExtensionFilter filter = new FileNameExtensionFilter("excel", "xlsx");
-        choix.setFileFilter(filter);
-        choix.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        choix.setDialogTitle("Sélection de votre classe");
         
-        UIManager.setLookAndFeel(lf);
+        if(fichierXlsx == null){
+            JOptionPane.showMessageDialog(null,"Veuillez sélectionner votre classe d'étudiant (ici Classeur1)");
+            
+            choix.setFileFilter(filter);
+            choix.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            choix.setDialogTitle("Sélection de votre classe");
+            
+            int resultat = JFileChooser.CANCEL_OPTION;
 
-        int resultat = JFileChooser.CANCEL_OPTION;
+            while(resultat != JFileChooser.APPROVE_OPTION){
+                resultat = choix.showOpenDialog(this);
 
-        while(resultat != JFileChooser.APPROVE_OPTION){
-            resultat = choix.showOpenDialog(this);
+                switch (resultat) {
+                    case JFileChooser.ERROR_OPTION:
+                        JOptionPane.showMessageDialog(null, "Une erreur est survenue lors du choix de fichier.");
 
-            switch (resultat) {
-                case JFileChooser.ERROR_OPTION:
-                    JOptionPane.showMessageDialog(null, "Une erreur est survenue lors du choix de fichier.");
-
-                    if(!ouiOuNon("Voulez-vous recommencer ?", "FERMETURE"))
+                        if(!ouiOuNon("Voulez-vous recommencer ?", "FERMETURE"))
+                            System.exit(0);
+                        break;
+                    case JFileChooser.CANCEL_OPTION:
                         System.exit(0);
-                    break;
-                case JFileChooser.CANCEL_OPTION:
-                    System.exit(0);
-                default:
-                    try{
-                        liste = new ListeDesEtudiants(choix.getSelectedFile());
-                        fichierPrincipale = choix.getSelectedFile().getCanonicalPath();
-                    } catch(FileNotFoundException fnfe){
-                        JOptionPane.showMessageDialog(null, fnfe.getMessage());
-                        resultat = JFileChooser.CANCEL_OPTION;
-                    } catch(IOException ioe){
-                        JOptionPane.showMessageDialog(null, ioe.getMessage());
-                        resultat = JFileChooser.CANCEL_OPTION;
-                    } catch(Exception e){
-                        JOptionPane.showMessageDialog(null, e.getMessage());
-                        resultat = JFileChooser.CANCEL_OPTION;
-                    }
-                    break;
-            }
+                    default:
+                        try{
+                            liste = new ListeDesEtudiants(choix.getSelectedFile());
+                            fichierPrincipale = choix.getSelectedFile().getCanonicalPath();
+                        } catch(FileNotFoundException fnfe){
+                            JOptionPane.showMessageDialog(null, fnfe.getMessage());
+                            resultat = JFileChooser.CANCEL_OPTION;
+                        } catch(IOException ioe){
+                            JOptionPane.showMessageDialog(null, ioe.getMessage());
+                            resultat = JFileChooser.CANCEL_OPTION;
+                        } catch(Exception e){
+                            JOptionPane.showMessageDialog(null, e.getMessage());
+                            resultat = JFileChooser.CANCEL_OPTION;
+                        }
+                        break;
+                }
 
+            }
         }
+        else{
+            try{
+                liste = new ListeDesEtudiants(fichierXlsx);
+                fichierPrincipale = choix.getSelectedFile().getCanonicalPath();
+            } catch(FileNotFoundException fnfe){
+                JOptionPane.showMessageDialog(null, fnfe.getMessage());
+            } catch(IOException ioe){
+                JOptionPane.showMessageDialog(null, ioe.getMessage());
+            } catch(Exception e){
+                JOptionPane.showMessageDialog(null, e.getMessage());
+            }
+            fichierPrincipale = fichierXlsx;
+        }
+           
         
+        try {
+            UIManager.setLookAndFeel(lf);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Erreur lors du paramétrage du look and feel.");
+        }
         nombreEtudiants = liste.getEtudiantsSize();
         
         //setSize(500, 500);
@@ -184,7 +211,7 @@ class MainFrame extends JFrame implements Runnable{
         constraints.gridy=1;
         JLabel nom = new JLabel("Nom");
         panneau.add(nom, constraints);
-        
+
         nomEtudiants = new JLabel[nombreEtudiants];
         for(int i=0; i<nombreEtudiants; i++){
             Etudiant currEtudiant = liste.getEtudiant(i);
@@ -493,23 +520,6 @@ class MainFrame extends JFrame implements Runnable{
         return (JOptionPane.showOptionDialog(null, msg, titre, JOptionPane.YES_NO_OPTION,
                 JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 0);
     }
-
-    @Override
-    public void run(){
-        if(Thread.interrupted() || !isVisible()){
-            try {
-                liste.writeToutEtudiantsEtImages(fichierPrincipale);
-            }catch(FileNotFoundException fnfe){
-                JOptionPane.showMessageDialog(null, fnfe.getMessage());
-            } catch(IOException ioe){
-                JOptionPane.showMessageDialog(null, ioe.getMessage());
-            } catch(Exception e){
-                JOptionPane.showMessageDialog(null, e.getMessage());
-            }
-            
-            dispose();
-        }
-    }
     
     private class GestAction implements ActionListener{
         @Override
@@ -616,9 +626,9 @@ class MainFrame extends JFrame implements Runnable{
         }
     }
     
-    protected static void setCouleurPouvoirs(int indEtudiant){
+    protected void setCouleurPouvoirs(int indEtudiant){
         int indPouvoir = 0;
-        Etudiant currEtudiant = liste.getEtudiant(indEtudiant);
+        Etudiant currEtudiant = this.liste.getEtudiant(indEtudiant);
         
         if(currEtudiant.getPv()== 0){ // bouton inutilisable couleur
             for(int j=0; j<6; j++){
@@ -690,6 +700,66 @@ class MainFrame extends JFrame implements Runnable{
                     listePouvoirs[indEtudiant][indPouvoir].setForeground(couleur2);
                 }
             }
+        }
+    }
+    
+    //Copiez collez de https://dzone.com/articles/programmatically-restart-java
+    public static void restart() throws IOException {
+        try {
+            // java binary
+            String java = System.getProperty("java.home") + "/bin/java";
+            // vm arguments
+            List<String> vmArguments = (List<String>)ManagementFactory.getRuntimeMXBean().getInputArguments();
+            StringBuffer vmArgsOneLine = new StringBuffer();
+            
+            for (String arg : vmArguments) {
+                // if it's the agent argument : we ignore it otherwise the
+                // address of the old application and the new one will be in conflict
+                if (!arg.contains("-agentlib")) {
+                    vmArgsOneLine.append(arg);
+                    vmArgsOneLine.append(" ");
+                }
+            }
+            // init the command to execute, add the vm args
+            final StringBuffer cmd = new StringBuffer("\"" + java + "\" " + vmArgsOneLine);
+
+            // program main and program arguments
+            String[] mainCommand = System.getProperty("sun.java.command").split(" ");
+            
+            // program main is a jar
+            if (mainCommand[0].endsWith(".jar")) {
+                // if it's a jar, add -jar mainJar
+                cmd.append("-jar " + new File(mainCommand[0]).getPath());
+            } else {
+                // else it's a .class, add the classpath and mainClass
+                cmd.append("-cp \"" + System.getProperty("java.class.path") + "\" " + mainCommand[0]);
+            }
+            
+            // finally add program arguments
+            for (int i = 1; i < mainCommand.length; i++) {
+                cmd.append(" ");
+                cmd.append(mainCommand[i]);
+            }
+            
+            // execute the command in a shutdown hook, to be sure that all the
+            // resources have been disposed before restarting the application
+            Runtime.getRuntime().addShutdownHook(new Thread(){
+            @Override
+            public void run() {
+                try {
+                    Runtime.getRuntime().exec(cmd.toString()+" "+fichierPrincipale);
+                } catch (IOException e) {
+                    JOptionPane.showMessageDialog(null, "Erreur lors du redémarrage, le programme doit s'arrêter.");
+                    System.exit(1);
+                }
+            }
+            });
+
+            // exit
+            System.exit(0);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erreur lors du redémarrage, le programme doit s'arrêter.");
+            System.exit(1);
         }
     }
 }
