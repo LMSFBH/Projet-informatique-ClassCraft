@@ -26,7 +26,7 @@ public class Etudiant {
     /**
      * Liste des rôles que l'étudiant peut prendre
      */
-    static Role[] roles = new Role[3];
+    static Role[] roles = new Role[4];
     
     public final int MAX_EXP = 1;
     
@@ -50,21 +50,21 @@ public class Etudiant {
         setCheminImage(null);
         
         try{
-            entree= new BufferedReader(new FileReader("result.txt "));
+            entree= new BufferedReader(new FileReader("documents textes/roles.txt "));
             String ligne, nomRole=null;
             int nombreLigne = 0, vie=0, i=0;
             while((ligne=entree .readLine() ) != null){
                 if(nombreLigne==0){
                     nomRole=ligne;
+                    nombreLigne++;
+                }else{
+                    if(nombreLigne==1){
+                        vie=Integer.parseInt(ligne);
+                        roles[i]=new Role(nomRole,vie);
+                        i++;
+                        nombreLigne=0;
+                    } 
                 }
-                if(nombreLigne==1){
-                    vie=Integer.parseInt(ligne);
-                }
-                if(nombreLigne==2){
-                    roles[i]=new Role(nomRole,vie);
-                    i++;
-                }
-                nombreLigne++;
             }
         } catch (FileNotFoundException e)    { // Exception déclenchée si le fichier n'existe pas 
             JOptionPane.showMessageDialog(null,"Le fichier n'existe pas");
@@ -100,21 +100,21 @@ public class Etudiant {
         setPouvoirs(pouvoirsUtilisable);
         
         try{
-            entree= new BufferedReader(new FileReader("result.txt "));
+            entree= new BufferedReader(new FileReader("documents textes/roles.txt "));
             String ligne, nomRole=null;
             int nombreLigne = 0, vie=0, i=0;
             while((ligne=entree .readLine()) != null){
                 if(nombreLigne==0){
                     nomRole=ligne;
+                    nombreLigne++;
+                }else{
+                    if(nombreLigne==1){
+                        vie=Integer.parseInt(ligne);
+                        roles[i]=new Role(nomRole,vie);
+                        i++;
+                        nombreLigne=0;
+                    } 
                 }
-                if(nombreLigne==1){
-                    vie=Integer.parseInt(ligne);
-                }
-                if(nombreLigne==2){
-                    roles[i]=new Role(nomRole,vie);
-                    i++;
-                }
-                nombreLigne++;
             }
         } catch (FileNotFoundException e)    { // Exception déclenchée si le fichier n'existe pas 
             JOptionPane.showMessageDialog(null,"Le fichier n'existe pas");

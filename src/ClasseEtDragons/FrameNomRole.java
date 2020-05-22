@@ -24,7 +24,7 @@ public class FrameNomRole extends JFrame{
     JLabel classeActuelle ;
     JLabel nouvelleClasse ;
     JTextField nomClasse ;
-    File f, f2;
+    File ancienneImage, nouvelleImage;
     
     public FrameNomRole(ListeDesEtudiants liste, int indexEtudiant){
 
@@ -56,7 +56,7 @@ public class FrameNomRole extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 //classeActuelle.setText(MainFrame.liste.getEtudiant(indexEtudiant).getRole().getRole());
                 int verif = 0;
-                f = new File("image/"+liste.getEtudiant(indexEtudiant).getRole().getNomRole()+".png");
+                ancienneImage = new File("image/"+liste.getEtudiant(indexEtudiant).getRole().getNomRole()+".png");
                 for(int i=0; i<Etudiant.roles.length; i++){
                     if(Etudiant.roles[i].getNomRole().equalsIgnoreCase(nomClasse.getText()) ){
                          JOptionPane.showMessageDialog(null,"La classe "+nomClasse.getText()+" existe deja.\nVeuiller changer la classe de l'eleve au lieu du nom de la classe.");
@@ -81,8 +81,10 @@ public class FrameNomRole extends JFrame{
                         //JOptionPane.showMessageDialog(null, "nom du label: "+MainFrame.rol[k].getText()+"\n new name:      "+nomClasse.getText());
                     }
                     classeActuelle.setText("Nom de la classe actuelle:     "+ nomClasse.getText());
-                    f2 = new File ("image/"+nomClasse.getText()+".png");
-                    f.renameTo(f2);
+                    nouvelleImage = new File ("image/"+nomClasse.getText()+".png");
+                    ancienneImage.renameTo(nouvelleImage);
+                    
+                    
                 }
             }
         });
