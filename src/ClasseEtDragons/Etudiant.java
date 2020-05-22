@@ -5,10 +5,9 @@
  */
 package ClasseEtDragons;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import javax.swing.*;
+import java.io.*;
+import java.util.*;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -22,16 +21,12 @@ public class Etudiant {
     private String nAdmission, nom, pseudo, cheminImage;
     private int exp, niveau, pv, role;
     private boolean pouvoirsUtilisable[] = {true, true, true, true, true, true};
+    BufferedReader entree;
     
     /**
      * Liste des rôles que l'étudiant peut prendre
      */
-    static Role[] roles = {new Role("Guerrier", 8),
-                           new Role("Guerrisseur", 6),
-                           new Role("Magicien", 5),
-                           new Role("Voleur", 5)};
-    
-   
+    static Role[] roles = new Role[3];
     
     public final int MAX_EXP = 1;
     
@@ -54,8 +49,30 @@ public class Etudiant {
         
         setCheminImage(null);
         
-        //BufferedReader entree= new BufferedReader(new FileReader("result.txt "));
+        try{
+            entree= new BufferedReader(new FileReader("result.txt "));
+            String ligne, nomRole=null;
+            int nombreLigne = 0, vie=0, i=0;
+            while((ligne=entree .readLine() ) != null){
+                if(nombreLigne==0){
+                    nomRole=ligne;
+                }
+                if(nombreLigne==1){
+                    vie=Integer.parseInt(ligne);
+                }
+                if(nombreLigne==2){
+                    roles[i]=new Role(nomRole,vie);
+                    i++;
+                }
+                nombreLigne++;
+            }
+        } catch (FileNotFoundException e)    { // Exception déclenchée si le fichier n'existe pas 
+            JOptionPane.showMessageDialog(null,"Le fichier n'existe pas");
+        }
         
+        finally {
+            entree.close();
+        }
     }
     
     /**
@@ -71,7 +88,7 @@ public class Etudiant {
      * @param pv                 Les points de vie de cet Etudiant
      * @param pouvoirsUtilisable La liste des pouvoirs utilisable par cet Etudiant
      */
-    public Etudiant(String nAdmission, String nom, int role, String pseudo, String cheminImage, int exp, int niveau, int pv, boolean[] pouvoirsUtilisable){
+    public Etudiant(String nAdmission, String nom, int role, String pseudo, String cheminImage, int exp, int niveau, int pv, boolean[] pouvoirsUtilisable) throws FileNotFoundException, IOException, Exception{
         setNAdmission(nAdmission);
         setName(nom);
         setRole(role);
@@ -81,6 +98,32 @@ public class Etudiant {
         setPv(pv);
         setCheminImage(cheminImage);
         setPouvoirs(pouvoirsUtilisable);
+        
+        try{
+            entree= new BufferedReader(new FileReader("result.txt "));
+            String ligne, nomRole=null;
+            int nombreLigne = 0, vie=0, i=0;
+            while((ligne=entree .readLine()) != null){
+                if(nombreLigne==0){
+                    nomRole=ligne;
+                }
+                if(nombreLigne==1){
+                    vie=Integer.parseInt(ligne);
+                }
+                if(nombreLigne==2){
+                    roles[i]=new Role(nomRole,vie);
+                    i++;
+                }
+                nombreLigne++;
+            }
+        } catch (FileNotFoundException e)    { // Exception déclenchée si le fichier n'existe pas 
+            JOptionPane.showMessageDialog(null,"Le fichier n'existe pas");
+        }
+        
+        finally {
+            entree.close();
+        }
+        
     }
     
     //Accesseurs/Setteurs pour Etudiant

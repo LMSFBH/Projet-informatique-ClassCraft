@@ -51,7 +51,7 @@ class MainFrame extends JFrame{
         Image icone = Toolkit.getDefaultToolkit().getImage("image/dragon.jpg");
         setIconImage(icone);
         
-        JOptionPane.showMessageDialog(null,"Veuillez sélectionner votre classe d'étudiant");
+        JOptionPane.showMessageDialog(null,"Veuillez sélectionner votre classe d'étudiant (fichierExcel)");
         LookAndFeel lf = UIManager.getLookAndFeel();
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         choix = new JFileChooser(new File(System.getProperty("user.home"), "desktop"));
@@ -205,7 +205,7 @@ class MainFrame extends JFrame{
         
         constraints.gridx++;
         constraints.gridy=1;
-        JLabel classe = new JLabel("classe");
+        JLabel classe = new JLabel("Classe");
         classe.setToolTipText("Classe des etudiants\nCliquez sur une classe pour changer son nom");
         classe.setForeground(couleur6);
         panneau.add(classe, constraints);
