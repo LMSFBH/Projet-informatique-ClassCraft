@@ -1,6 +1,3 @@
-mettre un meilleur fond
-fond different par frame
-
 Bouton pour ajouter/enlever
 le bug de FrameNomRole (le tableau roles[] de Etudiant n'est pas sauvegarder)
 Le fait que le role soit en int dans le fichier excel ne fait pas de sens (car le role est une des 4 colonnes a mettre obligatoirement)

@@ -107,17 +107,15 @@ public class FrameChangement extends JFrame{
                 
                 try {
                     liste.writeToutEtudiantsEtImages(fileName);
-                } catch (IOException ex) {
-                    Logger.getLogger(FrameChangement.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (Exception ex) {
-                    Logger.getLogger(FrameChangement.class.getName()).log(Level.SEVERE, null, ex);
+                }catch(FileNotFoundException fnfe){
+                    JOptionPane.showMessageDialog(null, fnfe.getMessage());
+                } catch(IOException ioe){
+                    JOptionPane.showMessageDialog(null, ioe.getMessage());
+                } catch(Exception exc){
+                    JOptionPane.showMessageDialog(null, exc.getMessage());
                 }
                 
-                try{
-                    MainFrame.restart();
-                } catch(Exception exc){
-                    JOptionPane.showMessageDialog(null, "kek");
-                }
+                MainFrame.restart();
             }
         });
         

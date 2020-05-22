@@ -99,6 +99,13 @@ public class ListeDesEtudiants{
         Row ligne = null;
         Cell cellule = null;
         
+        ligne = sheet.createRow(0);
+        cellule = ligne.createCell(0);
+        cellule = ligne.createCell(0);
+        cellule = ligne.createCell(0);
+        cellule = ligne.createCell(0);
+        
+        
         for (int i=0;i < etudiants.size();i++){
             ligne = sheet.createRow(i+1);
             Etudiant currEtudiant = etudiants.get(i);

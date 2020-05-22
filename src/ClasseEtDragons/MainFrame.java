@@ -704,7 +704,7 @@ class MainFrame extends JFrame{
     }
     
     //Copiez collez de https://dzone.com/articles/programmatically-restart-java
-    public static void restart() throws IOException {
+    public static void restart() {
         try {
             // java binary
             String java = System.getProperty("java.home") + "/bin/java";
