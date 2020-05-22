@@ -1,0 +1,7 @@
+mettre un meilleur fond
+fond different par frame
+
+lire a partir de la ligne 1
+Bouton pour ajouter/enlever
+le bug classement
+le bug de FrameNomRole (le tableau roles[] de Etudiant n'est pas sauvegarder)

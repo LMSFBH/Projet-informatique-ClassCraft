@@ -1,0 +1,6 @@
+Ceci est une application pour professeur qui lui permet de gérer sa classe d'étudiant à travers un petit jeu vidéo.
+
+Les images des étudiants sont tous répertoriées dans un dossier "image" et les tableaux Excel devront être rangés dans le dossier "classe".
+
+Nous vous avons mis dans le dossier "classe" un exemple de tableau Excel que vous devez suivre pour créer votre propre classe à partir du tableaux Excel pour éviter des erreurs. 
+Vous n'aurez plus besoin de toucher ce tableau Excel après cela, si ce n'est pour enlever ou ajouter un élève.
