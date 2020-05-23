@@ -380,18 +380,20 @@ class MainFrame extends JFrame{
         role = new JLabel[nombreEtudiants];
         for(int i=0; i<role.length; i++){
             constraints.gridy++;
-            FrameNomRole rl = null;
+            FrameNomRole r1 = null;
             
+            try {
+                r1 = new FrameNomRole(liste, i);
+            } catch (FileNotFoundException ex) {
+                JOptionPane.showMessageDialog(null, "Fichier des roles introuvables.");
+            }
+            r1.setVisible(false);     
             
             role[i] = new JLabel(liste.getEtudiant(i).getRole().getNomRole());
             role[i].addMouseListener(new MouseAdapter(){
                 @Override
                 public void mouseClicked(MouseEvent e){
-                    try {
-                        rl = new FrameNomRole(liste, i);
-                    } catch (FileNotFoundException ex) {
-                        JOptionPane.showMessageDialog(null, "Fichier introuvable dans frame.");
-                    }
+                    r1.setVisible(true);
                 }});
             
             panneau.add(role[i],constraints);
