@@ -10,6 +10,8 @@ import java.util.List;
 import java.awt.event.*;
 import java.io.*;
 import java.lang.management.ManagementFactory;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -67,7 +69,7 @@ class MainFrame extends JFrame{
         FileNameExtensionFilter filter = new FileNameExtensionFilter("excel", "xlsx");
         
         if(fichierXlsx == null){
-            JOptionPane.showMessageDialog(null,"Veuillez sélectionner votre classe d'étudiant (ici Classeur1)");
+            JOptionPane.showMessageDialog(null,"Veuillez sélectionner votre classe d'étudiant (fichierExcel)");
             
             choix.setFileFilter(filter);
             choix.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -154,9 +156,10 @@ class MainFrame extends JFrame{
                 JFrame frameOrdre = new JFrame();
                 JPanel panneau = new JPanel();
                 
+                
                 frameOrdre.setSize(900,500);
                 frameOrdre.setTitle("Ordre chronologique par niveau");
-                
+                frameOrdre.setIconImage(icone);
                 GridBagLayout gbl = new GridBagLayout();
                 panneau.setLayout(gbl);
                 GridBagConstraints constraints = new GridBagConstraints();
@@ -253,8 +256,8 @@ class MainFrame extends JFrame{
                 JTextField texteNom = new JTextField(10);
                 JTextField textePseudo = new JTextField(10);
                 JComboBox<String> roleChangement = new JComboBox<>();
-                for(int i=0; i<Etudiant.roles.length; i++)
-                    roleChangement.addItem(Etudiant.roles[i].getNomRole());
+                for(int i=0; i<Etudiant.roles.size(); i++)
+                    roleChangement.addItem(Etudiant.roles.get(i).getNomRole());
 
                 JButton confirmer = new JButton("Ajouter");
                 confirmer.addActionListener(new ActionListener(){
@@ -272,8 +275,8 @@ class MainFrame extends JFrame{
                             JOptionPane.showMessageDialog(null, exc.getMessage());
                         }
 
-                        for(int i=0; i<unEtudiant.roles.length; i++)
-                            if(roleChangement.getSelectedItem().equals(unEtudiant.roles[i].getNomRole()))
+                        for(int i=0; i<unEtudiant.roles.size(); i++)
+                            if(roleChangement.getSelectedItem().equals(Etudiant.roles.get(i).getNomRole()))
                                 unEtudiant.setRole(i);
 
                         JOptionPane.showMessageDialog(null, "Ajout effectuée");
@@ -369,7 +372,7 @@ class MainFrame extends JFrame{
         
         constraints.gridx++;
         constraints.gridy=1;
-        JLabel classe = new JLabel("classe");
+        JLabel classe = new JLabel("Classe");
         classe.setToolTipText("Classe des etudiants\nCliquez sur une classe pour changer son nom");
         classe.setForeground(couleur6);
         panneau.add(classe, constraints);
@@ -377,14 +380,18 @@ class MainFrame extends JFrame{
         role = new JLabel[nombreEtudiants];
         for(int i=0; i<role.length; i++){
             constraints.gridy++;
-            FrameNomRole rl = new FrameNomRole(liste, i);
-            rl.setVisible(false);     
+            FrameNomRole rl = null;
+            
             
             role[i] = new JLabel(liste.getEtudiant(i).getRole().getNomRole());
             role[i].addMouseListener(new MouseAdapter(){
                 @Override
                 public void mouseClicked(MouseEvent e){
-                    rl.setVisible(true);                 
+                    try {
+                        rl = new FrameNomRole(liste, i);
+                    } catch (FileNotFoundException ex) {
+                        JOptionPane.showMessageDialog(null, "Fichier introuvable dans frame.");
+                    }
                 }});
             
             panneau.add(role[i],constraints);
@@ -872,7 +879,7 @@ class MainFrame extends JFrame{
             @Override
             public void run() {
                 try {
-                    Runtime.getRuntime().exec(cmd.toString()+" "+fichierPrincipale);
+                    Runtime.getRuntime().exec(cmd.toString()+" "+"\""+fichierPrincipale+"\"");
                 } catch (IOException e) {
                     JOptionPane.showMessageDialog(null, "Erreur lors du redémarrage, le programme doit s'arrêter.");
                     System.exit(1);

@@ -1,0 +1,8 @@
+Guerrier
+8
+Guerrisseur
+6
+Magicien
+5
+Voleur
+5

@@ -23,6 +23,8 @@ public class FrameEtudiant extends JFrame {
         this.fileName = fileName;
         
         setSize(425,275);
+        Image icone = Toolkit.getDefaultToolkit().getImage("image/dragon.jpg");
+        setIconImage(icone);
         panneau = new JPanel();
         JLabel nAdmission = new JLabel("Numéro d'admission: "+unEtudiant.getNAdmission());
         nomEtPrenom = new JLabel("Nom et prénom: "+unEtudiant.getName());
