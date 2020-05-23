@@ -33,11 +33,9 @@ public class FrameNomRole extends JFrame{
     BufferedWriter sortie;
     String ancienNom;
     
-    public FrameNomRole(ListeDesEtudiants liste, int indexEtudiant)throws FileNotFoundException {
-        //int indexEtudiant = liste.getIndex(currEtudiant);
+    public FrameNomRole(ListeDesEtudiants liste, Etudiant currEtudiant)throws FileNotFoundException {
+        int indexEtudiant = liste.getIndex(currEtudiant);
         
-        setTitle("Changer le nom de la classe");    
-        setSize(403,250);
         Image icone = Toolkit.getDefaultToolkit().getImage("image/dragon.jpg");
         setIconImage(icone);
 
@@ -94,8 +92,11 @@ public class FrameNomRole extends JFrame{
                     ancienneImage.renameTo(nouvelleImage);
                     
                     try{
-                        entree= new BufferedReader(new FileReader("documents textes/roles.txt"));
-                        sortie = new BufferedWriter(new FileWriter("documents textes/test.txt"));
+                        
+                        entree= new BufferedReader(new FileReader("docs/roles.txt"));
+                        
+                        System.out.print("kek");
+                        sortie = new BufferedWriter(new FileWriter("docs/test.txt"));
                         String ligne, nomRole=null;
                         int nombreLigne = 0, vie=0, i=0;
                         while((ligne=entree .readLine() ) != null){
@@ -107,7 +108,7 @@ public class FrameNomRole extends JFrame{
                                 sortie.newLine();
                             }
                         }
-                    } catch (FileNotFoundException erreur)    { // Exception déclenchée si le fichier n'existe pas 
+                    } catch (FileNotFoundException fnfe){
                         JOptionPane.showMessageDialog(null,"Le fichier d'aide n'existe pas");
                     } catch (IOException ex) {
                         JOptionPane.showMessageDialog(null,"Il y a un problème lors de l'écriture du fichier aide");
@@ -117,12 +118,12 @@ public class FrameNomRole extends JFrame{
                             entree.close();
                             sortie.close();
                         } catch (IOException ex) {
-                            JOptionPane.showMessageDialog(null,"Il y a un problème lors de la fermeture du fichier aide");
+                            JOptionPane.showMessageDialog(null,"Erreur d'I/O lors de la fermeture du fichier aide");
                         }
                     }
                     
-                    new File("documents textes/roles.txt").delete();
-                    new File("documents textes/test.txt").renameTo(new File("documents textes/roles.txt"));
+                    new File("docs/roles.txt").delete();
+                    (new File("docs/test.txt")).renameTo(new File("docs/roles.txt"));
 
                 }
             }

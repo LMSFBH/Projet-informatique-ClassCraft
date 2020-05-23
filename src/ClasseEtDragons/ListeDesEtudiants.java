@@ -22,27 +22,54 @@ public class ListeDesEtudiants{
     
     private ArrayList<Etudiant> etudiants = new ArrayList<>();
     
-    //Initialise la liste d'etudiant avec un fichier de chemin fichierAvatar
+    /**
+     * Constructeur à 1 paramètres pour ListeDesEtudiants
+     * 
+     * @param fichierAvatars Chemin canonique du fichier excel contenant la liste des étudiants
+     */
     public ListeDesEtudiants(String fichierAvatars) throws IllegalArgumentException, FileNotFoundException, IOException, Exception{
         setToutEtudiants(fichierAvatars);
     }
     
+    /**
+     * Constructeur à 1 paramètres pour ListeDesEtudiants
+     * 
+     * @param fichierAvatars Fichier excel contenant la liste des étudiants
+     */
     public ListeDesEtudiants(File fichierAvatars) throws IllegalArgumentException, FileNotFoundException, IOException, Exception{
         this(fichierAvatars.getCanonicalPath());
     }
-
+    
+    /**
+     * Obtient l'étudiant situer a index dans la liste.
+     * 
+     * @param index Index de l'étudiant à obtenir
+     */
     public Etudiant getEtudiant(int index){
         return etudiants.get(index);
     }
 
+    /**
+     * Obtient la taille de la liste des étudiants
+     */
     public int getEtudiantsSize(){
         return etudiants.size();
     }
     
+    /**
+     * Obtient l'index d'un étudiant
+     * 
+     * @param unEtudiant Étudiant dont on a besoin de l'index
+     */
     public int getIndex(Etudiant unEtudiant){
         return etudiants.indexOf(unEtudiant);
     }
     
+    /**
+     * Set l'étudiant à un index
+     * 
+     * @param unEtudiant Index de l'étudiant à obtenir
+     */
     public void setEtudiant(int index, Etudiant unEtudiant){
         etudiants.set(index, unEtudiant);
     }
@@ -200,7 +227,6 @@ public class ListeDesEtudiants{
                             throw new Exception("2 etudiants ne peuvent pas etre pareil.");
                         
                         etudiants.add(unEtudiant);
-                        //Pouvoirs
                         break;
                     default:
                         throw new Exception("Format du fichier excel "+fileName+" invalide (nombre de colonnes n'est pas egale a 4 ou "+MAX_CELLS/* ou "+(MAX_CELLS-NBR_POUVOIRS)+"*/);

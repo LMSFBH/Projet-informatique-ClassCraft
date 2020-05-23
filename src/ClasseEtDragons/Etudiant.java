@@ -50,10 +50,10 @@ public class Etudiant {
         setCheminImage(null);
         
         try{
-            entree= new BufferedReader(new FileReader("documents textes/roles.txt "));
+            entree= new BufferedReader(new FileReader("docs/roles.txt "));
             String ligne, nomRole=null;
             int nombreLigne = 0, vie=0, i=0;
-            while((ligne=entree .readLine() ) != null){
+            while((ligne=entree.readLine() ) != null){
                 if(nombreLigne==0){
                     nomRole=ligne;
                     nombreLigne++;
@@ -100,7 +100,7 @@ public class Etudiant {
         setPouvoirs(pouvoirsUtilisable);
         
         try{
-            entree= new BufferedReader(new FileReader("documents textes/roles.txt "));
+            entree= new BufferedReader(new FileReader("docs/roles.txt"));
             String ligne, nomRole=null;
             int nombreLigne = 0, vie=0, i=0;
             while((ligne=entree .readLine()) != null){
@@ -116,8 +116,8 @@ public class Etudiant {
                     } 
                 }
             }
-        } catch (FileNotFoundException e)    { // Exception déclenchée si le fichier n'existe pas 
-            JOptionPane.showMessageDialog(null,"Le fichier n'existe pas");
+        } catch (FileNotFoundException e){
+            JOptionPane.showMessageDialog(null,"Le fichier roles n'existe pas");
         }
         
         finally {

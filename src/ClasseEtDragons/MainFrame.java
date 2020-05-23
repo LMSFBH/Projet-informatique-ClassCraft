@@ -100,6 +100,7 @@ class MainFrame extends JFrame{
                             JOptionPane.showMessageDialog(null, ioe.getMessage());
                             resultat = JFileChooser.CANCEL_OPTION;
                         } catch(Exception e){
+                            System.out.print("kek");
                             JOptionPane.showMessageDialog(null, e.getMessage());
                             resultat = JFileChooser.CANCEL_OPTION;
                         }
@@ -309,7 +310,9 @@ class MainFrame extends JFrame{
                 GridBagConstraints constraints = new GridBagConstraints();
                 constraints.gridx=0;
                 constraints.gridy=0;
-
+                changementInfo.add(nAdmission, constraints);
+                constraints.gridx++;
+                constraints.gridy++;
                 changementInfo.add(nom, constraints);
                 constraints.gridx++;
                 changementInfo.add(texteNom, constraints);
@@ -380,22 +383,24 @@ class MainFrame extends JFrame{
         role = new JLabel[nombreEtudiants];
         for(int i=0; i<role.length; i++){
             constraints.gridy++;
-            FrameNomRole r1 = null;
-            
-            try {
-                r1 = new FrameNomRole(liste, i);
-            } catch (FileNotFoundException ex) {
-                JOptionPane.showMessageDialog(null, "Fichier des roles introuvables.");
-            }
-            r1.setVisible(false);     
-            
+            Etudiant currEtudiant = liste.getEtudiant(i);   
+
             role[i] = new JLabel(liste.getEtudiant(i).getRole().getNomRole());
             role[i].addMouseListener(new MouseAdapter(){
                 @Override
                 public void mouseClicked(MouseEvent e){
-                    r1.setVisible(true);
-                }});
+                    FrameNomRole r1 = null;
             
+                    try {
+                        r1 = new FrameNomRole(liste, currEtudiant);
+                    } catch (FileNotFoundException ex) {
+                        JOptionPane.showMessageDialog(null, "Fichier des roles introuvables.");
+                    }
+                    r1.setVisible(true);  
+                    r1.setTitle("Changer le nom de la classe");    
+                    r1.setSize(403,250);
+                }});
+
             panneau.add(role[i],constraints);
         }
         
@@ -667,8 +672,8 @@ class MainFrame extends JFrame{
             if(cmd.startsWith("pv inc") || cmd.startsWith("pv dec") || cmd.startsWith("exp inc") || cmd.startsWith("exp dec"))
                 indexEtudiant = Integer.parseInt(cmds[2]); //Soit c'est pv/exp inc/dec, donc l'index est apres le 2e espace
             else{
-                    indexEtudiant = Integer.parseInt(cmds[1]); //Soit c'est pouvoir, donc l'index est apres le 1e espace
-                    indexPouvoir = Integer.parseInt(cmds[2]);
+                indexEtudiant = Integer.parseInt(cmds[1]); //Soit c'est pouvoir, donc l'index est apres le 1e espace
+                indexPouvoir = Integer.parseInt(cmds[2]);
             }
 
             Etudiant currEtudiant = liste.getEtudiant(indexEtudiant);
