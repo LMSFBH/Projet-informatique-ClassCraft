@@ -96,15 +96,18 @@ public class ListeDesEtudiants{
         XSSFWorkbook wb = new XSSFWorkbook();
         Sheet sheet = wb.createSheet();
         
-        Row ligne = null;
-        Cell cellule = null;
+        Row ligne;
+        Cell cellule;
         
         ligne = sheet.createRow(0);
         cellule = ligne.createCell(0);
-        cellule = ligne.createCell(0);
-        cellule = ligne.createCell(0);
-        cellule = ligne.createCell(0);
-        
+        cellule.setCellValue("Numéros d'admission");
+        cellule = ligne.createCell(1);
+        cellule.setCellValue("Noms et prénoms");
+        cellule = ligne.createCell(2);
+        cellule.setCellValue("Numéro du rôle");
+        cellule = ligne.createCell(3);
+        cellule.setCellValue("Pseudo de l'élève");
         
         for (int i=0;i < etudiants.size();i++){
             ligne = sheet.createRow(i+1);

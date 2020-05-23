@@ -25,8 +25,8 @@ class MainFrame extends JFrame{
     
     ListeDesEtudiants liste;
     JPanel panneau = new JPanel();
-    int nombreEtudiants, indexEtudiant;
-    static JFileChooser choix;
+    int nombreEtudiants;
+    JFileChooser choix;
     FrameEtudiant frameClique;
     
     JProgressBar[] progressBar;
@@ -35,7 +35,7 @@ class MainFrame extends JFrame{
     static String fichierPrincipale;
     boolean boutonUtilisableSeul;
     JScrollPane miseEnPage;
-    JButton[] changerImage;
+    JButton addEtudiant, rmEtudiant;
     JButton[][] listePouvoirs;
     
     Image tete =getToolkit().getImage("image/teteMort.png");
@@ -167,6 +167,32 @@ class MainFrame extends JFrame{
                 
                 constraints.weightx = 1;
                 constraints.weighty = 1;
+                constraints.gridy = 0;
+                constraints.gridx=0;
+
+                JLabel nom = new JLabel("Nom et prénom");
+                nom.setForeground(couleur6);
+                panneau.add(nom, constraints);
+                constraints.gridx++;
+                JLabel numeroDA = new JLabel(" Numéro d'admission");
+                numeroDA.setForeground(couleur6);
+                panneau.add(numeroDA, constraints);
+                constraints.gridx++;
+                JLabel role = new JLabel("Rôle");
+                role.setForeground(couleur6);
+                panneau.add(role, constraints);
+                constraints.gridx++;
+                JLabel pseudo = new JLabel("Pseudo");
+                pseudo.setForeground(couleur6);
+                panneau.add(pseudo, constraints);
+                constraints.gridx++;
+                JLabel niveau = new JLabel("Niveau");
+                niveau.setForeground(couleur6);
+                panneau.add(niveau, constraints);
+                constraints.gridx++;
+                JLabel pointsVies = new JLabel("Points de vies");
+                pointsVies.setForeground(couleur6);
+                panneau.add(pointsVies, constraints);
                 
                 for(int i=0;i<NOMBRE_ETUDIANT_CLASSEMENT;i++){
                     
@@ -174,15 +200,16 @@ class MainFrame extends JFrame{
                         break;
                     
                     Etudiant currEtudiant = liste.getEtudiant(i);
-
-                    constraints.gridy = i;
+                    constraints.gridy= i+1;
                     constraints.gridx=0;
-                    JLabel etudiantNom = new JLabel("Nom et prénom: "+currEtudiant.getName());
-                    JLabel etudiantDA = new JLabel(" Numéro d'admission: "+currEtudiant.getNAdmission());
-                    JLabel etudiantRole = new JLabel("Rôle: "+currEtudiant.getRole().getNomRole());
-                    JLabel etudiantPseudo= new JLabel("Pseudo: "+currEtudiant.getPseudo());
-                    JLabel etudiantNiveau = new JLabel("Niveau: "+currEtudiant.getNiveau());
-                    JLabel etudiantPv = new JLabel("Points de vies: "+currEtudiant.getPv());
+
+
+                    JLabel etudiantNom = new JLabel(currEtudiant.getName());
+                    JLabel etudiantDA = new JLabel(currEtudiant.getNAdmission());
+                    JLabel etudiantRole = new JLabel(currEtudiant.getRole().getNomRole());
+                    JLabel etudiantPseudo= new JLabel(currEtudiant.getPseudo());
+                    JLabel etudiantNiveau = new JLabel(""+currEtudiant.getNiveau());
+                    JLabel etudiantPv = new JLabel(""+currEtudiant.getPv());
 
                     panneau.add(etudiantNom, constraints);
                     constraints.gridx++;
@@ -195,10 +222,7 @@ class MainFrame extends JFrame{
                     panneau.add(etudiantNiveau, constraints);
                     constraints.gridx++;
                     panneau.add(etudiantPv, constraints);
-                    
                 }
-                
-  
                 
                 frameOrdre.add(panneau);
                 frameOrdre.setVisible(true);
@@ -209,6 +233,114 @@ class MainFrame extends JFrame{
         });
         panneau.add(changement, constraints);
         
+        constraints.gridx=1;
+        addEtudiant = new JButton("Ajout");
+        addEtudiant.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame frameAjout = new JFrame("Ajout");
+                JPanel changementInfo = new JPanel();
+                frameAjout.setSize(500,500);
+                frameAjout.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                frameAjout.setVisible(true);
+                
+                JLabel nAdmission = new JLabel("Numéro DA: ");
+                JLabel nom = new JLabel("Nom: ");
+                JLabel pseudo = new JLabel("Pseudo: ");
+                JLabel role = new JLabel("Rôle: ");
+                
+                JTextField texteNAdmission = new JTextField(10);
+                JTextField texteNom = new JTextField(10);
+                JTextField textePseudo = new JTextField(10);
+                JComboBox<String> roleChangement = new JComboBox<>();
+                for(int i=0; i<Etudiant.roles.length; i++)
+                    roleChangement.addItem(Etudiant.roles[i].getNomRole());
+
+                JButton confirmer = new JButton("Ajouter");
+                confirmer.addActionListener(new ActionListener(){
+                    @Override
+                    public void actionPerformed(ActionEvent e){
+                        Etudiant unEtudiant = null;
+                        
+                        try {
+                            unEtudiant = new Etudiant(texteNAdmission.getText(), texteNom.getText(), 0, textePseudo.getText());
+                        }catch(FileNotFoundException fnfe){
+                            JOptionPane.showMessageDialog(null, fnfe.getMessage());
+                        } catch(IOException ioe){
+                            JOptionPane.showMessageDialog(null, ioe.getMessage());
+                        } catch(Exception exc){
+                            JOptionPane.showMessageDialog(null, exc.getMessage());
+                        }
+
+                        for(int i=0; i<unEtudiant.roles.length; i++)
+                            if(roleChangement.getSelectedItem().equals(unEtudiant.roles[i].getNomRole()))
+                                unEtudiant.setRole(i);
+
+                        JOptionPane.showMessageDialog(null, "Ajout effectuée");
+
+                        try{
+                            liste.writeToutEtudiantsEtImages(fichierPrincipale);
+                        }catch(FileNotFoundException fnfe){
+                            JOptionPane.showMessageDialog(null, fnfe.getMessage());
+                        } catch(IOException ioe){
+                            JOptionPane.showMessageDialog(null, ioe.getMessage());
+                        } catch(Exception exc){
+                            JOptionPane.showMessageDialog(null, exc.getMessage());
+                        }
+
+                        restart();
+                    }
+                });
+
+                JButton annuler = new JButton("Annuler");
+                annuler.addActionListener(new ActionListener(){
+                    @Override
+                    public void actionPerformed(ActionEvent e){
+                        JOptionPane.showMessageDialog(null, "Modification annulée");
+                        dispose();
+                    }
+                });
+
+                GridBagLayout gbl = new GridBagLayout();
+                changementInfo.setLayout(gbl);
+                GridBagConstraints constraints = new GridBagConstraints();
+                constraints.gridx=0;
+                constraints.gridy=0;
+
+                changementInfo.add(nom, constraints);
+                constraints.gridx++;
+                changementInfo.add(texteNom, constraints);
+                constraints.gridx=0;
+                constraints.gridy++;
+                changementInfo.add(pseudo, constraints);
+                constraints.gridx++;
+                changementInfo.add(textePseudo, constraints);
+                constraints.gridx=0;
+                constraints.gridy++;
+                changementInfo.add(role, constraints);
+                constraints.gridx++;
+                changementInfo.add(roleChangement, constraints);
+                constraints.gridwidth=1;
+                constraints.gridy++;
+                changementInfo.add(confirmer, constraints);
+                constraints.gridx++;
+                changementInfo.add(annuler, constraints);
+                frameAjout.add(changementInfo);
+            }
+        });
+        
+        panneau.add(addEtudiant, constraints);
+        
+        constraints.gridx=2;
+        rmEtudiant = new JButton("Suppression");
+        rmEtudiant.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            }
+        });
+        panneau.add(rmEtudiant, constraints);
+        
+        constraints.gridx=0;
         constraints.gridy=1;
         JLabel nom = new JLabel("Nom");
         
