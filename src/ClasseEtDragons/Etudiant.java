@@ -26,7 +26,7 @@ public class Etudiant {
     /**
      * Liste des rôles que l'étudiant peut prendre
      */
-    static ArrayList<Role> roles = new ArrayList<Role>();
+    static Role[] roles = new Role[4];
     
     public final int MAX_EXP = 1;
     
@@ -60,7 +60,7 @@ public class Etudiant {
                 }else{
                     if(nombreLigne==1){
                         vie=Integer.parseInt(ligne);
-                        roles.add(new Role(nomRole,vie));
+                        roles[i] = (new Role(nomRole,vie));
                         i++;
                         nombreLigne=0;
                     } 
@@ -110,7 +110,7 @@ public class Etudiant {
                 }else{
                     if(nombreLigne==1){
                         vie=Integer.parseInt(ligne);
-                        roles.add(new Role(nomRole,vie));
+                        roles[i] = (new Role(nomRole,vie));
                         i++;
                         nombreLigne=0;
                     } 
@@ -142,8 +142,8 @@ public class Etudiant {
     }
     
     public void setRole(int role){
-        if((role < 0) || role > roles.size())
-            throw new IllegalArgumentException("Le role doit être entre 0 et "+roles.size()+".");
+        if((role < 0) || role > roles.length)
+            throw new IllegalArgumentException("Le role doit être entre 0 et "+roles.length+".");
         
         this.role = role;
     }
@@ -226,7 +226,7 @@ public class Etudiant {
     }
     
     public Role getRole(){
-       return roles.get(getRoleIndex()); 
+       return roles[getRoleIndex()]; 
     }
     
     public boolean[] getPouvoirs(){
