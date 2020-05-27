@@ -13,8 +13,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 import java.io.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -33,11 +31,14 @@ public class FrameNomRole extends JFrame{
     BufferedWriter sortie;
     String ancienNom;
     
-    public FrameNomRole(ListeDesEtudiants liste, Etudiant currEtudiant)throws FileNotFoundException {
-        int indexEtudiant = liste.getIndex(currEtudiant);
+    public FrameNomRole(ListeDesEtudiants liste, Etudiant unEtudiant)throws FileNotFoundException {
+        int indexEtudiant = liste.getIndex(unEtudiant);
         
+        setTitle("Changer le nom de la classe");    
+        setSize(403,250);
         Image icone = Toolkit.getDefaultToolkit().getImage("image/dragon.jpg");
         setIconImage(icone);
+        setVisible(false);
 
         classeActuelle = new JLabel("Nom de la classe actuelle:     "+ liste.getEtudiant(indexEtudiant).getRole().getNomRole());
         nouvelleClasse = new JLabel("Nouveau nom de la classe: ");
@@ -64,24 +65,24 @@ public class FrameNomRole extends JFrame{
                 int verif = 0;
                 ancienNom = liste.getEtudiant(indexEtudiant).getRole().getNomRole();
                 ancienneImage = new File("image/"+ancienNom+".png");
-                for(int i=0; i<Etudiant.roles.size(); i++){
-                    if(Etudiant.roles.get(i).getNomRole().equalsIgnoreCase(nomClasse.getText()) ){
-                         JOptionPane.showMessageDialog(null,"La classe "+nomClasse.getText()+" existe deja.\nVeuiller changer la classe de l'eleve pour autre chose.");
+                for(int i=0; i<Etudiant.roles.length; i++){
+                    if(Etudiant.roles[i].getNomRole().equalsIgnoreCase(nomClasse.getText()) ){
+                         JOptionPane.showMessageDialog(null,"La classe "+nomClasse.getText()+" existe deja.\nVeuiller changer la classe de l'eleve au lieu du nom de la classe.");
+                         i=Etudiant.roles.length;
                          verif=1;
-                         break;
                     } 
                 }
                 
                 if( verif ==0){
                     classeActuelle.setText(MainFrame.role[indexEtudiant].getText());
-                    for(int i=0; i<Etudiant.roles.size(); i++){
-                        if(Etudiant.roles.get(i).getNomRole().equalsIgnoreCase(ancienNom)){
+                    for(int i=0; i<Etudiant.roles.length; i++){
+                        if(Etudiant.roles[i].getNomRole().equalsIgnoreCase(ancienNom)){
                             //changer role dans tableau role
                         }
                     }
                     
                     for(int k=0; k<MainFrame.role.length; k++){  
-                        Etudiant.roles.get(liste.getEtudiant(indexEtudiant).getRoleIndex()).setNomRole(nomClasse.getText());       
+                        Etudiant.roles[liste.getEtudiant(indexEtudiant).getRoleIndex()].setNomRole(nomClasse.getText());       
                         if(MainFrame.role[k].getText().equalsIgnoreCase(classeActuelle.getText()) ){
                              MainFrame.role[k].setText(nomClasse.getText());
                         }    
@@ -92,10 +93,7 @@ public class FrameNomRole extends JFrame{
                     ancienneImage.renameTo(nouvelleImage);
                     
                     try{
-                        
                         entree= new BufferedReader(new FileReader("docs/roles.txt"));
-                        
-                        System.out.print("kek");
                         sortie = new BufferedWriter(new FileWriter("docs/test.txt"));
                         String ligne, nomRole=null;
                         int nombreLigne = 0, vie=0, i=0;
@@ -108,22 +106,23 @@ public class FrameNomRole extends JFrame{
                                 sortie.newLine();
                             }
                         }
-                    } catch (FileNotFoundException fnfe){
-                        JOptionPane.showMessageDialog(null,"Le fichier d'aide n'existe pas");
+                    } catch (FileNotFoundException erreur)    { // Exception déclenchée si le fichier n'existe pas 
+                        JOptionPane.showMessageDialog(null,"Le fichier n'existe pas");
                     } catch (IOException ex) {
-                        JOptionPane.showMessageDialog(null,"Il y a un problème lors de l'écriture du fichier aide");
+                        JOptionPane.showMessageDialog(null,"Il y a un problème lors de l'écriture");
                     }
+
                     finally {
                         try {
                             entree.close();
                             sortie.close();
                         } catch (IOException ex) {
-                            JOptionPane.showMessageDialog(null,"Erreur d'I/O lors de la fermeture du fichier aide");
+                            JOptionPane.showMessageDialog(null,"Il y a un problème lors de la fermeture du fichier");
                         }
                     }
                     
                     new File("docs/roles.txt").delete();
-                    (new File("docs/test.txt")).renameTo(new File("docs/roles.txt"));
+                    new File("docs/test.txt").renameTo(new File("docs/roles.txt"));
 
                 }
             }

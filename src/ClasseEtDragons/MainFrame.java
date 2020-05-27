@@ -100,7 +100,6 @@ class MainFrame extends JFrame{
                             JOptionPane.showMessageDialog(null, ioe.getMessage());
                             resultat = JFileChooser.CANCEL_OPTION;
                         } catch(Exception e){
-                            System.out.print("kek");
                             JOptionPane.showMessageDialog(null, e.getMessage());
                             resultat = JFileChooser.CANCEL_OPTION;
                         }
@@ -112,13 +111,15 @@ class MainFrame extends JFrame{
         else{
             try{
                 liste = new ListeDesEtudiants(fichierXlsx);
-                fichierPrincipale = choix.getSelectedFile().getCanonicalPath();
             } catch(FileNotFoundException fnfe){
                 JOptionPane.showMessageDialog(null, fnfe.getMessage());
+                dispose();
             } catch(IOException ioe){
                 JOptionPane.showMessageDialog(null, ioe.getMessage());
+                dispose();
             } catch(Exception e){
                 JOptionPane.showMessageDialog(null, e.getMessage());
+                dispose();
             }
             fichierPrincipale = fichierXlsx;
         }
@@ -257,8 +258,8 @@ class MainFrame extends JFrame{
                 JTextField texteNom = new JTextField(10);
                 JTextField textePseudo = new JTextField(10);
                 JComboBox<String> roleChangement = new JComboBox<>();
-                for(int i=0; i<Etudiant.roles.size(); i++)
-                    roleChangement.addItem(Etudiant.roles.get(i).getNomRole());
+                for(int i=0; i<Etudiant.roles.length; i++)
+                    roleChangement.addItem(Etudiant.roles[i].getNomRole());
 
                 JButton confirmer = new JButton("Ajouter");
                 confirmer.addActionListener(new ActionListener(){
@@ -276,10 +277,16 @@ class MainFrame extends JFrame{
                             JOptionPane.showMessageDialog(null, exc.getMessage());
                         }
 
-                        for(int i=0; i<unEtudiant.roles.size(); i++)
-                            if(roleChangement.getSelectedItem().equals(Etudiant.roles.get(i).getNomRole()))
+                        for(int i=0; i<unEtudiant.roles.length; i++)
+                            if(roleChangement.getSelectedItem().equals(Etudiant.roles[i].getNomRole()))
                                 unEtudiant.setRole(i);
-
+                        
+                        try {
+                            liste.addEtudiant(unEtudiant);
+                        } catch (Exception ex) {
+                            JOptionPane.showMessageDialog(null, ex.getMessage());
+                        }
+                        
                         JOptionPane.showMessageDialog(null, "Ajout effectuée");
 
                         try{
@@ -301,7 +308,7 @@ class MainFrame extends JFrame{
                     @Override
                     public void actionPerformed(ActionEvent e){
                         JOptionPane.showMessageDialog(null, "Modification annulée");
-                        dispose();
+                        frameAjout.dispose();
                     }
                 });
 
@@ -312,7 +319,9 @@ class MainFrame extends JFrame{
                 constraints.gridy=0;
                 changementInfo.add(nAdmission, constraints);
                 constraints.gridx++;
+                changementInfo.add(texteNAdmission, constraints);
                 constraints.gridy++;
+                constraints.gridx=0;
                 changementInfo.add(nom, constraints);
                 constraints.gridx++;
                 changementInfo.add(texteNom, constraints);
@@ -327,6 +336,7 @@ class MainFrame extends JFrame{
                 constraints.gridx++;
                 changementInfo.add(roleChangement, constraints);
                 constraints.gridwidth=1;
+                constraints.gridx=0;
                 constraints.gridy++;
                 changementInfo.add(confirmer, constraints);
                 constraints.gridx++;
@@ -342,6 +352,76 @@ class MainFrame extends JFrame{
         rmEtudiant.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
+                JFrame frameRm = new JFrame("Supression");
+                JPanel changementInfo = new JPanel();
+                frameRm.setSize(500,500);
+                frameRm.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                frameRm.setVisible(true);
+                
+                JLabel nAdmission = new JLabel("Numéro DA: ");
+                JLabel nom = new JLabel("Nom: ");
+                
+                JTextField texteNAdmission = new JTextField(10);
+                JTextField texteNom = new JTextField(10);
+                
+                JButton confirmer = new JButton("Supprimer");
+                confirmer.addActionListener(new ActionListener(){
+                    @Override
+                    public void actionPerformed(ActionEvent e){
+                        Etudiant unEtudiant = new Etudiant(texteNAdmission.getText(), texteNom.getText());
+                        
+                        try {
+                            liste.rmEtudiant(unEtudiant);
+                        } catch (Exception ex) {
+                            JOptionPane.showMessageDialog(null, ex.getMessage());
+                        }
+                        
+                        JOptionPane.showMessageDialog(null, "Suppression effectuée");
+
+                        try{
+                            liste.writeToutEtudiantsEtImages(fichierPrincipale);
+                        }catch(FileNotFoundException fnfe){
+                            JOptionPane.showMessageDialog(null, fnfe.getMessage());
+                        } catch(IOException ioe){
+                            JOptionPane.showMessageDialog(null, ioe.getMessage());
+                        } catch(Exception exc){
+                            JOptionPane.showMessageDialog(null, exc.getMessage());
+                        }
+
+                        restart();
+                    }
+                });
+                
+                JButton annuler = new JButton("Annuler");
+                annuler.addActionListener(new ActionListener(){
+                    @Override
+                    public void actionPerformed(ActionEvent e){
+                        JOptionPane.showMessageDialog(null, "Modification annulée");
+                        frameRm.dispose();
+                    }
+                });
+                
+                GridBagLayout gbl = new GridBagLayout();
+                changementInfo.setLayout(gbl);
+                GridBagConstraints constraints = new GridBagConstraints();
+                
+                constraints.gridx=0;
+                constraints.gridy=0;
+                changementInfo.add(nAdmission, constraints);
+                constraints.gridx++;
+                changementInfo.add(texteNAdmission, constraints);
+                constraints.gridy++;
+                constraints.gridx=0;
+                changementInfo.add(nom, constraints);
+                constraints.gridx++;
+                changementInfo.add(texteNom, constraints);
+                constraints.gridwidth=1;
+                constraints.gridx=0;
+                constraints.gridy++;
+                changementInfo.add(confirmer, constraints);
+                constraints.gridx++;
+                changementInfo.add(annuler, constraints);
+                frameRm.add(changementInfo);
             }
         });
         panneau.add(rmEtudiant, constraints);
@@ -394,7 +474,7 @@ class MainFrame extends JFrame{
                     try {
                         r1 = new FrameNomRole(liste, currEtudiant);
                     } catch (FileNotFoundException ex) {
-                        JOptionPane.showMessageDialog(null, "Fichier des roles introuvables.");
+                        JOptionPane.showMessageDialog(null, "Le fichier role n'existe pas.");
                     }
                     r1.setVisible(true);  
                     r1.setTitle("Changer le nom de la classe");    

@@ -38,8 +38,8 @@ public class FrameChangement extends JFrame{
         pseudoChangement.setText(unEtudiant.getPseudo());
         JLabel role = new JLabel("Rôle: ");
         roleChangement = new JComboBox<String>();
-        for(int i=0; i<unEtudiant.roles.size(); i++){
-            roleChangement.addItem(unEtudiant.roles.get(i).getNomRole());
+        for(int i=0; i<unEtudiant.roles.length; i++){
+            roleChangement.addItem(unEtudiant.roles[i].getNomRole());
         }
         roleChangement.setSelectedIndex(unEtudiant.getRoleIndex());
         
@@ -57,9 +57,9 @@ public class FrameChangement extends JFrame{
                     choix.setFileFilter(filter);
                     UIManager.setLookAndFeel(lf);
                 } catch (Exception exc){
-                    JOptionPane.showMessageDialog(null, "Erreur de look and feel.");
+                    JOptionPane.showMessageDialog(null, "Erreur lors du paramétrage du look and feel.");
                 }
-                
+
                 choix.setFileSelectionMode(JFileChooser.FILES_ONLY);
                 choix.setDialogTitle("Sélectionnez l'image de l'étudiant "+unEtudiant.getName());
 
@@ -109,8 +109,8 @@ public class FrameChangement extends JFrame{
                 FrameEtudiant.pseudo.setText("Pseudo: "+unEtudiant.getPseudo());
                 MainFrame.pseudoEtudiant[liste.getIndex(unEtudiant)].setText(unEtudiant.getPseudo());
                 
-                for(int i=0; i<unEtudiant.roles.size(); i++){
-                    if(roleChangement.getSelectedItem().equals(unEtudiant.roles.get(i).getNomRole())){
+                for(int i=0; i<unEtudiant.roles.length; i++){
+                    if(roleChangement.getSelectedItem().equals(unEtudiant.roles[i].getNomRole())){
                         unEtudiant.setRole(i);
                         FrameEtudiant.role.setText("Rôle: "+unEtudiant.getRole().getNomRole());
                         MainFrame.role[liste.getIndex(unEtudiant)].setText(unEtudiant.getRole().getNomRole());
@@ -118,19 +118,7 @@ public class FrameChangement extends JFrame{
                 }
                 
                 JOptionPane.showMessageDialog(null, "Modification effectuée");
-                
-                
-                try {
-                    liste.writeToutEtudiantsEtImages(fileName);
-                }catch(FileNotFoundException fnfe){
-                    JOptionPane.showMessageDialog(null, fnfe.getMessage());
-                } catch(IOException ioe){
-                    JOptionPane.showMessageDialog(null, ioe.getMessage());
-                } catch(Exception exc){
-                    JOptionPane.showMessageDialog(null, exc.getMessage());
-                }
-                
-                MainFrame.restart();
+                dispose();
             }
         });
         

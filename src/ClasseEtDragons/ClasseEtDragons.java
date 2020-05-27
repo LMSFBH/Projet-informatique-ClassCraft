@@ -4,11 +4,6 @@
  * and open the template in the editor.
  */
 package ClasseEtDragons;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 /**
  *
  * @author 
@@ -25,7 +20,7 @@ public class ClasseEtDragons{
         else
             frame = new MainFrame(args[0]);
         
-        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        frame.setDefaultCloseOperation(MainFrame.DO_NOTHING_ON_CLOSE);
         frame.setVisible(true);
     }
 }

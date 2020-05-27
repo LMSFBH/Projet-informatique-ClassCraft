@@ -84,10 +84,14 @@ public class ListeDesEtudiants{
     
     //Supprime un etudiant et reorganise la liste
     public void rmEtudiant(Etudiant unEtudiant) throws Exception{
-        if(!etudiants.remove(unEtudiant))
-            throw new Exception("L'etudiant "+unEtudiant.getName()+" de numero de DA "+unEtudiant.getNAdmission()+" n'a pas pu etre supprimer.");
+        for(int i=0;i<etudiants.size();i++)
+            if(etudiants.get(i).getName().equals(unEtudiant.getName()) && etudiants.get(i).getNAdmission().equals(unEtudiant.getNAdmission())){
+                etudiants.remove(i);
+                organisezAlphabet();
+                return;
+            }
         
-        organisezAlphabet();
+        throw new Exception("L'etudiant "+unEtudiant.getName()+" de numero de DA "+unEtudiant.getNAdmission()+" n'a pas pu etre supprimer.");
     }
     
     //Organise la liste
@@ -198,7 +202,11 @@ public class ListeDesEtudiants{
         String img;
         Etudiant unEtudiant;
         DataFormatter formatter = new DataFormatter();
-        for (int i=1;((ligne = sheet.getRow(i)) != null);i++){
+        for (int i=1;i <= sheet.getLastRowNum();i++){
+            
+            if((ligne = sheet.getRow(i)) == null)
+                continue;
+            
             try{
                 switch (ligne.getLastCellNum()) {
                     case 4:
