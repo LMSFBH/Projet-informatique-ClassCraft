@@ -10,8 +10,6 @@ import java.util.List;
 import java.awt.event.*;
 import java.io.*;
 import java.lang.management.ManagementFactory;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -369,11 +367,17 @@ class MainFrame extends JFrame{
                     @Override
                     public void actionPerformed(ActionEvent e){
                         Etudiant unEtudiant = new Etudiant(texteNAdmission.getText(), texteNom.getText());
+                        Etudiant currEtudiant;
                         
-                        try {
-                            liste.rmEtudiant(unEtudiant);
-                        } catch (Exception ex) {
-                            JOptionPane.showMessageDialog(null, ex.getMessage());
+                        for(int i=0;i<liste.getEtudiantsSize();i++){
+                            currEtudiant = liste.getEtudiant(i);
+                            if(currEtudiant.getName().equals(texteNom.getText()) && currEtudiant.getNAdmission().equals(texteNAdmission.getText())){
+                                try {
+                                    liste.rmEtudiant(currEtudiant);
+                                } catch (Exception ex) {
+                                    JOptionPane.showMessageDialog(null, ex.getMessage());
+                                }
+                            }
                         }
                         
                         JOptionPane.showMessageDialog(null, "Suppression effectuée");
