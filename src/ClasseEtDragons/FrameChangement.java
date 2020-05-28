@@ -9,8 +9,6 @@ import static ClasseEtDragons.MainFrame.ouiOuNon;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -58,17 +56,10 @@ public class FrameChangement extends JFrame{
                     FileNameExtensionFilter filter = new FileNameExtensionFilter("images", ImageIO.getReaderFileSuffixes());
                     choix.setFileFilter(filter);
                     UIManager.setLookAndFeel(lf);
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(FrameChangement.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (InstantiationException ex) {
-                    Logger.getLogger(FrameChangement.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IllegalAccessException ex) {
-                    Logger.getLogger(FrameChangement.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (UnsupportedLookAndFeelException ex) {
-                    Logger.getLogger(FrameChangement.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (Exception exc){
+                    JOptionPane.showMessageDialog(null, "Erreur lors du paramétrage du look and feel.");
                 }
 
-                
                 choix.setFileSelectionMode(JFileChooser.FILES_ONLY);
                 choix.setDialogTitle("Sélectionnez l'image de l'étudiant "+unEtudiant.getName());
 

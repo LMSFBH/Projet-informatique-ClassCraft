@@ -31,6 +31,17 @@ public class Etudiant {
     public final int MAX_EXP = 1;
     
     /**
+     * Constructeur à 2 paramètres pour Etudiant
+     * 
+     * @param nAdmission Le numéro d'admission de cet Etudiant
+     * @param nom        Le nom de cet Etudiant
+     */
+    public Etudiant(String nAdmission, String nom){
+        setName(nom);
+        setNAdmission(nom);
+    }
+    
+    /**
      * Constructeur à 4 paramètres pour Etudiant
      * 
      * @param nAdmission Le numéro d'admission de cet Etudiant
@@ -40,7 +51,7 @@ public class Etudiant {
      */
     public Etudiant(String nAdmission, String nom, int role, String pseudo) throws FileNotFoundException, IOException, Exception{
         setName(nom);
-        setNAdmission(nom);
+        setNAdmission(nAdmission);
         setRole(role);
         setPseudo(pseudo);
         setExp(0);
@@ -50,20 +61,18 @@ public class Etudiant {
         setCheminImage(null);
         
         try{
-            entree= new BufferedReader(new FileReader("documents textes/roles.txt "));
+            entree = new BufferedReader(new FileReader("docs/roles.txt "));
             String ligne, nomRole=null;
             int nombreLigne = 0, vie=0, i=0;
             while((ligne=entree .readLine() ) != null){
                 if(nombreLigne==0){
                     nomRole=ligne;
                     nombreLigne++;
-                }else{
-                    if(nombreLigne==1){
-                        vie=Integer.parseInt(ligne);
-                        roles[i] = (new Role(nomRole,vie));
-                        i++;
-                        nombreLigne=0;
-                    } 
+                }else if(nombreLigne==1){
+                    vie=Integer.parseInt(ligne);
+                    roles[i] = (new Role(nomRole,vie));
+                    i++;
+                    nombreLigne=0;
                 }
             }
         } catch (FileNotFoundException e)    { // Exception déclenchée si le fichier n'existe pas 
@@ -100,20 +109,18 @@ public class Etudiant {
         setPouvoirs(pouvoirsUtilisable);
         
         try{
-            entree= new BufferedReader(new FileReader("documents textes/roles.txt "));
+            entree= new BufferedReader(new FileReader("docs/roles.txt "));
             String ligne, nomRole=null;
             int nombreLigne = 0, vie=0, i=0;
             while((ligne=entree .readLine()) != null){
                 if(nombreLigne==0){
                     nomRole=ligne;
                     nombreLigne++;
-                }else{
-                    if(nombreLigne==1){
-                        vie=Integer.parseInt(ligne);
-                        roles[i] = (new Role(nomRole,vie));
-                        i++;
-                        nombreLigne=0;
-                    } 
+                }else if(nombreLigne==1){
+                    vie=Integer.parseInt(ligne);
+                    roles[i] = (new Role(nomRole,vie));
+                    i++;
+                    nombreLigne=0;
                 }
             }
         } catch (FileNotFoundException e)    { // Exception déclenchée si le fichier n'existe pas 

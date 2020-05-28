@@ -13,8 +13,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 import java.io.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -33,8 +31,9 @@ public class FrameNomRole extends JFrame{
     BufferedWriter sortie;
     String ancienNom;
     
-    public FrameNomRole(ListeDesEtudiants liste, int indexEtudiant)throws FileNotFoundException {
-
+    public FrameNomRole(ListeDesEtudiants liste, Etudiant unEtudiant)throws FileNotFoundException {
+        int indexEtudiant = liste.getIndex(unEtudiant);
+        
         setTitle("Changer le nom de la classe");    
         setSize(403,250);
         Image icone = Toolkit.getDefaultToolkit().getImage("image/dragon.jpg");
@@ -94,8 +93,8 @@ public class FrameNomRole extends JFrame{
                     ancienneImage.renameTo(nouvelleImage);
                     
                     try{
-                        entree= new BufferedReader(new FileReader("documents textes/roles.txt"));
-                        sortie = new BufferedWriter(new FileWriter("documents textes/test.txt"));
+                        entree= new BufferedReader(new FileReader("docs/roles.txt"));
+                        sortie = new BufferedWriter(new FileWriter("docs/test.txt"));
                         String ligne, nomRole=null;
                         int nombreLigne = 0, vie=0, i=0;
                         while((ligne=entree .readLine() ) != null){
@@ -122,8 +121,8 @@ public class FrameNomRole extends JFrame{
                         }
                     }
                     
-                    new File("documents textes/roles.txt").delete();
-                    new File("documents textes/test.txt").renameTo(new File("documents textes/roles.txt"));
+                    new File("docs/roles.txt").delete();
+                    new File("docs/test.txt").renameTo(new File("docs/roles.txt"));
 
                 }
             }

@@ -91,7 +91,6 @@ public class FrameEtudiant extends JFrame {
             image = getToolkit().getImage("image/"+unEtudiant.getRole().getNomRole()+".png");
         
         g2d.drawImage(image, 175, 100, 100, 100, this);
-        
     }
     
     private class GestAction implements ActionListener{

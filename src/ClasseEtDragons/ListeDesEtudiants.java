@@ -22,27 +22,54 @@ public class ListeDesEtudiants{
     
     private ArrayList<Etudiant> etudiants = new ArrayList<>();
     
-    //Initialise la liste d'etudiant avec un fichier de chemin fichierAvatar
+    /**
+     * Constructeur à 1 paramètres pour ListeDesEtudiants
+     * 
+     * @param fichierAvatars Chemin canonique du fichier excel contenant la liste des étudiants
+     */
     public ListeDesEtudiants(String fichierAvatars) throws IllegalArgumentException, FileNotFoundException, IOException, Exception{
         setToutEtudiants(fichierAvatars);
     }
     
+    /**
+     * Constructeur à 1 paramètres pour ListeDesEtudiants
+     * 
+     * @param fichierAvatars Fichier excel contenant la liste des étudiants
+     */
     public ListeDesEtudiants(File fichierAvatars) throws IllegalArgumentException, FileNotFoundException, IOException, Exception{
         this(fichierAvatars.getCanonicalPath());
     }
-
+    
+    /**
+     * Obtient l'étudiant situer a index dans la liste.
+     * 
+     * @param index Index de l'étudiant à obtenir
+     */
     public Etudiant getEtudiant(int index){
         return etudiants.get(index);
     }
 
+    /**
+     * Obtient la taille de la liste des étudiants
+     */
     public int getEtudiantsSize(){
         return etudiants.size();
     }
     
+    /**
+     * Obtient l'index d'un étudiant
+     * 
+     * @param unEtudiant Étudiant dont on a besoin de l'index
+     */
     public int getIndex(Etudiant unEtudiant){
         return etudiants.indexOf(unEtudiant);
     }
     
+    /**
+     * Set l'étudiant à un index
+     * 
+     * @param unEtudiant Index de l'étudiant à obtenir
+     */
     public void setEtudiant(int index, Etudiant unEtudiant){
         etudiants.set(index, unEtudiant);
     }
@@ -57,10 +84,14 @@ public class ListeDesEtudiants{
     
     //Supprime un etudiant et reorganise la liste
     public void rmEtudiant(Etudiant unEtudiant) throws Exception{
-        if(!etudiants.remove(unEtudiant))
-            throw new Exception("L'etudiant "+unEtudiant.getName()+" de numero de DA "+unEtudiant.getNAdmission()+" n'a pas pu etre supprimer.");
+        for(int i=0;i<etudiants.size();i++)
+            if(etudiants.get(i).getName().equals(unEtudiant.getName()) && etudiants.get(i).getNAdmission().equals(unEtudiant.getNAdmission())){
+                etudiants.remove(i);
+                organisezAlphabet();
+                return;
+            }
         
-        organisezAlphabet();
+        throw new Exception("L'etudiant "+unEtudiant.getName()+" de numero de DA "+unEtudiant.getNAdmission()+" n'a pas pu etre supprimer.");
     }
     
     //Organise la liste
@@ -96,11 +127,21 @@ public class ListeDesEtudiants{
         XSSFWorkbook wb = new XSSFWorkbook();
         Sheet sheet = wb.createSheet();
         
-        Row ligne = null;
-        Cell cellule = null;
+        Row ligne;
+        Cell cellule;
+        
+        ligne = sheet.createRow(0);
+        cellule = ligne.createCell(0);
+        cellule.setCellValue("Numéros d'admission");
+        cellule = ligne.createCell(1);
+        cellule.setCellValue("Noms et prénoms");
+        cellule = ligne.createCell(2);
+        cellule.setCellValue("Numéro du rôle");
+        cellule = ligne.createCell(3);
+        cellule.setCellValue("Pseudo de l'élève");
         
         for (int i=0;i < etudiants.size();i++){
-            ligne = sheet.createRow(i);
+            ligne = sheet.createRow(i+1);
             Etudiant currEtudiant = etudiants.get(i);
             String img = currEtudiant.getCheminImage();
             
@@ -161,7 +202,11 @@ public class ListeDesEtudiants{
         String img;
         Etudiant unEtudiant;
         DataFormatter formatter = new DataFormatter();
-        for (int i=0;((ligne = sheet.getRow(i)) != null);i++){
+        for (int i=1;i <= sheet.getLastRowNum();i++){
+            
+            if((ligne = sheet.getRow(i)) == null)
+                continue;
+            
             try{
                 switch (ligne.getLastCellNum()) {
                     case 4:
@@ -190,7 +235,6 @@ public class ListeDesEtudiants{
                             throw new Exception("2 etudiants ne peuvent pas etre pareil.");
                         
                         etudiants.add(unEtudiant);
-                        //Pouvoirs
                         break;
                     default:
                         throw new Exception("Format du fichier excel "+fileName+" invalide (nombre de colonnes n'est pas egale a 4 ou "+MAX_CELLS/* ou "+(MAX_CELLS-NBR_POUVOIRS)+"*/);

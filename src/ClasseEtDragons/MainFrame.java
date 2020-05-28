@@ -6,8 +6,12 @@
 package ClasseEtDragons;
 
 import java.awt.*;
+import java.util.List;
 import java.awt.event.*;
 import java.io.*;
+import java.lang.management.ManagementFactory;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -18,21 +22,22 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 class MainFrame extends JFrame{ 
     public final int NOMBRE_ETUDIANT_CLASSEMENT = 10;
    
-     JButton aide = new JButton("Aide");
-     Aide lAide = new Aide();
+    JButton aide = new JButton("Aide");
+    Aide lAide;
     
     ListeDesEtudiants liste;
     JPanel panneau = new JPanel();
-    int nombreEtudiants, indexEtudiant;
-    static JFileChooser choix;
+    int nombreEtudiants;
+    JFileChooser choix;
     FrameEtudiant frameClique;
     
     JProgressBar[] progressBar;
     static JLabel[] pv, nomEtudiants, teteDeMort, role, pseudoEtudiant;
-    String fichierPrincipale;
+    
+    static String fichierPrincipale;
     boolean boutonUtilisableSeul;
     JScrollPane miseEnPage;
-    JButton[] changerImage;
+    JButton addEtudiant, rmEtudiant;
     JButton[][] listePouvoirs;
     
     Image tete =getToolkit().getImage("image/teteMort.png");
@@ -47,54 +52,84 @@ class MainFrame extends JFrame{
     Color couleur6 = new Color(0,0,255); // couleur Bleu
     Color couleur7 = new Color(100,100,0); // couleur jaune pale
     
-    public MainFrame() throws  FileNotFoundException, IOException, Exception{
+    public MainFrame(String fichierXlsx){
+        lAide = new Aide();
+        lAide.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        
         Image icone = Toolkit.getDefaultToolkit().getImage("image/dragon.jpg");
         setIconImage(icone);
         
-        JOptionPane.showMessageDialog(null,"Veuillez sélectionner votre classe d'étudiant (fichierExcel)");
         LookAndFeel lf = UIManager.getLookAndFeel();
-        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Erreur lors du paramétrage du look and feel.");
+        }
         choix = new JFileChooser(new File(System.getProperty("user.home"), "desktop"));
         FileNameExtensionFilter filter = new FileNameExtensionFilter("excel", "xlsx");
-        choix.setFileFilter(filter);
-        choix.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        choix.setDialogTitle("Sélection de votre classe");
         
-        UIManager.setLookAndFeel(lf);
+        if(fichierXlsx == null){
+            JOptionPane.showMessageDialog(null,"Veuillez sélectionner votre classe d'étudiant (fichierExcel)");
+            
+            choix.setFileFilter(filter);
+            choix.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            choix.setDialogTitle("Sélection de votre classe");
+            
+            int resultat = JFileChooser.CANCEL_OPTION;
 
-        int resultat = JFileChooser.CANCEL_OPTION;
+            while(resultat != JFileChooser.APPROVE_OPTION){
+                resultat = choix.showOpenDialog(this);
 
-        while(resultat != JFileChooser.APPROVE_OPTION){
-            resultat = choix.showOpenDialog(this);
+                switch (resultat) {
+                    case JFileChooser.ERROR_OPTION:
+                        JOptionPane.showMessageDialog(null, "Une erreur est survenue lors du choix de fichier.");
 
-            switch (resultat) {
-                case JFileChooser.ERROR_OPTION:
-                    JOptionPane.showMessageDialog(null, "Une erreur est survenue lors du choix de fichier.");
-
-                    if(!ouiOuNon("Voulez-vous recommencer ?", "FERMETURE"))
+                        if(!ouiOuNon("Voulez-vous recommencer ?", "FERMETURE"))
+                            System.exit(0);
+                        break;
+                    case JFileChooser.CANCEL_OPTION:
                         System.exit(0);
-                    break;
-                case JFileChooser.CANCEL_OPTION:
-                    System.exit(0);
-                default:
-                    try{
-                        liste = new ListeDesEtudiants(choix.getSelectedFile());
-                        fichierPrincipale = choix.getSelectedFile().getCanonicalPath();
-                    } catch(FileNotFoundException fnfe){
-                        JOptionPane.showMessageDialog(null, fnfe.getMessage());
-                        resultat = JFileChooser.CANCEL_OPTION;
-                    } catch(IOException ioe){
-                        JOptionPane.showMessageDialog(null, ioe.getMessage());
-                        resultat = JFileChooser.CANCEL_OPTION;
-                    } catch(Exception e){
-                        JOptionPane.showMessageDialog(null, e.getMessage());
-                        resultat = JFileChooser.CANCEL_OPTION;
-                    }
-                    break;
-            }
+                    default:
+                        try{
+                            liste = new ListeDesEtudiants(choix.getSelectedFile());
+                            fichierPrincipale = choix.getSelectedFile().getCanonicalPath();
+                        } catch(FileNotFoundException fnfe){
+                            JOptionPane.showMessageDialog(null, fnfe.getMessage());
+                            resultat = JFileChooser.CANCEL_OPTION;
+                        } catch(IOException ioe){
+                            JOptionPane.showMessageDialog(null, ioe.getMessage());
+                            resultat = JFileChooser.CANCEL_OPTION;
+                        } catch(Exception e){
+                            JOptionPane.showMessageDialog(null, e.getMessage());
+                            resultat = JFileChooser.CANCEL_OPTION;
+                        }
+                        break;
+                }
 
+            }
         }
+        else{
+            try{
+                liste = new ListeDesEtudiants(fichierXlsx);
+            } catch(FileNotFoundException fnfe){
+                JOptionPane.showMessageDialog(null, fnfe.getMessage());
+                dispose();
+            } catch(IOException ioe){
+                JOptionPane.showMessageDialog(null, ioe.getMessage());
+                dispose();
+            } catch(Exception e){
+                JOptionPane.showMessageDialog(null, e.getMessage());
+                dispose();
+            }
+            fichierPrincipale = fichierXlsx;
+        }
+           
         
+        try {
+            UIManager.setLookAndFeel(lf);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Erreur lors du paramétrage du look and feel.");
+        }
         nombreEtudiants = liste.getEtudiantsSize();
         
         //setSize(500, 500);
@@ -137,6 +172,32 @@ class MainFrame extends JFrame{
                 
                 constraints.weightx = 1;
                 constraints.weighty = 1;
+                constraints.gridy = 0;
+                constraints.gridx=0;
+
+                JLabel nom = new JLabel("Nom et prénom");
+                nom.setForeground(couleur6);
+                panneau.add(nom, constraints);
+                constraints.gridx++;
+                JLabel numeroDA = new JLabel(" Numéro d'admission");
+                numeroDA.setForeground(couleur6);
+                panneau.add(numeroDA, constraints);
+                constraints.gridx++;
+                JLabel role = new JLabel("Rôle");
+                role.setForeground(couleur6);
+                panneau.add(role, constraints);
+                constraints.gridx++;
+                JLabel pseudo = new JLabel("Pseudo");
+                pseudo.setForeground(couleur6);
+                panneau.add(pseudo, constraints);
+                constraints.gridx++;
+                JLabel niveau = new JLabel("Niveau");
+                niveau.setForeground(couleur6);
+                panneau.add(niveau, constraints);
+                constraints.gridx++;
+                JLabel pointsVies = new JLabel("Points de vies");
+                pointsVies.setForeground(couleur6);
+                panneau.add(pointsVies, constraints);
                 
                 for(int i=0;i<NOMBRE_ETUDIANT_CLASSEMENT;i++){
                     
@@ -144,15 +205,16 @@ class MainFrame extends JFrame{
                         break;
                     
                     Etudiant currEtudiant = liste.getEtudiant(i);
-
-                    constraints.gridy = i;
+                    constraints.gridy= i+1;
                     constraints.gridx=0;
-                    JLabel etudiantNom = new JLabel("Nom et prénom: "+currEtudiant.getName());
-                    JLabel etudiantDA = new JLabel(" Numéro d'admission: "+currEtudiant.getNAdmission());
-                    JLabel etudiantRole = new JLabel("Rôle: "+currEtudiant.getRole().getNomRole());
-                    JLabel etudiantPseudo= new JLabel("Pseudo: "+currEtudiant.getPseudo());
-                    JLabel etudiantNiveau = new JLabel("Niveau: "+currEtudiant.getNiveau());
-                    JLabel etudiantPv = new JLabel("Points de vies: "+currEtudiant.getPv());
+
+
+                    JLabel etudiantNom = new JLabel(currEtudiant.getName());
+                    JLabel etudiantDA = new JLabel(currEtudiant.getNAdmission());
+                    JLabel etudiantRole = new JLabel(currEtudiant.getRole().getNomRole());
+                    JLabel etudiantPseudo= new JLabel(currEtudiant.getPseudo());
+                    JLabel etudiantNiveau = new JLabel(""+currEtudiant.getNiveau());
+                    JLabel etudiantPv = new JLabel(""+currEtudiant.getPv());
 
                     panneau.add(etudiantNom, constraints);
                     constraints.gridx++;
@@ -165,10 +227,7 @@ class MainFrame extends JFrame{
                     panneau.add(etudiantNiveau, constraints);
                     constraints.gridx++;
                     panneau.add(etudiantPv, constraints);
-                    
                 }
-                
-  
                 
                 frameOrdre.add(panneau);
                 frameOrdre.setVisible(true);
@@ -179,12 +238,202 @@ class MainFrame extends JFrame{
         });
         panneau.add(changement, constraints);
         
+        constraints.gridx=1;
+        addEtudiant = new JButton("Ajout");
+        addEtudiant.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame frameAjout = new JFrame("Ajout");
+                JPanel changementInfo = new JPanel();
+                frameAjout.setSize(500,500);
+                frameAjout.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                frameAjout.setVisible(true);
+                
+                JLabel nAdmission = new JLabel("Numéro DA: ");
+                JLabel nom = new JLabel("Nom: ");
+                JLabel pseudo = new JLabel("Pseudo: ");
+                JLabel role = new JLabel("Rôle: ");
+                
+                JTextField texteNAdmission = new JTextField(10);
+                JTextField texteNom = new JTextField(10);
+                JTextField textePseudo = new JTextField(10);
+                JComboBox<String> roleChangement = new JComboBox<>();
+                for(int i=0; i<Etudiant.roles.length; i++)
+                    roleChangement.addItem(Etudiant.roles[i].getNomRole());
+
+                JButton confirmer = new JButton("Ajouter");
+                confirmer.addActionListener(new ActionListener(){
+                    @Override
+                    public void actionPerformed(ActionEvent e){
+                        Etudiant unEtudiant = null;
+                        
+                        try {
+                            unEtudiant = new Etudiant(texteNAdmission.getText(), texteNom.getText(), Integer.parseInt((String) roleChangement.getSelectedItem()), textePseudo.getText());
+                        }catch(FileNotFoundException fnfe){
+                            JOptionPane.showMessageDialog(null, fnfe.getMessage());
+                        } catch(IOException ioe){
+                            JOptionPane.showMessageDialog(null, ioe.getMessage());
+                        } catch(Exception exc){
+                            JOptionPane.showMessageDialog(null, exc.getMessage());
+                        }
+
+                        for(int i=0; i<unEtudiant.roles.length; i++)
+                            if(roleChangement.getSelectedItem().equals(Etudiant.roles[i].getNomRole()))
+                                unEtudiant.setRole(i);
+                        
+                        try {
+                            liste.addEtudiant(unEtudiant);
+                        } catch (Exception ex) {
+                            JOptionPane.showMessageDialog(null, ex.getMessage());
+                        }
+                        
+                        JOptionPane.showMessageDialog(null, "Ajout effectuée");
+
+                        try{
+                            liste.writeToutEtudiantsEtImages(fichierPrincipale);
+                        }catch(FileNotFoundException fnfe){
+                            JOptionPane.showMessageDialog(null, fnfe.getMessage());
+                        } catch(IOException ioe){
+                            JOptionPane.showMessageDialog(null, ioe.getMessage());
+                        } catch(Exception exc){
+                            JOptionPane.showMessageDialog(null, exc.getMessage());
+                        }
+
+                        restart();
+                    }
+                });
+
+                JButton annuler = new JButton("Annuler");
+                annuler.addActionListener(new ActionListener(){
+                    @Override
+                    public void actionPerformed(ActionEvent e){
+                        JOptionPane.showMessageDialog(null, "Modification annulée");
+                        frameAjout.dispose();
+                    }
+                });
+
+                GridBagLayout gbl = new GridBagLayout();
+                changementInfo.setLayout(gbl);
+                GridBagConstraints constraints = new GridBagConstraints();
+                constraints.gridx=0;
+                constraints.gridy=0;
+                changementInfo.add(nAdmission, constraints);
+                constraints.gridx++;
+                changementInfo.add(texteNAdmission, constraints);
+                constraints.gridy++;
+                constraints.gridx=0;
+                changementInfo.add(nom, constraints);
+                constraints.gridx++;
+                changementInfo.add(texteNom, constraints);
+                constraints.gridx=0;
+                constraints.gridy++;
+                changementInfo.add(pseudo, constraints);
+                constraints.gridx++;
+                changementInfo.add(textePseudo, constraints);
+                constraints.gridx=0;
+                constraints.gridy++;
+                changementInfo.add(role, constraints);
+                constraints.gridx++;
+                changementInfo.add(roleChangement, constraints);
+                constraints.gridwidth=1;
+                constraints.gridx=0;
+                constraints.gridy++;
+                changementInfo.add(confirmer, constraints);
+                constraints.gridx++;
+                changementInfo.add(annuler, constraints);
+                frameAjout.add(changementInfo);
+            }
+        });
+        
+        panneau.add(addEtudiant, constraints);
+        
+        constraints.gridx=2;
+        rmEtudiant = new JButton("Suppression");
+        rmEtudiant.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame frameRm = new JFrame("Supression");
+                JPanel changementInfo = new JPanel();
+                frameRm.setSize(500,500);
+                frameRm.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                frameRm.setVisible(true);
+                
+                JLabel nAdmission = new JLabel("Numéro DA: ");
+                JLabel nom = new JLabel("Nom: ");
+                
+                JTextField texteNAdmission = new JTextField(10);
+                JTextField texteNom = new JTextField(10);
+                
+                JButton confirmer = new JButton("Supprimer");
+                confirmer.addActionListener(new ActionListener(){
+                    @Override
+                    public void actionPerformed(ActionEvent e){
+                        Etudiant unEtudiant = new Etudiant(texteNAdmission.getText(), texteNom.getText());
+                        
+                        try {
+                            liste.rmEtudiant(unEtudiant);
+                        } catch (Exception ex) {
+                            JOptionPane.showMessageDialog(null, ex.getMessage());
+                        }
+                        
+                        JOptionPane.showMessageDialog(null, "Suppression effectuée");
+
+                        try{
+                            liste.writeToutEtudiantsEtImages(fichierPrincipale);
+                        }catch(FileNotFoundException fnfe){
+                            JOptionPane.showMessageDialog(null, fnfe.getMessage());
+                        } catch(IOException ioe){
+                            JOptionPane.showMessageDialog(null, ioe.getMessage());
+                        } catch(Exception exc){
+                            JOptionPane.showMessageDialog(null, exc.getMessage());
+                        }
+
+                        restart();
+                    }
+                });
+                
+                JButton annuler = new JButton("Annuler");
+                annuler.addActionListener(new ActionListener(){
+                    @Override
+                    public void actionPerformed(ActionEvent e){
+                        JOptionPane.showMessageDialog(null, "Modification annulée");
+                        frameRm.dispose();
+                    }
+                });
+                
+                GridBagLayout gbl = new GridBagLayout();
+                changementInfo.setLayout(gbl);
+                GridBagConstraints constraints = new GridBagConstraints();
+                
+                constraints.gridx=0;
+                constraints.gridy=0;
+                changementInfo.add(nAdmission, constraints);
+                constraints.gridx++;
+                changementInfo.add(texteNAdmission, constraints);
+                constraints.gridy++;
+                constraints.gridx=0;
+                changementInfo.add(nom, constraints);
+                constraints.gridx++;
+                changementInfo.add(texteNom, constraints);
+                constraints.gridwidth=1;
+                constraints.gridx=0;
+                constraints.gridy++;
+                changementInfo.add(confirmer, constraints);
+                constraints.gridx++;
+                changementInfo.add(annuler, constraints);
+                frameRm.add(changementInfo);
+            }
+        });
+        panneau.add(rmEtudiant, constraints);
+        
+        constraints.gridx=0;
         constraints.gridy=1;
         JLabel nom = new JLabel("Nom");
+        
         nom.setToolTipText("Nom des etudiants\nCliquez sur un nom pour changer les informations de l'étudiant");
         nom.setForeground(couleur6);
         panneau.add(nom, constraints);
-        
+
         nomEtudiants = new JLabel[nombreEtudiants];
         for(int i=0; i<nombreEtudiants; i++){
             Etudiant currEtudiant = liste.getEtudiant(i);
@@ -214,16 +463,24 @@ class MainFrame extends JFrame{
         role = new JLabel[nombreEtudiants];
         for(int i=0; i<role.length; i++){
             constraints.gridy++;
-            FrameNomRole rl = new FrameNomRole(liste, i);
-            rl.setVisible(false);     
-            
+            Etudiant currEtudiant = liste.getEtudiant(i);   
+
             role[i] = new JLabel(liste.getEtudiant(i).getRole().getNomRole());
             role[i].addMouseListener(new MouseAdapter(){
                 @Override
                 public void mouseClicked(MouseEvent e){
-                    rl.setVisible(true);                 
-                }});
+                    FrameNomRole r1 = null;
             
+                    try {
+                        r1 = new FrameNomRole(liste, currEtudiant);
+                    } catch (FileNotFoundException ex) {
+                        JOptionPane.showMessageDialog(null, "Le fichier role n'existe pas.");
+                    }
+                    r1.setVisible(true);  
+                    r1.setTitle("Changer le nom de la classe");    
+                    r1.setSize(403,250);
+                }});
+
             panneau.add(role[i],constraints);
         }
         
@@ -470,12 +727,10 @@ class MainFrame extends JFrame{
         aide.addActionListener(new ActionListener(){
         @Override
         public void actionPerformed(ActionEvent e) {
-           
             lAide.setVisible(true);
         }});
         
         panneau.add(aide,constraints);
-        
         miseEnPage = new JScrollPane(panneau);
         add(miseEnPage);
     }
@@ -497,8 +752,8 @@ class MainFrame extends JFrame{
             if(cmd.startsWith("pv inc") || cmd.startsWith("pv dec") || cmd.startsWith("exp inc") || cmd.startsWith("exp dec"))
                 indexEtudiant = Integer.parseInt(cmds[2]); //Soit c'est pv/exp inc/dec, donc l'index est apres le 2e espace
             else{
-                    indexEtudiant = Integer.parseInt(cmds[1]); //Soit c'est pouvoir, donc l'index est apres le 1e espace
-                    indexPouvoir = Integer.parseInt(cmds[2]);
+                indexEtudiant = Integer.parseInt(cmds[1]); //Soit c'est pouvoir, donc l'index est apres le 1e espace
+                indexPouvoir = Integer.parseInt(cmds[2]);
             }
 
             Etudiant currEtudiant = liste.getEtudiant(indexEtudiant);
@@ -569,11 +824,11 @@ class MainFrame extends JFrame{
                         if(currEtudiant.getPv()== 0)
                             JOptionPane.showMessageDialog(null,"Pouvoir inacessible ! L'élève est mort");
                         else if(listePouvoirs[indexEtudiant][indexPouvoir].getBackground().equals(couleur3) ) {
-                                currEtudiant.setPouvoir(indexPouvoir, false);
+                            currEtudiant.setPouvoir(indexPouvoir, false);
                         }else if(listePouvoirs[indexEtudiant][indexPouvoir].getBackground().equals(couleur5)) {
                             currEtudiant.setPouvoir(indexPouvoir, true);
                         }else
-                            JOptionPane.showMessageDialog(null,"Le niveau de l'étudiant est insuffisant pour utiliser le pouvoir"); 
+                            JOptionPane.showMessageDialog(null,"Le niveau de l'étudiant est insuffisant pour utiliser le pouvoir");
                         break;
                     default:
                         break;
@@ -664,6 +919,66 @@ class MainFrame extends JFrame{
                     listePouvoirs[indEtudiant][indPouvoir].setForeground(couleur2);
                 }
             }
+        }
+    }
+    
+    //Copiez collez de https://dzone.com/articles/programmatically-restart-java
+    public static void restart() {
+        try {
+            // java binary
+            String java = System.getProperty("java.home") + "/bin/java";
+            // vm arguments
+            List<String> vmArguments = (List<String>)ManagementFactory.getRuntimeMXBean().getInputArguments();
+            StringBuffer vmArgsOneLine = new StringBuffer();
+            
+            for (String arg : vmArguments) {
+                // if it's the agent argument : we ignore it otherwise the
+                // address of the old application and the new one will be in conflict
+                if (!arg.contains("-agentlib")) {
+                    vmArgsOneLine.append(arg);
+                    vmArgsOneLine.append(" ");
+                }
+            }
+            // init the command to execute, add the vm args
+            final StringBuffer cmd = new StringBuffer("\"" + java + "\" " + vmArgsOneLine);
+
+            // program main and program arguments
+            String[] mainCommand = System.getProperty("sun.java.command").split(" ");
+            
+            // program main is a jar
+            if (mainCommand[0].endsWith(".jar")) {
+                // if it's a jar, add -jar mainJar
+                cmd.append("-jar " + new File(mainCommand[0]).getPath());
+            } else {
+                // else it's a .class, add the classpath and mainClass
+                cmd.append("-cp \"" + System.getProperty("java.class.path") + "\" " + mainCommand[0]);
+            }
+            
+            // finally add program arguments
+            for (int i = 1; i < mainCommand.length; i++) {
+                cmd.append(" ");
+                cmd.append(mainCommand[i]);
+            }
+            
+            // execute the command in a shutdown hook, to be sure that all the
+            // resources have been disposed before restarting the application
+            Runtime.getRuntime().addShutdownHook(new Thread(){
+            @Override
+            public void run() {
+                try {
+                    Runtime.getRuntime().exec(cmd.toString()+" "+"\""+fichierPrincipale+"\"");
+                } catch (IOException e) {
+                    JOptionPane.showMessageDialog(null, "Erreur lors du redémarrage, le programme doit s'arrêter.");
+                    System.exit(1);
+                }
+            }
+            });
+
+            // exit
+            System.exit(0);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erreur lors du redémarrage, le programme doit s'arrêter.");
+            System.exit(1);
         }
     }
 }
