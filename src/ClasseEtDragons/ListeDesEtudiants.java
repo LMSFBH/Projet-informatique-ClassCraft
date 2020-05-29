@@ -81,17 +81,12 @@ public class ListeDesEtudiants{
         
         organisezAlphabet();
     }
-    
-    //Supprime un etudiant et reorganise la liste
-    public void rmEtudiant(Etudiant unEtudiant) throws Exception{
-        for(int i=0;i<etudiants.size();i++)
-            if(etudiants.get(i).getName().equals(unEtudiant.getName()) && etudiants.get(i).getNAdmission().equals(unEtudiant.getNAdmission())){
-                etudiants.remove(i);
-                organisezAlphabet();
-                return;
-            }
         
-        throw new Exception("L'etudiant "+unEtudiant.getName()+" de numero de DA "+unEtudiant.getNAdmission()+" n'a pas pu etre supprimer.");
+    public void rmEtudiant(int index) throws Exception{
+        if((index < 0) || (index > etudiants.size()))
+            throw new Exception("L'etudiant n'a pas pu etre supprimer.");
+        
+        etudiants.remove(index);
     }
     
     //Organise la liste

@@ -38,7 +38,7 @@ public class Etudiant {
      */
     public Etudiant(String nAdmission, String nom){
         setName(nom);
-        setNAdmission(nom);
+        setNAdmission(nAdmission);
     }
     
     /**

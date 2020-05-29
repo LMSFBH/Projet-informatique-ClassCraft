@@ -14,8 +14,8 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
- *
- * @author usager
+ * @desc   Classe principale affichant la liste des etudiants
+ * @author Nour Asmani, Pierre Moyne-Bressand, Arthur Frennette, Kegoum Brecht
  */
 class MainFrame extends JFrame{ 
     public final int NOMBRE_ETUDIANT_CLASSEMENT = 10;
@@ -50,6 +50,11 @@ class MainFrame extends JFrame{
     Color couleur6 = new Color(0,0,255); // couleur Bleu
     Color couleur7 = new Color(100,100,0); // couleur jaune pale
     
+    /**
+     * Constructeur a 1 param
+     * 
+     * @param fichierXlsx 
+     */
     public MainFrame(String fichierXlsx){
         lAide = new Aide();
         lAide.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -80,9 +85,7 @@ class MainFrame extends JFrame{
 
                 switch (resultat) {
                     case JFileChooser.ERROR_OPTION:
-                        JOptionPane.showMessageDialog(null, "Une erreur est survenue lors du choix de fichier.");
-
-                        if(!ouiOuNon("Voulez-vous recommencer ?", "FERMETURE"))
+                        if(!ouiOuNon("Une erreur est survenue lors du choix de fichier. Voulez-vous recommencer ?", "FERMETURE"))
                             System.exit(0);
                         break;
                     case JFileChooser.CANCEL_OPTION:
@@ -93,13 +96,13 @@ class MainFrame extends JFrame{
                             fichierPrincipale = choix.getSelectedFile().getCanonicalPath();
                         } catch(FileNotFoundException fnfe){
                             JOptionPane.showMessageDialog(null, fnfe.getMessage());
-                            resultat = JFileChooser.CANCEL_OPTION;
+                            resultat = JFileChooser.ERROR_OPTION;
                         } catch(IOException ioe){
                             JOptionPane.showMessageDialog(null, ioe.getMessage());
-                            resultat = JFileChooser.CANCEL_OPTION;
+                            resultat = JFileChooser.ERROR_OPTION;
                         } catch(Exception e){
                             JOptionPane.showMessageDialog(null, e.getMessage());
-                            resultat = JFileChooser.CANCEL_OPTION;
+                            resultat = JFileChooser.ERROR_OPTION;
                         }
                         break;
                 }
@@ -266,25 +269,27 @@ class MainFrame extends JFrame{
                         Etudiant unEtudiant = null;
                         
                         try {
-                            unEtudiant = new Etudiant(texteNAdmission.getText(), texteNom.getText(), Integer.parseInt((String) roleChangement.getSelectedItem()), textePseudo.getText());
+                            unEtudiant = new Etudiant(texteNAdmission.getText(), texteNom.getText(), 0, textePseudo.getText());
+                            unEtudiant.setRole(getRoleEtudiant(unEtudiant, roleChangement));
                         }catch(IllegalArgumentException iae){
                             JOptionPane.showMessageDialog(null, iae.getMessage());
+                            return;
                         }catch(FileNotFoundException fnfe){
                             JOptionPane.showMessageDialog(null, fnfe.getMessage());
+                            return;
                         } catch(IOException ioe){
                             JOptionPane.showMessageDialog(null, ioe.getMessage());
+                            return;
                         } catch(Exception exc){
                             JOptionPane.showMessageDialog(null, exc.getMessage());
+                            return;
                         }
-
-                        for(int i=0; i<unEtudiant.roles.length; i++)
-                            if(roleChangement.getSelectedItem().equals(Etudiant.roles[i].getNomRole()))
-                                unEtudiant.setRole(i);
                         
                         try {
                             liste.addEtudiant(unEtudiant);
                         } catch (Exception ex) {
                             JOptionPane.showMessageDialog(null, ex.getMessage());
+                            return;
                         }
                         
                         JOptionPane.showMessageDialog(null, "Ajout effectuée");
@@ -293,10 +298,13 @@ class MainFrame extends JFrame{
                             liste.writeToutEtudiantsEtImages(fichierPrincipale);
                         }catch(FileNotFoundException fnfe){
                             JOptionPane.showMessageDialog(null, fnfe.getMessage());
+                            return;
                         } catch(IOException ioe){
                             JOptionPane.showMessageDialog(null, ioe.getMessage());
+                            return;
                         } catch(Exception exc){
                             JOptionPane.showMessageDialog(null, exc.getMessage());
+                            return;
                         }
 
                         restart();
@@ -374,10 +382,12 @@ class MainFrame extends JFrame{
                             currEtudiant = liste.getEtudiant(i);
                             if(currEtudiant.getName().equals(texteNom.getText()) && currEtudiant.getNAdmission().equals(texteNAdmission.getText())){
                                 try {
-                                    liste.rmEtudiant(currEtudiant);
+                                    liste.rmEtudiant(i);
                                 } catch (Exception ex) {
                                     JOptionPane.showMessageDialog(null, ex.getMessage());
+                                    return;
                                 }
+                                break;
                             }
                         }
                         
@@ -385,10 +395,13 @@ class MainFrame extends JFrame{
                             liste.writeToutEtudiantsEtImages(fichierPrincipale);
                         }catch(FileNotFoundException fnfe){
                             JOptionPane.showMessageDialog(null, fnfe.getMessage());
+                            return;
                         } catch(IOException ioe){
                             JOptionPane.showMessageDialog(null, ioe.getMessage());
+                            return;
                         } catch(Exception exc){
                             JOptionPane.showMessageDialog(null, exc.getMessage());
+                            return;
                         }
                         
                         JOptionPane.showMessageDialog(null, "Suppression effectuée");
@@ -480,7 +493,10 @@ class MainFrame extends JFrame{
                         r1 = new FrameNomRole(liste, currEtudiant);
                     } catch (FileNotFoundException ex) {
                         JOptionPane.showMessageDialog(null, "Le fichier role n'existe pas.");
+                        return;
                     }
+                    
+                    r1.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
                     r1.setVisible(true);  
                     r1.setTitle("Changer le nom de la classe");    
                     r1.setSize(403,250);
@@ -678,42 +694,41 @@ class MainFrame extends JFrame{
                 if(ouiOuNon("Êtes-vous sûr de vouloir fermer l'application?", "FERMETURE")){
                     String fichierXlsx;
                     int resultat = JFileChooser.CANCEL_OPTION;
-                    boolean utiliserFichierDemarrage;
                     
                     while(resultat != JFileChooser.APPROVE_OPTION){
-                        utiliserFichierDemarrage = ouiOuNon("Voulez-vous sauvegarder le fichier ?", "FERMETURE");
+                        if(!ouiOuNon("Voulez-vous sauvegarder le fichier ?", "FERMETURE"))
+                            System.exit(0);
                         
                         try{
                             JFileChooser choix = null;
-                            if(!utiliserFichierDemarrage){
-                                System.exit(0);
-                            } else
-                                resultat = JFileChooser.APPROVE_OPTION;
+                            resultat = JFileChooser.APPROVE_OPTION;
                             
                             switch(resultat){
                                 case JFileChooser.ERROR_OPTION:
-                                    JOptionPane.showMessageDialog(null, "Une erreur est survenue lors du choix de fichier.");
-
-                                    if(!ouiOuNon("Voulez-vous recommencer ?", "FERMETURE"))
+                                    if(!ouiOuNon("Une erreur est survenue lors du choix de fichier. Voulez-vous recommencer ?", "FERMETURE"))
                                         System.exit(0);
+                                    else
+                                        resultat = JFileChooser.APPROVE_OPTION;
                                     break;
                                 case JFileChooser.CANCEL_OPTION:
                                     return;
                                 case JFileChooser.APPROVE_OPTION:
-                                    fichierXlsx = utiliserFichierDemarrage ? fichierPrincipale : choix.getSelectedFile().getCanonicalPath();
+                                    fichierXlsx = fichierPrincipale;
                                     if(!fichierXlsx.endsWith(".xlsx"))
                                         fichierXlsx += ".xlsx";
 
                                     liste.writeToutEtudiantsEtImages(fichierXlsx);
                                     System.exit(0);
                             }
-
                         }catch(FileNotFoundException fnfe){
                             JOptionPane.showMessageDialog(null, fnfe.getMessage());
+                            resultat = JFileChooser.ERROR_OPTION;
                         } catch(IOException ioe){
                             JOptionPane.showMessageDialog(null, ioe.getMessage());
+                            resultat = JFileChooser.ERROR_OPTION;
                         } catch(Exception e){
                             JOptionPane.showMessageDialog(null, e.getMessage());
+                            resultat = JFileChooser.ERROR_OPTION;
                         }
                     }
                     
@@ -744,6 +759,14 @@ class MainFrame extends JFrame{
         String[] options = {"Oui", "Non"};
         return (JOptionPane.showOptionDialog(null, msg, titre, JOptionPane.YES_NO_OPTION,
                 JOptionPane.INFORMATION_MESSAGE, null, options, options[0]) == 0);
+    }
+    
+    public int getRoleEtudiant(Etudiant unEtudiant, JComboBox roleChangement) throws Exception{
+        for(int i=0; i<unEtudiant.roles.length; i++)
+            if(roleChangement.getSelectedItem().equals(Etudiant.roles[i].getNomRole()))
+                return i;
+        
+        throw new Exception("Role invalide.");
     }
     
     private class GestAction implements ActionListener{
@@ -841,6 +864,7 @@ class MainFrame extends JFrame{
             setCouleurPouvoirs(indexEtudiant);
             } catch(IllegalArgumentException iae){
                 JOptionPane.showMessageDialog(null, iae.getMessage());
+                return;
             }
 
             liste.setEtudiant(indexEtudiant, currEtudiant);
@@ -878,7 +902,6 @@ class MainFrame extends JFrame{
                 if(currEtudiant.getNiveau()>=10){
                 listePouvoirs[indEtudiant][indPouvoir].setBackground(couleur3);
                 listePouvoirs[indEtudiant][indPouvoir].setForeground(couleur2);
-                //Moi: j'ai fait des copier coller pour bouton utlisable. j'ai l'impression qu'on peut le faire une fois pour tout mais ... la prochaine fois peu etre
                 
                 if(currEtudiant.getPouvoir(indPouvoir) == false){
                     listePouvoirs[indEtudiant][indPouvoir].setBackground(couleur5);
@@ -930,34 +953,30 @@ class MainFrame extends JFrame{
     //Copiez collez de https://dzone.com/articles/programmatically-restart-java
     public static void restart() {
         try {
-            // java binary
+            // éxecutable java
             String java = System.getProperty("java.home") + "/bin/java";
-            // vm arguments
+            // arguments de la vm
             List<String> vmArguments = (List<String>)ManagementFactory.getRuntimeMXBean().getInputArguments();
             StringBuffer vmArgsOneLine = new StringBuffer();
             
             for (String arg : vmArguments) {
-                // if it's the agent argument : we ignore it otherwise the
-                // address of the old application and the new one will be in conflict
                 if (!arg.contains("-agentlib")) {
                     vmArgsOneLine.append(arg);
                     vmArgsOneLine.append(" ");
                 }
             }
-            // init the command to execute, add the vm args
+            
+            // commande à executer, ajout des arguments de la vm passer au demarrage
             final StringBuffer cmd = new StringBuffer("\"" + java + "\" " + vmArgsOneLine);
 
-            // program main and program arguments
+            // main et les arguments du programe
             String[] mainCommand = System.getProperty("sun.java.command").split(" ");
             
-            // program main is a jar
-            if (mainCommand[0].endsWith(".jar")) {
-                // if it's a jar, add -jar mainJar
+            // si le programe est un jar ou pas, ils faut rajouter l'argument en question
+            if (mainCommand[0].endsWith(".jar"))
                 cmd.append("-jar " + new File(mainCommand[0]).getPath());
-            } else {
-                // else it's a .class, add the classpath and mainClass
+            else
                 cmd.append("-cp \"" + System.getProperty("java.class.path") + "\" " + mainCommand[0]);
-            }
             
             // finally add program arguments
             for (int i = 1; i < mainCommand.length; i++) {
@@ -971,7 +990,10 @@ class MainFrame extends JFrame{
             @Override
             public void run() {
                 try {
-                    Runtime.getRuntime().exec(cmd.toString()+" "+"\""+fichierPrincipale+"\"");
+                    if(cmd.toString().endsWith(" "+"\""+fichierPrincipale+"\"") || cmd.toString().endsWith(" "+fichierPrincipale))
+                        Runtime.getRuntime().exec(cmd.toString());
+                    else
+                        Runtime.getRuntime().exec(cmd.toString()+" "+"\""+fichierPrincipale+"\"");
                 } catch (IOException e) {
                     JOptionPane.showMessageDialog(null, "Erreur lors du redémarrage, le programme doit s'arrêter.");
                     System.exit(1);
