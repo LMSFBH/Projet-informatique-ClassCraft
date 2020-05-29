@@ -101,11 +101,17 @@ public class FrameChangement extends JFrame{
         confirmer.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                unEtudiant.setName(nomChangement.getText());
+                try{
+                    unEtudiant.setName(nomChangement.getText());
+                    unEtudiant.setPseudo(pseudoChangement.getText());
+                } catch(IllegalArgumentException iae){
+                    JOptionPane.showMessageDialog(null, iae.getMessage());
+                    return;
+                }
+                
                 FrameEtudiant.nomEtPrenom.setText("Nom et prénom: "+unEtudiant.getName());
                 MainFrame.nomEtudiants[liste.getIndex(unEtudiant)].setText(unEtudiant.getName());
 
-                unEtudiant.setPseudo(pseudoChangement.getText());
                 FrameEtudiant.pseudo.setText("Pseudo: "+unEtudiant.getPseudo());
                 MainFrame.pseudoEtudiant[liste.getIndex(unEtudiant)].setText(unEtudiant.getPseudo());
                 

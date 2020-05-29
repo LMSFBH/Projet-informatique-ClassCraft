@@ -76,9 +76,8 @@ public class Etudiant {
                 }
             }
         } catch (FileNotFoundException e)    { // Exception déclenchée si le fichier n'existe pas 
-            JOptionPane.showMessageDialog(null,"Le fichier n'existe pas");
+            throw new FileNotFoundException("Le fichier n'existe pas");
         }
-        
         finally {
             entree.close();
         }
@@ -124,7 +123,7 @@ public class Etudiant {
                 }
             }
         } catch (FileNotFoundException e)    { // Exception déclenchée si le fichier n'existe pas 
-            JOptionPane.showMessageDialog(null,"Le fichier n'existe pas");
+            throw new FileNotFoundException("Le fichier n'existe pas");
         }
         
         finally {

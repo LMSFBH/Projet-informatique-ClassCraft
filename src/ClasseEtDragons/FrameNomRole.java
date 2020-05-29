@@ -58,7 +58,7 @@ public class FrameNomRole extends JFrame{
         constraints.gridx+=2;
         panneauClique.add(nomClasse,constraints);
         constraints.gridy++;
-        int placeRole =0;
+        
         confirmer.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -75,18 +75,12 @@ public class FrameNomRole extends JFrame{
                 
                 if( verif ==0){
                     classeActuelle.setText(MainFrame.role[indexEtudiant].getText());
-                    for(int i=0; i<Etudiant.roles.length; i++){
-                        if(Etudiant.roles[i].getNomRole().equalsIgnoreCase(ancienNom)){
-                            //changer role dans tableau role
-                        }
-                    }
                     
                     for(int k=0; k<MainFrame.role.length; k++){  
                         Etudiant.roles[liste.getEtudiant(indexEtudiant).getRoleIndex()].setNomRole(nomClasse.getText());       
                         if(MainFrame.role[k].getText().equalsIgnoreCase(classeActuelle.getText()) ){
                              MainFrame.role[k].setText(nomClasse.getText());
-                        }    
-                        //JOptionPane.showMessageDialog(null, "nom du label: "+MainFrame.rol[k].getText()+"\n new name:      "+nomClasse.getText());
+                        }
                     }
                     classeActuelle.setText("Nom de la classe actuelle:     "+ nomClasse.getText());
                     nouvelleImage = new File ("image/"+nomClasse.getText()+".png");
@@ -107,17 +101,19 @@ public class FrameNomRole extends JFrame{
                             }
                         }
                     } catch (FileNotFoundException erreur)    { // Exception déclenchée si le fichier n'existe pas 
-                        JOptionPane.showMessageDialog(null,"Le fichier n'existe pas");
+                        JOptionPane.showMessageDialog(null,"Le fichier role n'existe pas");
+                        return;
                     } catch (IOException ex) {
-                        JOptionPane.showMessageDialog(null,"Il y a un problème lors de l'écriture");
+                        JOptionPane.showMessageDialog(null,"Erreur d'I/O lors de la lecture du fichier role");
+                        return;
                     }
-
                     finally {
                         try {
                             entree.close();
                             sortie.close();
                         } catch (IOException ex) {
                             JOptionPane.showMessageDialog(null,"Il y a un problème lors de la fermeture du fichier");
+                            return;
                         }
                     }
                     

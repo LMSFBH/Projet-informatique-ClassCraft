@@ -23,11 +23,11 @@ public class Aide extends JFrame {
     String ligne;
     
     public Aide(){
-        
         setTitle("Aide");
         setSize(1400,500);
         Image icone = Toolkit.getDefaultToolkit().getImage("image/dragon.jpg");
         setIconImage(icone);
+        
         aide.setEditable(false);
         try{
             BufferedReader entree = new BufferedReader(new FileReader("docs/aide.txt"));
