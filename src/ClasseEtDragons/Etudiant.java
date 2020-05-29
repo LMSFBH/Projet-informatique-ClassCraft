@@ -54,7 +54,6 @@ public class Etudiant {
         setPseudo(pseudo);
         setExp(0);
         setNiveau(1);
-        setPv(getRole().getMaxPv());
         
         setCheminImage(null);
         
@@ -79,6 +78,8 @@ public class Etudiant {
         finally {
             entree.close();
         }
+        
+        setPv(getRole().getMaxPv());
     }
     
     /**
@@ -132,7 +133,6 @@ public class Etudiant {
         finally {
             entree.close();
         }
-        
     }
     
     //Accesseurs/Setteurs pour Etudiant

@@ -164,13 +164,13 @@ public class ListeDesEtudiants{
         // Chaque ligne et cellule doivent être crée manuellement
         ligne = sheet.createRow(0);
         cellule = ligne.createCell(0);
-        cellule.setCellValue("Numéros d'admission");
+        cellule.setCellValue("Les 4 champs nécessaires de bases sont:");
         cellule = ligne.createCell(1);
         cellule.setCellValue("Numéros d'admission");
         cellule = ligne.createCell(2);
         cellule.setCellValue("Noms et prénoms");
         cellule = ligne.createCell(3);
-        cellule.setCellValue("Numéro du rôle");
+        cellule.setCellValue("Numéro du rôle (déterminez par la ligne du role dans docs/role.txt)");
         cellule = ligne.createCell(4);
         cellule.setCellValue("Pseudo de l'élève");
         
@@ -249,8 +249,9 @@ public class ListeDesEtudiants{
         Etudiant unEtudiant;
         DataFormatter formatter = new DataFormatter();
         for (int i=1;i <= sheet.getLastRowNum();i++){
+            ligne = sheet.getRow(i);
             
-            if((ligne = sheet.getRow(i)) == null)
+            if(ligne == null)
                 continue;
             
             try{
