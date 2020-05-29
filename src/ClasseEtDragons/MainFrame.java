@@ -59,6 +59,7 @@ class MainFrame extends JFrame{
      */
     public MainFrame(String fichierXlsx){
         lAide = new Aide();
+        lAide.setVisible(false);
         lAide.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         
         Image icone = Toolkit.getDefaultToolkit().getImage("image/dragon.jpg");
@@ -790,6 +791,7 @@ class MainFrame extends JFrame{
         add(miseEnPage);
     }
     
+    //Pour des questions dont la réponse est affirmative/négative
     public static boolean ouiOuNon(String msg, String titre){
         String[] options = {"Oui", "Non"};
         return (JOptionPane.showOptionDialog(null, msg, titre, JOptionPane.YES_NO_OPTION,
@@ -804,6 +806,7 @@ class MainFrame extends JFrame{
         throw new Exception("Role invalide.");
     }
     
+    //Action listener principale pour les boutons d'incrémentation/décrementation et les pouvoirs
     private class GestAction implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -811,7 +814,8 @@ class MainFrame extends JFrame{
             String[] cmds = cmd.split(" ");
             int indexEtudiant = 0;
             int indexPouvoir = 0;
-
+            
+            //On lit la source dans l'action command
             if(cmd.startsWith("pv inc") || cmd.startsWith("pv dec") || cmd.startsWith("exp inc") || cmd.startsWith("exp dec"))
                 indexEtudiant = Integer.parseInt(cmds[2]); //Soit c'est pv/exp inc/dec, donc l'index est apres le 2e espace
             else{
@@ -821,6 +825,7 @@ class MainFrame extends JFrame{
 
             Etudiant currEtudiant = liste.getEtudiant(indexEtudiant);
 
+            //Éffectuer l'incrémentation/décrémentation ou l'activation/désactivation du pouvoir
             try{
                 switch (cmds[0]) {
                     case "pv":
@@ -896,6 +901,7 @@ class MainFrame extends JFrame{
                     default:
                         break;
                 }
+                
             setCouleurPouvoirs(indexEtudiant);
             } catch(IllegalArgumentException iae){
                 JOptionPane.showMessageDialog(null, iae.getMessage());
@@ -903,9 +909,6 @@ class MainFrame extends JFrame{
             }
 
             liste.setEtudiant(indexEtudiant, currEtudiant);
-
-            revalidate();
-            repaint();
         }
     }
     
@@ -914,18 +917,18 @@ class MainFrame extends JFrame{
         int indPouvoir = 0;
         Etudiant currEtudiant = liste.getEtudiant(indEtudiant);
         
-        if(currEtudiant.getPv()== 0){ // bouton inutilisable couleur
+        if(currEtudiant.getPv()== 0){ //Bouton inutilisable en rouge
             for(int j=0; j<6; j++){
                 listePouvoirs[indEtudiant][j].setBackground(ROUGE); 
                 listePouvoirs[indEtudiant][j].setForeground(BLANC);
             }
-        }else{      // couleur pour un bouton normal  
+        }else{ // couleur pour un bouton normal  
             for(int j=0; j<6; j++){
                 listePouvoirs[indEtudiant][j].setBackground(GRIS); 
                 listePouvoirs[indEtudiant][j].setForeground(BLANC);
             }   
 
-            if(currEtudiant.getNiveau()>=5){ //couleur pour un pouvoir actif
+            if(currEtudiant.getNiveau()>=5){ //Couleur pour les pouvoirs actifs
                 listePouvoirs[indEtudiant][indPouvoir].setBackground(VERT);
                 listePouvoirs[indEtudiant][indPouvoir].setForeground(GRIS);
             if(currEtudiant.getPouvoir(indPouvoir) == false){
@@ -990,7 +993,8 @@ class MainFrame extends JFrame{
         try {
             // éxecutable java
             String java = System.getProperty("java.home") + "/bin/java";
-            // arguments de la vm
+            
+            // arguments de la virtual machine
             List<String> vmArguments = (List<String>)ManagementFactory.getRuntimeMXBean().getInputArguments();
             StringBuffer vmArgsOneLine = new StringBuffer();
             
@@ -1013,14 +1017,14 @@ class MainFrame extends JFrame{
             else
                 cmd.append("-cp \"" + System.getProperty("java.class.path") + "\" " + mainCommand[0]);
             
-            // finally add program arguments
+            // ajouter les arguments du programmes
             for (int i = 1; i < mainCommand.length; i++) {
                 cmd.append(" ");
                 cmd.append(mainCommand[i]);
             }
             
-            // execute the command in a shutdown hook, to be sure that all the
-            // resources have been disposed before restarting the application
+            // exécuter la commande dans une thread de shutdown pour être sur que les
+            // ressources ont bien été supprimer avant de redémarrez
             Runtime.getRuntime().addShutdownHook(new Thread(){
             @Override
             public void run() {
@@ -1036,7 +1040,7 @@ class MainFrame extends JFrame{
             }
             });
 
-            // exit
+            // Quitté
             System.exit(0);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Erreur lors du redémarrage, le programme doit s'arrêter.");
