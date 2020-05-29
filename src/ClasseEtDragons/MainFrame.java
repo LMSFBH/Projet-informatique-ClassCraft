@@ -1,8 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
+
 package ClasseEtDragons;
 
 import java.awt.*;
@@ -14,7 +11,7 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
- * @desc   Classe principale affichant la liste des etudiants
+ * Classe principale affichant la liste des etudiants
  * @author Nour Asmani, Pierre Moyne-Bressand, Arthur Frennette, Kegoum Brecht
  */
 class MainFrame extends JFrame{ 
@@ -38,8 +35,8 @@ class MainFrame extends JFrame{
     JButton addEtudiant, rmEtudiant;
     JButton[][] listePouvoirs;
     
-    Image tete =getToolkit().getImage("image/teteMort.png");
-    Image crane=tete.getScaledInstance(20,20,0);
+    Image tete = getToolkit().getImage("image/teteMort.png");
+    Image crane= tete.getScaledInstance(20,20,0);
     ImageIcon cerveau = new ImageIcon(crane);
     
     Color BLANC = new Color(255,255,255);
@@ -315,7 +312,7 @@ class MainFrame extends JFrame{
                             return;
                         }
 
-                        //On redémarre (on ne peut pas ajouter d'étudiant dans l'interface actuelle)
+                        //On redémarre (on ne peut pas ajouter d'étudiant directement dans l'interface actuelle)
                         restart();
                     }
                 });
@@ -416,7 +413,7 @@ class MainFrame extends JFrame{
                         
                         JOptionPane.showMessageDialog(null, "Suppression effectuée");
                         
-                        //On redémarre (on ne peut pas ajouter d'étudiant dans l'interface actuelle)
+                        //On redémarre (on ne peut pas supprimer d'étudiant directement dans l'interface actuelle)
                         restart();
                     }
                 });

@@ -5,17 +5,10 @@
  */
 package ClasseEtDragons;
 
-import javax.swing.*;
 import java.io.*;
-import java.util.*;
-import org.apache.poi.ss.usermodel.DataFormatter;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
- *
- * V:1.05
+ * Classe décrivant un étudiant
  */
 public class Etudiant {
     private String nAdmission, nom, pseudo, cheminImage;
@@ -29,7 +22,7 @@ public class Etudiant {
     static Role[] roles = new Role[4];
     
     public final int MAX_EXP = 1;
-    
+
     /**
      * Constructeur à 2 paramètres pour Etudiant
      * 
@@ -48,6 +41,11 @@ public class Etudiant {
      * @param nom        Le nom de cet Etudiant
      * @param role       Le role de cet Etudiant
      * @param pseudo     Le pseudo de cet Etudiant
+     * 
+     * @throws IllegalArgumentException      Si l'un des arguments n'est pas permis par un setteur
+     * @throws java.io.FileNotFoundException Si le fichier rôle n'a pas put être accéder
+     * @throws IOException                   Si le fichier rôle n'a pas put être accéder
+     * @throws Exception                     Si le fichier rôle n'a pas put être accéder
      */
     public Etudiant(String nAdmission, String nom, int role, String pseudo) throws IllegalArgumentException, FileNotFoundException, IOException, Exception{
         setName(nom);
@@ -95,6 +93,11 @@ public class Etudiant {
      * @param niveau             Le niveau de cet Etudiant
      * @param pv                 Les points de vie de cet Etudiant
      * @param pouvoirsUtilisable La liste des pouvoirs utilisable par cet Etudiant
+     * 
+     * @throws IllegalArgumentException      Si l'un des arguments n'est pas permis par un setteur
+     * @throws java.io.FileNotFoundException Si le fichier rôle n'a pas put être accéder
+     * @throws IOException                   Si le fichier rôle n'a pas put être accéder
+     * @throws Exception                     Si le fichier rôle n'a pas put être accéder
      */
     public Etudiant(String nAdmission, String nom, int role, String pseudo, String cheminImage, int exp, int niveau, int pv, boolean[] pouvoirsUtilisable) throws FileNotFoundException, IOException, Exception{
         setNAdmission(nAdmission);

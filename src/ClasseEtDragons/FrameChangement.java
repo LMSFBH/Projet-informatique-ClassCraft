@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package ClasseEtDragons;
 
 import static ClasseEtDragons.MainFrame.ouiOuNon;
@@ -14,8 +10,8 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
- *
- * @author Pierre
+ * Frame modifiant les informations de l'étudiant
+ * @author Pierre Moyne-Bressand, Kegoum Brecht
  */
 public class FrameChangement extends JFrame{
     JPanel changementInfo;
@@ -25,6 +21,13 @@ public class FrameChangement extends JFrame{
     JTextField nomChangement, pseudoChangement;
     JComboBox<String> roleChangement;
     
+    /**
+     * Constructeur à 3 paramètres de FrameChangement
+     * 
+     * @param unEtudiant Étudiant actuelle
+     * @param liste      Liste actuelle
+     * @param fileName   fichier
+     */
     public FrameChangement(Etudiant unEtudiant, ListeDesEtudiants liste, String fileName){
         changementInfo = new JPanel();
         setSize(500,500);
@@ -124,7 +127,22 @@ public class FrameChangement extends JFrame{
                 }
                 
                 JOptionPane.showMessageDialog(null, "Modification effectuée");
-                dispose();
+                
+                //Écrire et redémarrez
+                try{
+                    liste.writeToutEtudiantsEtImages(fileName);
+                }catch(FileNotFoundException fnfe){
+                    JOptionPane.showMessageDialog(null, fnfe.getMessage());
+                    return;
+                } catch(IOException ioe){
+                    JOptionPane.showMessageDialog(null, ioe.getMessage());
+                    return;
+                } catch(Exception exc){
+                    JOptionPane.showMessageDialog(null, exc.getMessage());
+                    return;
+                }
+                
+                MainFrame.restart();
             }
         });
         

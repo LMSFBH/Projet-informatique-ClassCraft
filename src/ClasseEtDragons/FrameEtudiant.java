@@ -8,6 +8,7 @@ import javax.swing.*;
 
 /**
  * Frame affichant les informations de l'étudiant
+ * @author Pierre Moyne-Bressand, Kegoum Brecht
  */
 public class FrameEtudiant extends JFrame {
     JPanel panneau;

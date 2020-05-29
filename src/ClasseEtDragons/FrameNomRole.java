@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package ClasseEtDragons;
 
 import java.awt.GridBagConstraints;
@@ -15,10 +11,9 @@ import javax.swing.*;
 import java.io.*;
 
 /**
- *
- * @author Brecht
+ * Frame permettant de modifier le nom d'un role
+ * @author Kegoum Brecht
  */
-
 public class FrameNomRole extends JFrame{
 
     JPanel panneauClique = new JPanel();
@@ -31,6 +26,13 @@ public class FrameNomRole extends JFrame{
     BufferedWriter sortie;
     String ancienNom;
     
+    /**
+     * Constructeur à 1 paramètre de FrameNomRole
+     * 
+     * @param liste      Liste actuelle
+     * @param unEtudiant Étudiant actuelle
+     * 
+     */
     public FrameNomRole(ListeDesEtudiants liste, Etudiant unEtudiant)throws FileNotFoundException {
         int indexEtudiant = liste.getIndex(unEtudiant);
         
@@ -76,16 +78,20 @@ public class FrameNomRole extends JFrame{
                 if( verif ==0){
                     classeActuelle.setText(MainFrame.role[indexEtudiant].getText());
                     
+                    //Changer role dans tout les étudiants
                     for(int k=0; k<MainFrame.role.length; k++){  
                         Etudiant.roles[liste.getEtudiant(indexEtudiant).getRoleIndex()].setNomRole(nomClasse.getText());       
                         if(MainFrame.role[k].getText().equalsIgnoreCase(classeActuelle.getText()) ){
                              MainFrame.role[k].setText(nomClasse.getText());
                         }
                     }
+                    
+                    //Changer le nom de l'image
                     classeActuelle.setText("Nom de la classe actuelle:     "+ nomClasse.getText());
                     nouvelleImage = new File ("image/"+nomClasse.getText()+".png");
                     ancienneImage.renameTo(nouvelleImage);
                     
+                    //Changer le fichier rôle
                     try{
                         entree= new BufferedReader(new FileReader("docs/roles.txt"));
                         sortie = new BufferedWriter(new FileWriter("docs/test.txt"));

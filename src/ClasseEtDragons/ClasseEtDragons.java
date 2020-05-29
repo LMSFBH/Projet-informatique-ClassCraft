@@ -2,7 +2,9 @@
 
 package ClasseEtDragons;
 
-
+/**
+ * Classe principale
+ */
 public class ClasseEtDragons{
 
     public static void main(String[] args){

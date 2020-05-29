@@ -12,8 +12,8 @@ import java.io.*;
 import javax.swing.*;
 
 /**
- *
- * @author erwin
+ *  Fenêtre d'aide, dont le texte est dans docs/aide.txt
+ *  @author Kegoum Brecht
  */
 public class Aide extends JFrame {
     JPanel panneauAide= new JPanel();
@@ -40,11 +40,11 @@ public class Aide extends JFrame {
             panneauAide.add(aide);
             entree.close();
         } catch (FileNotFoundException e){
-            JOptionPane.showMessageDialog(null, "Le fichier d'aide n'existe pas");
+            JOptionPane.showMessageDialog(null, "Le fichier d'aide n'existe pas. L'aide ne fonctionnera pas.");
         } catch (EOFException e){
-            JOptionPane.showMessageDialog(null, "La fin du fichier aide est atteinte de manière étrange");
+            JOptionPane.showMessageDialog(null, "La fin du fichier aide est atteinte de manière étrange. L'aide ne fonctionnera pas.");
         } catch (IOException e){ 
-            JOptionPane.showMessageDialog(null, "Erreur d'I/O lors de l'accès du fichier aide");
+            JOptionPane.showMessageDialog(null, "Erreur d'I/O lors de l'accès du fichier aide. L'aide ne fonctionnera pas.");
         }
 
         add(panneauAide);
