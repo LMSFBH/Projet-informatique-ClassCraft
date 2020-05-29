@@ -17,5 +17,6 @@ La sixieme colonne correspond aux pouvoirs de l'etudiant. C'est a vous de decide
 _________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
 
 Cette application a ete programmee par des etudiants de SIM au collège Rosemont durant la session d'hiver 2020 pour leur projet d'integration: Nour Asmani, Arthur Frennette, Brecht Erwin Kegoum Tchantchet et Pierre Moyne-bressand
+Merci a notre professeur de programmation Wafaa Niar Dinedane.
 
 Si vous ne trouvez pas l'information que vous cherchiez ici, veuillez aller chercher dans le document texte "Utilisation" si votre information s'y trouve.

@@ -1,6 +1,7 @@
 
 package ClasseEtDragons;
 
+import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.io.*;
@@ -11,10 +12,9 @@ import javax.swing.*;
  *  @author Kegoum Brecht
  */
 public class Aide extends JFrame {
-    JPanel panneauAide= new JPanel();
-
-    JTextArea aide = new JTextArea() ;
-    JScrollPane barreDefilante = new JScrollPane();
+    JPanel panneauAide;
+    JTextArea aide;
+    
     String ligne;
     
     public Aide(){
@@ -22,6 +22,12 @@ public class Aide extends JFrame {
         setSize(1400,500);
         Image icone = Toolkit.getDefaultToolkit().getImage("image/dragon.jpg");
         setIconImage(icone);
+        
+        panneauAide = new JPanel();
+        aide = new JTextArea();
+        
+        GridBagLayout layout = new GridBagLayout();
+        panneauAide.setLayout(layout);
         
         aide.setEditable(false);
         try{
@@ -31,7 +37,7 @@ public class Aide extends JFrame {
                 ligne+="\n";
                 aide.append(ligne);
             }
-
+            
             panneauAide.add(aide);
             entree.close();
         } catch (FileNotFoundException e){
