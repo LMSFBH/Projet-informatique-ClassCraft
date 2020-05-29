@@ -366,7 +366,6 @@ class MainFrame extends JFrame{
                 confirmer.addActionListener(new ActionListener(){
                     @Override
                     public void actionPerformed(ActionEvent e){
-                        Etudiant unEtudiant = new Etudiant(texteNAdmission.getText(), texteNom.getText());
                         Etudiant currEtudiant;
                         
                         for(int i=0;i<liste.getEtudiantsSize();i++){
@@ -380,8 +379,6 @@ class MainFrame extends JFrame{
                             }
                         }
                         
-                        JOptionPane.showMessageDialog(null, "Suppression effectuée");
-
                         try{
                             liste.writeToutEtudiantsEtImages(fichierPrincipale);
                         }catch(FileNotFoundException fnfe){
@@ -391,6 +388,8 @@ class MainFrame extends JFrame{
                         } catch(Exception exc){
                             JOptionPane.showMessageDialog(null, exc.getMessage());
                         }
+                        
+                        JOptionPane.showMessageDialog(null, "Suppression effectuée");
 
                         restart();
                     }
