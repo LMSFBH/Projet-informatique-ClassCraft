@@ -49,9 +49,9 @@ public class Etudiant {
      * @param role       Le role de cet Etudiant
      * @param pseudo     Le pseudo de cet Etudiant
      */
-    public Etudiant(String nAdmission, String nom, int role, String pseudo) throws FileNotFoundException, IOException, Exception{
+    public Etudiant(String nAdmission, String nom, int role, String pseudo) throws IllegalArgumentException, FileNotFoundException, IOException, Exception{
         setName(nom);
-        setNAdmission(nom);
+        setNAdmission(nAdmission);
         setRole(role);
         setPseudo(pseudo);
         setExp(0);

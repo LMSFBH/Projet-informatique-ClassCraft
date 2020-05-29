@@ -266,7 +266,9 @@ class MainFrame extends JFrame{
                         Etudiant unEtudiant = null;
                         
                         try {
-                            unEtudiant = new Etudiant(texteNAdmission.getText(), texteNom.getText(), 0, textePseudo.getText());
+                            unEtudiant = new Etudiant(texteNAdmission.getText(), texteNom.getText(), Integer.parseInt((String) roleChangement.getSelectedItem()), textePseudo.getText());
+                        }catch(IllegalArgumentException iae){
+                            JOptionPane.showMessageDialog(null, iae.getMessage());
                         }catch(FileNotFoundException fnfe){
                             JOptionPane.showMessageDialog(null, fnfe.getMessage());
                         } catch(IOException ioe){
@@ -390,7 +392,7 @@ class MainFrame extends JFrame{
                         }
                         
                         JOptionPane.showMessageDialog(null, "Suppression effectuée");
-
+                        
                         restart();
                     }
                 });
