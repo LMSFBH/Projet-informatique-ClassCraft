@@ -1,21 +1,21 @@
-La première colonne correspond au prénom et nom d'un étudiant. En cliquant sur leur nom, vous pouvez voir les informations de cet étudiant et même changer ses informations au besoin.
+La premiere colonne correspond au prenom et nom d'un etudiant. En cliquant sur leur nom, vous pouvez voir les informations de cet etudiant et meme changer ses informations au besoin.
 
-La deuxième colonne correspond au pseudo donné à l'étudiant.
+La deuxieme colonne correspond au pseudo donné à l'etudiant.
 
-La troisième colonne correspond au rôle donné à l'étudiant. Ce rôle détermine les pouvoirs que l'étudiant aura, ainsi que son maximmum de point de vie. En cliquant sur un rôle, vous pouvez modifier le nom de ce rôle.
+La troisieme colonne correspond au role donné à l'etudiant. Ce role détermine les pouvoirs que l'etudiant aura, ainsi que son maximmum de point de vie. En cliquant sur un role, vous pouvez modifier le nom de ce role.
 
-La quatrième colonne correspond aux points de vie de l'étudiant. Son maximum de point de vie est déterminé par sa classe, son rôle. Il est possible d'augmenter ou diminuer ses points de vie de 1 grâçe aux boutons adjacents.
+La quatrieme colonne correspond aux points de vie de l'etudiant. Son maximum de point de vie est déterminé par sa classe, son role. Il est possible d'augmenter ou diminuer ses points de vie de 1 grace aux boutons adjacents.
 
-La cinquième colonne correspond à l'expérience de l'étudiant. Il est possible de donner ou d'enlever un demi-niveau, 0.5 expérience, grâçe aux boutons adjacents. Le niveau de l'étudiant permet de déterminer quel pouvoir est disponible et utilisable.
+La cinquieme colonne correspond à l'experience de l'etudiant. Il est possible de donner ou d'enlever un demi-niveau, 0.5 experience, grace aux boutons adjacents. Le niveau de l'etudiant permet de determiner quel pouvoir est disponible et utilisable.
 
-La sixième colonne correspond aux pouvoirs de l'étudiant. C'est à vous de décider l'action du pouvoir de chaque classe en influençant les points de vie ou expériences des autres étudiants. Il y a 4 couleurs différentes:
--Le gris: l'élève n'a pas le niveau requis pour activer son pouvoir
--Le vert: l'élève a le niveau requis pour activer son pouvoir
--Le jaune: l'élève a déjà activé son pouvoir
--Le rouge: l'élève n'a plus de point de vie et ne peut donc pas utiliser de pouvoirs
+La sixieme colonne correspond aux pouvoirs de l'etudiant. C'est a vous de decider l'action du pouvoir de chaque classe en influencant les points de vie ou experiences des autres etudiants. Il y a 4 couleurs differentes:
+-Le gris: l'eleve n'a pas le niveau requis pour activer son pouvoir
+-Le vert: l'eleve a le niveau requis pour activer son pouvoir
+-Le jaune: l'eleve a deja active son pouvoir
+-Le rouge: l'eleve n'a plus de point de vie et ne peut donc pas utiliser de pouvoirs
 
 _________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
 
-Cette application a été programmée par des étudiants de SIM au collège Rosemont pour leur projet d'intégration: Nour Asmani, Arthur Frennette, Brecht Erwin Kegoum Tchantchet et Pierre Moyne-bressand
+Cette application a ete programmee par des etudiants de SIM au collège Rosemont durant la session d'hiver 2020 pour leur projet d'integration: Nour Asmani, Arthur Frennette, Brecht Erwin Kegoum Tchantchet et Pierre Moyne-bressand
 
 Si vous ne trouvez pas l'information que vous cherchiez ici, veuillez aller chercher dans le document texte "Utilisation" si votre information s'y trouve.
