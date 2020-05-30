@@ -12,19 +12,21 @@ Le bouton aide, en haut à droite de la fenêtre principale, explique toutes les
 Les images des étudiants et des classes sont tous répertoriées dans un dossier "image" et les tableaux Excel devront être rangés dans le dossier "classe".
 
 Nous vous avons mis dans le dossier "classe" un exemple de tableau Excel que vous devez suivre pour créer votre propre classe à partir du tableaux Excel pour éviter des erreurs. 
-Vous n'aurez plus besoin de toucher à ce tableau Excel après cela, sauf si ce n'est pour enlever ou ajouter un élève.
+Vous n'aurez plus besoin de toucher à ce tableau Excel après cela, sauf si ce n'est pour enlever ou ajouter plusieurs élèves.
 
-Voici une aide pour la création de votre Excel:
+Voici une aide pour la création de votre Excel
+Vous ne devez remplir que les quatres premières colonnes, le programme se déroulera écrit les autres automatiquement.
+
 La première colonne correspond au numéro de DA de l'étudiant.
 La deuxième colonne correspond au nom et prénom de l'étudiant.
-La troisième colonne correspond à la classe qu'appartient l'étudiant. Voici une plus ample explication: 0 (Guerrier)/ 1 (Guerrisseur)/ 2 (Magicien)/ 3 (Voleur)
+La troisième colonne correspond à la classe qu'appartient l'étudiant. Voici une plus ample explication: 0 (Guerrier)/ 1 (Guerrisseur)/ 2 (Magicien)/ 3 (Voleur) (chaque numéro est celui de la ligne ou se trouve le nom du role dans docs/roles.txt, commancant de 0)
 La quatrième colonne correspond au pseudo que veut choisir l'étudiant.
-La cinquième colonne ne correspond à rien et peut être laissée vide.
+
+La cinquième colonne ne correspond à rien et doit être laissée vide.
 La sixième colonne correspond à l'expérience de l'étudiant.
 La septième colonne correspond au niveau de l'étudiant.
 La huitième colonne correspond aux points de vie de l'étudiant.
-
-Vous pouvez remplir que les quatres premières colonnes si vous le désirez, cela ne provoquera pas de bug et le programme se déroulera normalement.
+La neuvième colonne jusqu'à la quatorzième indique si le pouvoirs #1 à 6 est utilisée ou pas
 
 
 ______________________________________________________________________________________________________________________________________________________________________________________________________
