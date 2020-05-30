@@ -20,6 +20,7 @@ public class Aide extends JFrame {
     public Aide(){
         setTitle("Aide");
         setSize(1400,500);
+        setResizable(false);
         Image icone = Toolkit.getDefaultToolkit().getImage("image/dragon.jpg");
         setIconImage(icone);
         

@@ -274,6 +274,11 @@ public class ListeDesEtudiants{
                         
                         String[] pouvoirsUtilisableSS = {ligne.getCell(8).getStringCellValue(), ligne.getCell(9).getStringCellValue(), ligne.getCell(10).getStringCellValue(), ligne.getCell(11).getStringCellValue(),
                                                        ligne.getCell(12).getStringCellValue(), ligne.getCell(13).getStringCellValue()};
+                        
+                        for(int j=0;j<pouvoirsUtilisableSS.length;j++)
+                            if(!pouvoirsUtilisableSS[i].equalsIgnoreCase("true") && !pouvoirsUtilisableSS[i].equalsIgnoreCase("false"))
+                                throw new Exception("Pouvoirs invalides");
+                                
                         boolean[] pouvoirsUtilisable = {pouvoirsUtilisableSS[0].equalsIgnoreCase("true"), pouvoirsUtilisableSS[1].equalsIgnoreCase("true"), pouvoirsUtilisableSS[2].equalsIgnoreCase("true"), pouvoirsUtilisableSS[3].equalsIgnoreCase("true"),
                                                        pouvoirsUtilisableSS[4].equalsIgnoreCase("true"), pouvoirsUtilisableSS[5].equalsIgnoreCase("true")};
                         
